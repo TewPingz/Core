@@ -5,11 +5,11 @@ import co.aikar.commands.InvalidCommandArgument;
 import co.aikar.commands.contexts.ContextResolver;
 import me.tewpingz.core.CorePlugin;
 
-public class RankContextResolver implements ContextResolver<Rank, BukkitCommandExecutionContext> {
+public class RankContextResolver implements ContextResolver<Rank.RankSnapshot, BukkitCommandExecutionContext> {
     @Override
-    public Rank getContext(BukkitCommandExecutionContext context) throws InvalidCommandArgument {
+    public Rank.RankSnapshot getContext(BukkitCommandExecutionContext context) throws InvalidCommandArgument {
         String rankName = context.popFirstArg();
-        Rank rank = CorePlugin.getInstance().getCore().getRankManager().getRank(rankName);
+        Rank.RankSnapshot rank = CorePlugin.getInstance().getCore().getRankManager().getRank(rankName);
 
         if (rank == null) {
             throw new InvalidCommandArgument("That rank does not exist");

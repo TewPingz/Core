@@ -39,7 +39,7 @@ public class CorePlugin extends JavaPlugin {
         PaperCommandManager commandManager = new PaperCommandManager(this);
         commandManager.enableUnstableAPI("help");
 
-        commandManager.getCommandContexts().registerContext(Rank.class, new RankContextResolver());
+        commandManager.getCommandContexts().registerContext(Rank.RankSnapshot.class, new RankContextResolver());
         commandManager.getCommandCompletions().registerAsyncCompletion("ranks", new RankCommandCompletion());
         commandManager.registerCommand(new RankCommand());
         commandManager.registerCommand(new RanksCommand());

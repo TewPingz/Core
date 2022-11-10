@@ -9,7 +9,7 @@ import java.util.function.Consumer;
 
 public class ProfileManager {
 
-    private final RediGoCollection<UUID, Profile> collection;
+    private final RediGoCollection<Profile.ProfileSnapshot, UUID, Profile> collection;
 
     public ProfileManager(Core instance) {
         this.collection = instance.getRediGo().createCollection("profile", UUID.class, Profile.class, 30, false, playerId -> {
@@ -19,12 +19,12 @@ public class ProfileManager {
         });
     }
 
-    public Profile beginCachingLocally(UUID playerId) {
+    public Profile.ProfileSnapshot beginCachingLocally(UUID playerId) {
         this.collection.beginCachingLocally(playerId);
         return this.getCachedValue(playerId);
     }
 
-    public Profile getCachedValue(UUID playerId) {
+    public Profile.ProfileSnapshot getCachedValue(UUID playerId) {
         return this.collection.getCachedValued(playerId);
     }
 
