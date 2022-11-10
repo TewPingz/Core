@@ -1,0 +1,7 @@
+name: Core
+version: '${project.version}'
+main: me.tewpingz.core.CorePlugin
+api-version: 1.19
+authors: [ TewPingz ]
+description: A core made for Xenon Network
+website: https://www.tewpingz.me
