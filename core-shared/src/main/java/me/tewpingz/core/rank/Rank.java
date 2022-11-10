@@ -7,7 +7,9 @@ import me.tewpingz.redigo.data.RediGoObject;
 import me.tewpingz.redigo.data.RediGoValue;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 public class Rank implements RediGoObject<String, Rank.RankSnapshot>, Comparable<Rank> {
@@ -30,10 +32,10 @@ public class Rank implements RediGoObject<String, Rank.RankSnapshot>, Comparable
     private String suffix = "";
 
     @RediGoValue(key = "permissions")
-    private List<String> permissions = new ArrayList<>();
+    private Set<String> permissions = new HashSet<>();
 
     @RediGoValue(key = "inherits")
-    private List<String> inherits = new ArrayList<>();
+    private Set<String> inherits = new HashSet<>();
 
     public Rank(String rankId, String displayName) {
         this.rankId = rankId;
@@ -60,7 +62,7 @@ public class Rank implements RediGoObject<String, Rank.RankSnapshot>, Comparable
         private final String rankId, displayName;
         private final int priority;
         private final String color, prefix, suffix;
-        private final List<String> permissions, inherits;
+        private final Set<String> permissions, inherits;
 
         public RankSnapshot(Rank rank) {
             this.rankId = rank.getRankId();
