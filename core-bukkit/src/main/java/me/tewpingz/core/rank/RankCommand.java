@@ -12,6 +12,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 @CommandAlias("rank")
+@CommandPermission("core.rank")
 public class RankCommand extends BaseCommand {
 
     @Default
@@ -25,26 +26,26 @@ public class RankCommand extends BaseCommand {
     @Description("Create a rank")
     @CommandPermission("core.rank.create")
     @Syntax("<name>")
-    public static void onCreate(CommandSender commandSender, String rankId) {
+    public static void onCreate(CommandSender commandSender, String rankName) {
         RankManager rankManager = Core.getInstance().getRankManager();
 
-        if (rankManager.getRank(rankId) != null) {
+        if (rankManager.getRank(rankName) != null) {
             String message = MessageBuilderDefaults.error()
                     .primary("There is already a rank that is named")
-                    .secondary(rankId)
+                    .secondary(rankName)
                     .tertiary("(You can check the existing ranks using /ranks)")
                     .build();
             commandSender.sendMessage(message);
             return;
         }
 
-        rankManager.getRealValueAsync(rankId).thenRun(() -> {
+        rankManager.getRealValueAsync(rankName).thenRun(() -> {
             String message = MessageBuilderDefaults.success()
                     .primary("You have successfully created a rank named")
-                    .secondary(rankId)
+                    .secondary(rankName)
                     .build();
             commandSender.sendMessage(message);
-            Core.getInstance().getBridge().callEvent(new RankCreateEvent(commandSender.getName(), rankId));
+            Core.getInstance().getBridge().callEvent(new RankCreateEvent(commandSender.getName(), rankName));
         });
     }
 

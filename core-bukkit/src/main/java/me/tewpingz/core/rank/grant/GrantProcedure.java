@@ -59,7 +59,10 @@ public class GrantProcedure {
         @Override
         public @NotNull String getPromptText(@NotNull ConversationContext context) {
             return MessageBuilderDefaults.normal()
-                    .primary("Please confirm this grant by typing 'yes' in chat otherwise type 'no'")
+                    .primary("Confirm this grant by typing")
+                    .secondary("yes")
+                    .primary("otherwise type")
+                    .secondary("no")
                     .build();
         }
 

@@ -13,8 +13,9 @@ import me.tewpingz.core.rank.grant.GrantCommand;
 import me.tewpingz.core.rank.grant.GrantListener;
 import me.tewpingz.core.rank.grant.GrantScheduleManager;
 import me.tewpingz.core.util.duration.DurationContextResolver;
-import me.tewpingz.core.util.uuid.NameToUuidCommandCompletion;
-import me.tewpingz.core.util.uuid.NameToUuidContextResolver;
+import me.tewpingz.core.util.uuid.AsyncUuid;
+import me.tewpingz.core.util.uuid.AsyncUuidCommandCompletion;
+import me.tewpingz.core.util.uuid.AsyncUuidContextResolver;
 import me.tewpingz.core.util.uuid.UuidManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -57,10 +58,10 @@ public class CorePlugin extends JavaPlugin {
         PaperCommandManager commandManager = new PaperCommandManager(this);
         commandManager.enableUnstableAPI("help");
 
-        commandManager.getCommandContexts().registerContext(UuidManager.NameToUuidEntry.NameToUuidSnapshot.class, new NameToUuidContextResolver());
+        commandManager.getCommandContexts().registerContext(AsyncUuid.class, new AsyncUuidContextResolver());
         commandManager.getCommandContexts().registerContext(Duration.class, new DurationContextResolver());
         commandManager.getCommandContexts().registerContext(Rank.RankSnapshot.class, new RankContextResolver());
-        commandManager.getCommandCompletions().registerCompletion("players", new NameToUuidCommandCompletion());
+        commandManager.getCommandCompletions().registerCompletion("players", new AsyncUuidCommandCompletion());
         commandManager.getCommandCompletions().registerAsyncCompletion("ranks", new RankCommandCompletion());
 
         commandManager.registerCommand(new RankCommand());
