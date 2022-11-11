@@ -20,10 +20,22 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-@RequiredArgsConstructor
 public class RankGrantListener implements Listener {
 
     private final RankGrantScheduleManager rankGrantScheduleManager;
+    private final ChatRenderer formatRenderer;
+
+    public RankGrantListener(RankGrantScheduleManager rankGrantScheduleManager) {
+        this.rankGrantScheduleManager = rankGrantScheduleManager;
+        this.formatRenderer = ChatRenderer.viewerUnaware((source, sourceDisplayName, message) -> {
+            Profile.ProfileSnapshot snapshot = Core.getInstance().getProfileManager().getCachedValue(source.getUniqueId());
+            TextComponent prefix = Component.text(snapshot.getDisplayRank().getPrefix());
+            TextComponent suffix = Component.text(snapshot.getDisplayRank().getSuffix());
+            TextComponent color = Component.text(snapshot.getDisplayRank().getColor());
+            TextComponent separator = Component.text(": ").color(TextColor.color(220, 220, 220));
+            return prefix.append(suffix).append(color).append(sourceDisplayName).append(suffix).append(separator).append(message);
+        });
+    }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerJoin(PlayerJoinEvent event) {
@@ -47,13 +59,6 @@ public class RankGrantListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onAsyncPlayerChatEvent(final AsyncChatEvent event) {
-        event.renderer(ChatRenderer.viewerUnaware((source, sourceDisplayName, message) -> {
-            Profile.ProfileSnapshot snapshot = Core.getInstance().getProfileManager().getCachedValue(event.getPlayer().getUniqueId());
-            TextComponent prefix = Component.text(snapshot.getDisplayRank().getPrefix());
-            TextComponent suffix = Component.text(snapshot.getDisplayRank().getSuffix());
-            TextComponent color = Component.text(snapshot.getDisplayRank().getColor());
-            TextComponent separator = Component.text(": ").color(TextColor.color(220,220,220));
-            return prefix.append(suffix).append(color).append(sourceDisplayName).append(suffix).append(separator).append(message);
-        }));
+        event.renderer(this.formatRenderer);
     }
 }
