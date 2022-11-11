@@ -15,8 +15,7 @@ public class RankManager {
     private final RediGoCollection<Rank.RankSnapshot, String, Rank> collection;
 
     public RankManager(Core instance) {
-        this.collection = instance.getRediGo().createCollection("ranks", String.class, Rank.class, 30, true,
-                rankName -> new Rank(rankName.toLowerCase(), rankName));
+        this.collection = instance.getRediGo().createCollection("ranks", String.class, Rank.class, 30, true, rankId -> new Rank(rankId.toLowerCase()));
         this.collection.beginCachingLocally("default"); // Basically create default if it doesn't exist
     }
 

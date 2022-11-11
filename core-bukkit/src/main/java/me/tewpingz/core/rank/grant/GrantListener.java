@@ -22,13 +22,13 @@ public class GrantListener implements Listener {
 
     public GrantListener(GrantScheduleManager grantScheduleManager) {
         this.grantScheduleManager = grantScheduleManager;
-        this.formatRenderer = ChatRenderer.viewerUnaware((source, sourceDisplayName, message) -> {
+        this.formatRenderer = ChatRenderer.viewerUnaware((source, displayName, message) -> {
             Profile.ProfileSnapshot snapshot = Core.getInstance().getProfileManager().getCachedValue(source.getUniqueId());
             TextComponent prefix = Component.text(snapshot.getDisplayRank().getPrefix());
             TextComponent suffix = Component.text(snapshot.getDisplayRank().getSuffix());
             TextComponent color = Component.text(snapshot.getDisplayRank().getColor());
             TextComponent separator = Component.text(": ").color(TextColor.color(220, 220, 220));
-            return prefix.append(suffix).append(color).append(sourceDisplayName).append(suffix).append(separator).append(message);
+            return prefix.append(suffix).append(color).append(displayName).append(suffix).append(separator).append(message);
         });
     }
 

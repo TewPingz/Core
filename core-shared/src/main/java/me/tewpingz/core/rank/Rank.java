@@ -17,7 +17,7 @@ public class Rank implements RediGoObject<String, Rank.RankSnapshot>, Comparable
     private final String rankId;
 
     @RediGoValue(key = "displayName")
-    private String displayName;
+    private String displayName = "";
 
     @RediGoValue(key = "priority")
     private int priority = -1;
@@ -37,9 +37,8 @@ public class Rank implements RediGoObject<String, Rank.RankSnapshot>, Comparable
     @RediGoValue(key = "inherits")
     private Set<String> inherits = new HashSet<>();
 
-    public Rank(String rankId, String displayName) {
+    public Rank(String rankId) {
         this.rankId = rankId;
-        this.displayName = displayName;
     }
 
     @Override

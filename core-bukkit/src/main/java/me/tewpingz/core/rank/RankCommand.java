@@ -30,21 +30,21 @@ public class RankCommand extends BaseCommand {
         RankManager rankManager = Core.getInstance().getRankManager();
 
         if (rankManager.getRank(rankName) != null) {
-            String message = MessageBuilderDefaults.error()
+            MessageBuilderDefaults.error()
                     .primary("There is already a rank that is named")
                     .secondary(rankName)
                     .tertiary("(You can check the existing ranks using /ranks)")
-                    .build();
-            commandSender.sendMessage(message);
+                    .build(commandSender::sendMessage);
             return;
         }
 
-        rankManager.getRealValueAsync(rankName).thenRun(() -> {
-            String message = MessageBuilderDefaults.success()
+        rankManager.updateRealValueAsync(rankName.toLowerCase(), rank -> {
+            rank.setDisplayName(rankName);
+        }).thenRun(() -> {
+            MessageBuilderDefaults.success()
                     .primary("You have successfully created a rank named")
                     .secondary(rankName)
-                    .build();
-            commandSender.sendMessage(message);
+                    .build(commandSender::sendMessage);
             Core.getInstance().getBridge().callEvent(new RankCreateEvent(commandSender.getName(), rankName));
         });
     }
@@ -56,15 +56,14 @@ public class RankCommand extends BaseCommand {
     @CommandCompletion("@ranks")
     public void onSetPriority(CommandSender sender, Rank.RankSnapshot rankSnapshot, int priority) {
         RankManager rankManager = Core.getInstance().getRankManager();
-        rankManager.updateRealValueAsync(rankSnapshot.getRankId(), realRank -> realRank.setPriority(priority))
-                .thenRun(() -> {
-                    sender.sendMessage(MessageBuilderDefaults.success()
-                            .primary("You have successfully updated the priority of")
-                            .secondary(rankSnapshot.getDisplayName()).primary("to")
-                            .secondary(String.valueOf(priority))
-                            .build());
-                    Core.getInstance().getBridge().callEvent(new RankUpdateEvent(sender.getName(), rankSnapshot.getRankId()));
-                });
+        rankManager.updateRealValueAsync(rankSnapshot.getRankId(), realRank -> realRank.setPriority(priority)).thenRun(() -> {
+            MessageBuilderDefaults.success()
+                    .primary("You have successfully updated the priority of")
+                    .secondary(rankSnapshot.getDisplayName()).primary("to")
+                    .secondary(String.valueOf(priority))
+                    .build(sender::sendMessage);
+            Core.getInstance().getBridge().callEvent(new RankUpdateEvent(sender.getName(), rankSnapshot.getRankId()));
+        });
     }
 
     @Subcommand("priority")
@@ -75,101 +74,68 @@ public class RankCommand extends BaseCommand {
     public void onPriority(CommandSender sender, Rank.RankSnapshot rankSnapshot) {
         RankManager rankManager = Core.getInstance().getRankManager();
         rankManager.getRealValueAsync(rankSnapshot.getRankId()).thenAccept(realRank -> {
-            sender.sendMessage(MessageBuilderDefaults.normal()
+            MessageBuilderDefaults.normal()
                     .primary("The rank priority of")
                     .secondary(realRank.getRankId())
                     .primary("is")
                     .secondary(String.valueOf(realRank.getPriority()))
-                    .build());
+                    .build(sender::sendMessage);
         });
     }
 
-    @Subcommand("setprefix")
+    @Subcommand("setprefix|prefix")
     @Description("Set a ranks prefix")
     @CommandPermission("core.rank.setprefix")
     @Syntax("<rank> <prefix>")
     @CommandCompletion("@ranks")
     public void onSetPrefix(CommandSender sender, Rank.RankSnapshot rankSnapshot, String prefix) {
         RankManager rankManager = Core.getInstance().getRankManager();
-        rankManager.updateRealValueAsync(rankSnapshot.getRankId(), realRank -> realRank.setPrefix(ChatColor.translateAlternateColorCodes('&', prefix)))
-                .thenRun(() -> {
-                    sender.sendMessage(MessageBuilderDefaults.success()
-                            .primary("You have successfully updated the prefix of")
-                            .secondary(rankSnapshot.getDisplayName()).primary("to")
-                            .secondary(ChatColor.translateAlternateColorCodes('&', prefix))
-                            .build());
-                    Core.getInstance().getBridge().callEvent(new RankUpdateEvent(sender.getName(), rankSnapshot.getRankId()));
-                });
-    }
-
-    @Subcommand("prefix")
-    @Description("Get a ranks prefix")
-    @CommandPermission("core.rank.prefix")
-    @Syntax("<rank>")
-    @CommandCompletion("@ranks")
-    public void onPrefix(CommandSender sender, Rank.RankSnapshot rankSnapshot) {
-        RankManager rankManager = Core.getInstance().getRankManager();
-        rankManager.getRealValueAsync(rankSnapshot.getRankId()).thenAccept(realRank -> {
-            sender.sendMessage(MessageBuilderDefaults.normal()
-                    .primary("The rank prefix of")
-                    .secondary(realRank.getRankId())
-                    .primary("is")
-                    .secondary(rankSnapshot.getPrefix())
-                    .build());
+        String translatedPrefix = ChatColor.translateAlternateColorCodes('&', prefix);
+        rankManager.updateRealValueAsync(rankSnapshot.getRankId(), realRank -> realRank.setPrefix(translatedPrefix)).thenRun(() -> {
+            MessageBuilderDefaults.success()
+                    .primary("You have successfully updated the prefix of")
+                    .secondary(rankSnapshot.getDisplayName())
+                    .primary("to")
+                    .secondary(prefix)
+                    .build(sender::sendMessage);
+            Core.getInstance().getBridge().callEvent(new RankUpdateEvent(sender.getName(), rankSnapshot.getDisplayName()));
         });
     }
 
-    @Subcommand("setsuffix")
+    @Subcommand("setsuffix|suffix")
     @Description("Set a ranks suffix")
     @CommandPermission("core.rank.setsuffix")
     @Syntax("<rank> <suffix>")
     @CommandCompletion("@ranks")
     public void onSetSuffix(CommandSender sender, Rank.RankSnapshot rankSnapshot, String suffix) {
         RankManager rankManager = Core.getInstance().getRankManager();
-        rankManager.updateRealValueAsync(rankSnapshot.getRankId(), realRank -> realRank.setSuffix(ChatColor.translateAlternateColorCodes('&', suffix)))
-                .thenRun(() -> {
-                    sender.sendMessage(MessageBuilderDefaults.success()
-                            .primary("You have successfully updated the suffix of")
-                            .secondary(rankSnapshot.getDisplayName()).primary("to")
-                            .secondary(ChatColor.translateAlternateColorCodes('&', suffix))
-                            .build());
-                    Core.getInstance().getBridge().callEvent(new RankUpdateEvent(sender.getName(), rankSnapshot.getRankId()));
-                });
-    }
-
-    @Subcommand("suffix")
-    @Description("Get a ranks suffix")
-    @CommandPermission("core.rank.suffix")
-    @Syntax("<rank>")
-    @CommandCompletion("@ranks")
-    public void onSuffix(CommandSender sender, Rank.RankSnapshot rankSnapshot) {
-        RankManager rankManager = Core.getInstance().getRankManager();
-        rankManager.getRealValueAsync(rankSnapshot.getRankId()).thenAccept(realRank -> {
-            sender.sendMessage(MessageBuilderDefaults.normal()
-                    .primary("The rank suffix of")
-                    .secondary(realRank.getRankId())
-                    .primary("is")
-                    .secondary(rankSnapshot.getSuffix())
-                    .build());
+        String translatedSuffix = ChatColor.translateAlternateColorCodes('&', suffix);
+        rankManager.updateRealValueAsync(rankSnapshot.getRankId(), realRank -> realRank.setSuffix(translatedSuffix)).thenRun(() -> {
+            MessageBuilderDefaults.success()
+                    .primary("You have successfully updated the suffix of")
+                    .secondary(rankSnapshot.getDisplayName()).primary("to")
+                    .secondary(ChatColor.translateAlternateColorCodes('&', suffix))
+                    .build(sender::sendMessage);
+            Core.getInstance().getBridge().callEvent(new RankUpdateEvent(sender.getName(), rankSnapshot.getDisplayName()));
         });
     }
 
-    @Subcommand("setcolor|setcolour")
+    @Subcommand("setcolor|setcolour|color|colour")
     @Description("Set a ranks color")
     @CommandPermission("core.rank.setcolor")
     @Syntax("<rank> <color|&7&6>")
     @CommandCompletion("@ranks")
     public void onSetColor(CommandSender sender, Rank.RankSnapshot rankSnapshot, String color) {
         RankManager rankManager = Core.getInstance().getRankManager();
-        rankManager.updateRealValueAsync(rankSnapshot.getRankId(), realRank -> realRank.setColor(ChatColor.translateAlternateColorCodes('&', color)))
-                .thenRun(() -> {
-                    sender.sendMessage(MessageBuilderDefaults.success()
-                            .primary("You have successfully updated the color of")
-                            .secondary(rankSnapshot.getDisplayName()).primary("to")
-                            .secondary(color)
-                            .build());
-                    Core.getInstance().getBridge().callEvent(new RankUpdateEvent(sender.getName(), rankSnapshot.getRankId()));
-                });
+        String translatedColor = ChatColor.translateAlternateColorCodes('&', color);
+        rankManager.updateRealValueAsync(rankSnapshot.getRankId(), realRank -> realRank.setColor(translatedColor)).thenRun(() -> {
+            sender.sendMessage(MessageBuilderDefaults.success()
+                    .primary("You have successfully updated the color of")
+                    .secondary(rankSnapshot.getDisplayName()).primary("to")
+                    .secondary(color)
+                    .build());
+            Core.getInstance().getBridge().callEvent(new RankUpdateEvent(sender.getName(), rankSnapshot.getDisplayName()));
+        });
     }
 
     @Subcommand("permission")
@@ -195,7 +161,7 @@ public class RankCommand extends BaseCommand {
                     .primary("to")
                     .secondary(rankSnapshot.getDisplayName())
                     .build());
-            Core.getInstance().getBridge().callEvent(new RankUpdateEvent(sender.getName(), rankSnapshot.getRankId()));
+            Core.getInstance().getBridge().callEvent(new RankUpdateEvent(sender.getName(), rankSnapshot.getDisplayName()));
         });
     }
 
@@ -222,7 +188,7 @@ public class RankCommand extends BaseCommand {
                     .primary("as an inherit to")
                     .secondary(rankSnapshot.getDisplayName())
                     .build());
-            Core.getInstance().getBridge().callEvent(new RankUpdateEvent(sender.getName(), rankSnapshot.getRankId()));
+            Core.getInstance().getBridge().callEvent(new RankUpdateEvent(sender.getName(), rankSnapshot.getDisplayName()));
         });
     }
 
@@ -238,7 +204,7 @@ public class RankCommand extends BaseCommand {
 
             sender.sendMessage(MessageBuilderDefaults.normal()
                     .primary("This is the information for")
-                    .secondary(realRank.getDisplayName())
+                    .secondary(realRank.getColor() + realRank.getDisplayName())
                     .build());
             sender.sendMessage(MessageBuilderDefaults.normal()
                     .tertiary(" -")

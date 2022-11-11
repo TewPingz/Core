@@ -6,6 +6,7 @@ import com.google.gson.GsonBuilder;
 import fr.mrmicky.fastinv.FastInv;
 import fr.mrmicky.fastinv.FastInvManager;
 import lombok.Getter;
+import me.tewpingz.core.command.ListCommand;
 import me.tewpingz.core.profile.ProfileListener;
 import me.tewpingz.core.rank.*;
 import me.tewpingz.core.rank.grant.GrantBridgeListener;
@@ -58,15 +59,20 @@ public class CorePlugin extends JavaPlugin {
         PaperCommandManager commandManager = new PaperCommandManager(this);
         commandManager.enableUnstableAPI("help");
 
+        // Register contexts
         commandManager.getCommandContexts().registerContext(AsyncUuid.class, new AsyncUuidContextResolver());
         commandManager.getCommandContexts().registerContext(Duration.class, new DurationContextResolver());
         commandManager.getCommandContexts().registerContext(Rank.RankSnapshot.class, new RankContextResolver());
+
+        // Register command completions
         commandManager.getCommandCompletions().registerCompletion("players", new AsyncUuidCommandCompletion());
         commandManager.getCommandCompletions().registerAsyncCompletion("ranks", new RankCommandCompletion());
 
+        // Register commands
         commandManager.registerCommand(new RankCommand());
         commandManager.registerCommand(new RanksCommand());
         commandManager.registerCommand(new GrantCommand());
+        commandManager.registerCommand(new ListCommand());
     }
 
     private void registerListeners() {

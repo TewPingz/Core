@@ -3,6 +3,7 @@ package me.tewpingz.core.profile;
 import me.tewpingz.core.Core;
 import me.tewpingz.redigo.RediGoCollection;
 
+import java.util.Collection;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
@@ -26,6 +27,14 @@ public class ProfileManager {
 
     public Profile.ProfileSnapshot getCachedValue(UUID playerId) {
         return this.collection.getCachedValued(playerId);
+    }
+
+    public Collection<Profile.ProfileSnapshot> getCachedValues() {
+        return this.collection.getCachedValues();
+    }
+
+    public void forEachCachedValue(Consumer<Profile.ProfileSnapshot> consumer) {
+        this.collection.forEachCachedValue(consumer);
     }
 
     public void stopCachingLocally(UUID playerId) {
