@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import me.tewpingz.core.bridge.BridgeEvent;
+import me.tewpingz.core.rank.Rank;
 
 @Data
 @NoArgsConstructor
@@ -11,6 +12,6 @@ import me.tewpingz.core.bridge.BridgeEvent;
 public class RankCreateEvent implements BridgeEvent {
 
     private String executedBy;
-    private String rankName;
+    private Rank.RankSnapshot rankSnapshot;
 
 }

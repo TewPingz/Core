@@ -1,17 +1,16 @@
 package me.tewpingz.core.rank.grant;
 
-import co.aikar.commands.InvalidCommandArgument;
 import fr.mrmicky.fastinv.FastInv;
-import fr.mrmicky.fastinv.ItemBuilder;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import me.tewpingz.core.Core;
 import me.tewpingz.core.CorePlugin;
 import me.tewpingz.core.rank.Rank;
+import me.tewpingz.core.util.ItemBuilder;
 import me.tewpingz.core.util.TimeUtil;
-import me.tewpingz.message.MessageBuilder;
 import me.tewpingz.message.MessageBuilderDefaults;
+import net.kyori.adventure.text.Component;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.conversations.*;
@@ -19,7 +18,6 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.time.Duration;
 import java.util.UUID;
 
 @Data
@@ -59,25 +57,27 @@ public class GrantProcedure {
         @Override
         public @NotNull String getPromptText(@NotNull ConversationContext context) {
             return MessageBuilderDefaults.normal()
-                    .primary("Confirm this grant by typing")
-                    .secondary("yes")
-                    .primary("otherwise type")
-                    .secondary("no")
-                    .build();
+                    .primary("Confirm this grant by typing").space()
+                    .secondary("yes").space()
+                    .primary("otherwise type").space()
+                    .secondary("no").tertiary(".")
+                    .toString();
         }
 
         @Override
         protected @Nullable Prompt acceptValidatedInput(@NotNull ConversationContext context, boolean input) {
             if (input) {
-                MessageBuilderDefaults.success().primary("You have successfully applied that")
-                        .secondary(this.procedure.getSelectedRank().getDisplayName())
-                        .primary("grant")
+                MessageBuilderDefaults.success()
+                        .primary("You have successfully applied that").space()
+                        .append(this.procedure.getSelectedRank().getColor().apply(Component.text(this.procedure.getSelectedRank().getDisplayName()))).space()
+                        .primary("grant").tertiary(".")
                         .build(message -> ((Player)context.getForWhom()).sendMessage(message));
                 this.procedure.apply((Player) context.getForWhom());
             } else {
-                MessageBuilderDefaults.success().primary("You have successfully cancelled that")
-                        .secondary(this.procedure.getSelectedRank().getDisplayName())
-                        .primary("grant")
+                MessageBuilderDefaults.success()
+                        .primary("You have successfully cancelled that").space()
+                        .append(this.procedure.getSelectedRank().getColor().apply(Component.text(this.procedure.getSelectedRank().getDisplayName()))).space()
+                        .primary("grant").tertiary(".")
                         .build(message -> ((Player)context.getForWhom()).sendMessage(message));
             }
             return null;
@@ -92,10 +92,11 @@ public class GrantProcedure {
         @Override
         public @NotNull String getPromptText(@NotNull ConversationContext context) {
             return MessageBuilderDefaults.normal()
-                    .primary("Please select a reason for this")
-                    .secondary(this.procedure.getSelectedRank().getDisplayName())
+                    .primary("Please select a reason for this").space()
+                    .append(this.procedure.getSelectedRank().getColor().apply(Component.text(this.procedure.getSelectedRank().getDisplayName()))).space()
                     .primary("grant")
-                    .build();
+                    .tertiary(".")
+                    .toString();
         }
 
         @Override
@@ -113,10 +114,11 @@ public class GrantProcedure {
         @Override
         public @NotNull String getPromptText(@NotNull ConversationContext context) {
             return MessageBuilderDefaults.normal()
-                    .primary("Please select the duration for this")
-                    .secondary(this.procedure.getSelectedRank().getDisplayName())
+                    .primary("Please select the duration for this").space()
+                    .append(this.procedure.getSelectedRank().getColor().apply(Component.text(this.procedure.getSelectedRank().getDisplayName()))).space()
                     .primary("grant")
-                    .build();
+                    .tertiary(".")
+                    .toString();
         }
 
         @Override
@@ -142,9 +144,10 @@ public class GrantProcedure {
     private static class RankPrompt extends FastInv {
         public RankPrompt(GrantProcedure procedure) {
             super(9 * 5, ChatColor.GOLD + "Select a rank");
-            this.setItems(this.getBorders(), new ItemBuilder(Material.BLACK_STAINED_GLASS).name(" ").build(), event -> event.setCancelled(true));
+            this.setItems(this.getBorders(), new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE).name(" ").build(), event -> event.setCancelled(true));
             Core.getInstance().getRankManager().getSortedRanks().forEach(rankSnapshot -> {
-                this.addItem(new ItemBuilder(Material.PAPER).name(rankSnapshot.getColor() + rankSnapshot.getDisplayName()).build(), event -> {
+                Component displayName = rankSnapshot.getColor().apply(Component.text(rankSnapshot.getDisplayName()));
+                this.addItem(new ItemBuilder(Material.LEATHER_CHESTPLATE).color(rankSnapshot.getColor().toTextColor()).name(displayName).build(), event -> {
                     procedure.setSelectedRank(rankSnapshot);
                     event.getInventory().close();
                     procedure.promptForDuration((Player) event.getWhoClicked());

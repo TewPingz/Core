@@ -4,6 +4,11 @@ import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.Default;
 import me.tewpingz.core.Core;
+import me.tewpingz.message.MessageBuilder;
+import me.tewpingz.message.MessageBuilderDefaults;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -14,22 +19,31 @@ public class ListCommand extends BaseCommand {
     @Default
     public void onCommand(CommandSender sender) {
         Core.getInstance().getRankManager().getSortedRanksAsync().thenApply(ranks -> {
-            StringBuilder stringBuilder = new StringBuilder();
+            MessageBuilder builder = MessageBuilderDefaults.normal();
             ranks.forEach(rank -> {
-                if (!stringBuilder.isEmpty()) {
-                    stringBuilder.append(ChatColor.WHITE).append(", ");
+                if (!builder.isEmpty()) {
+                    builder.append(Component.text(",").color(NamedTextColor.YELLOW)).space();
                 }
-                stringBuilder.append(rank.getColor()).append(rank.getDisplayName());
+                builder.append(rank.getColor().apply(Component.text(rank.getDisplayName())));
             });
-            return stringBuilder.toString();
+            return builder.build();
         }).thenAccept(rankList -> {
+            MessageBuilder builder = MessageBuilderDefaults.normal();
+            Core.getInstance().getProfileManager().forEachCachedValue(profile -> {
+                if (!builder.isEmpty()) {
+                    builder.append(Component.text(",").color(NamedTextColor.WHITE)).space();
+                }
+                builder.append(profile.getDisplayRank().getColor().apply(Component.text(profile.getLastSeenName())));
+            });
+
             int amount = Core.getInstance().getProfileManager().getCachedValues().size();
-            StringBuilder message = new StringBuilder(ChatColor.GRAY.toString());
-            message.append("(").append(amount).append("/").append(Bukkit.getMaxPlayers()).append("): ");
-            Core.getInstance().getProfileManager().forEachCachedValue(profile -> message.append(profile.getDisplayRank().getColor()).append(profile.getLastSeenName()));
+            Component component = Component.text("(" + amount + "/" + Bukkit.getMaxPlayers() + "): ")
+                    .color(NamedTextColor.GRAY)
+                    .append(builder.build());
+
             sender.sendMessage("");
             sender.sendMessage(rankList);
-            sender.sendMessage(message.toString());
+            sender.sendMessage(component);
             sender.sendMessage("");
         });
     }

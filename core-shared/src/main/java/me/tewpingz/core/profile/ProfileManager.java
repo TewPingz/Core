@@ -45,7 +45,7 @@ public class ProfileManager {
         return this.collection.getOrCreateRealValueAsync(playerId);
     }
 
-    public CompletableFuture<Void> updateRealValueAsync(UUID playerId, Consumer<Profile> consumer) {
+    public CompletableFuture<Profile> updateRealValueAsync(UUID playerId, Consumer<Profile> consumer) {
         return this.collection.updateRealValueAsync(playerId, consumer);
     }
 }

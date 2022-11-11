@@ -27,7 +27,7 @@ public class GrantCommand extends BaseCommand {
         asyncUuid.fetchUuidAsync().thenAccept(uuid -> {
             if (uuid == null) {
                 MessageBuilderDefaults.error()
-                        .secondary(asyncUuid.getName())
+                        .secondary(asyncUuid.getName()).space()
                         .primary("has not joined the server before!")
                         .build(player::sendMessage);
                 return;
@@ -47,7 +47,7 @@ public class GrantCommand extends BaseCommand {
         asyncUuid.fetchUuidAsync().thenAccept(uuid -> {
             if (uuid == null) {
                 MessageBuilderDefaults.error()
-                        .secondary(asyncUuid.getName())
+                        .secondary(asyncUuid.getName()).space()
                         .primary("has not joined the server before!")
                         .build(sender::sendMessage);
                 return;

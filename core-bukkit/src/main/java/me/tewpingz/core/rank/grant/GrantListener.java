@@ -7,6 +7,7 @@ import me.tewpingz.core.CorePlugin;
 import me.tewpingz.core.profile.Profile;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -26,9 +27,13 @@ public class GrantListener implements Listener {
             Profile.ProfileSnapshot snapshot = Core.getInstance().getProfileManager().getCachedValue(source.getUniqueId());
             TextComponent prefix = Component.text(snapshot.getDisplayRank().getPrefix());
             TextComponent suffix = Component.text(snapshot.getDisplayRank().getSuffix());
-            TextComponent color = Component.text(snapshot.getDisplayRank().getColor());
-            TextComponent separator = Component.text(": ").color(TextColor.color(220, 220, 220));
-            return prefix.append(suffix).append(color).append(displayName).append(suffix).append(separator).append(message);
+            TextComponent separator = Component.text(": ").color(NamedTextColor.GRAY);
+            return prefix
+                    .append(suffix)
+                    .append(snapshot.getDisplayRank().getColor().apply(displayName))
+                    .append(suffix)
+                    .append(separator)
+                    .append(message);
         });
     }
 

@@ -16,6 +16,11 @@ public class RankManager {
 
     public RankManager(Core instance) {
         this.collection = instance.getRediGo().createCollection("ranks", String.class, Rank.class, 30, true, rankId -> new Rank(rankId.toLowerCase()));
+        this.collection.updateRealValue("default", rank -> {
+            if (rank.getDisplayName().isEmpty()) {
+                rank.setDisplayName("Default");
+            }
+        });
         this.collection.beginCachingLocally("default"); // Basically create default if it doesn't exist
     }
 
@@ -41,7 +46,7 @@ public class RankManager {
         return this.collection.getOrCreateRealValueAsync(rankId.toLowerCase());
     }
 
-    public CompletableFuture<Void> updateRealValueAsync(String rankId, Consumer<Rank> consumer) {
+    public CompletableFuture<Rank> updateRealValueAsync(String rankId, Consumer<Rank> consumer) {
         return this.collection.updateRealValueAsync(rankId.toLowerCase(), consumer);
     }
 
