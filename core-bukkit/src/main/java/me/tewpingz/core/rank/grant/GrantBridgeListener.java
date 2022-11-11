@@ -1,5 +1,6 @@
 package me.tewpingz.core.rank.grant;
 
+import me.tewpingz.core.Core;
 import me.tewpingz.core.CorePlugin;
 import me.tewpingz.core.rank.grant.event.GrantCreateEvent;
 import me.tewpingz.message.MessageBuilderDefaults;
@@ -18,7 +19,7 @@ public class GrantBridgeListener {
                         .primary("has granted")
                         .secondary(grantCreateEvent.getGrant().getRankSnapshot().getDisplayName())
                         .primary("to")
-                        .secondary(grantCreateEvent.getPlayerUuid().toString())
+                        .secondary(Core.getInstance().getUuidManager().getName(grantCreateEvent.getPlayerUuid()).getName())
                         .build(this::broadcast);
             }
         });

@@ -50,11 +50,15 @@
                             <relocations>
                                 <relocation>
                                     <pattern>co.aikar.commands</pattern>
-                                    <shadedPattern>me.tewpingz.core.acf</shadedPattern> <!-- Replace this -->
+                                    <shadedPattern>me.tewpingz.core.acf</shadedPattern>
                                 </relocation>
                                 <relocation>
                                     <pattern>co.aikar.locales</pattern>
-                                    <shadedPattern>me.tewpingz.core.locales</shadedPattern> <!-- Replace this -->
+                                    <shadedPattern>me.tewpingz.core.locales</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>fr.mrmicky.fastinv</pattern>
+                                    <shadedPattern>me.tewpingz.fastinv</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>
@@ -68,6 +72,11 @@
         <repository>
             <id>papermc-repo</id>
             <url>https://repo.papermc.io/repository/maven-public/</url>
+        </repository>
+
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
         </repository>
     </repositories>
 
@@ -98,6 +107,12 @@
             <artifactId>MessageBuilder</artifactId>
             <version>1.0</version>
             <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>fr.mrmicky</groupId>
+            <artifactId>FastInv</artifactId>
+            <version>3.0.3</version>
         </dependency>
     </dependencies>
 </project>

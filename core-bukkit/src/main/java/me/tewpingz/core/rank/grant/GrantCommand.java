@@ -11,16 +11,13 @@ import org.bukkit.entity.Player;
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
-@CommandAlias("rankgrant|grant")
+@CommandAlias("grant")
 public class GrantCommand extends BaseCommand {
 
     @Default
-    @CommandCompletion("@players @ranks")
-    @Syntax("<target> <rank> <reason>")
-    public void onCommand(Player player, UuidManager.NameToUuidEntry.NameToUuidSnapshot uuidSnapshot, Rank.RankSnapshot rankSnapshot, Duration duration, String reason) {
-        Core.getInstance().getProfileManager().updateRealValueAsync(uuidSnapshot.getUuid(), profile -> {
-            profile.addGrant(rankSnapshot.getRankId(), player.getName(), reason, duration.toMillis());
-        });
+    @Syntax("<target>")
+    public void onCommand(Player player, UuidManager.NameToUuidEntry.NameToUuidSnapshot uuidSnapshot) {
+        new GrantProcedure(uuidSnapshot.getUuid()).start(player);
     }
 
     @Subcommand("add")

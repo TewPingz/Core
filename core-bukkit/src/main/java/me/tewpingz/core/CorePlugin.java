@@ -3,6 +3,8 @@ package me.tewpingz.core;
 import co.aikar.commands.PaperCommandManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import fr.mrmicky.fastinv.FastInv;
+import fr.mrmicky.fastinv.FastInvManager;
 import lombok.Getter;
 import me.tewpingz.core.profile.ProfileListener;
 import me.tewpingz.core.rank.*;
@@ -41,6 +43,7 @@ public class CorePlugin extends JavaPlugin {
 
         this.grantScheduleManager = new GrantScheduleManager();
 
+        FastInvManager.register(this);
         this.registerListeners();
         this.registerCommands();
     }
