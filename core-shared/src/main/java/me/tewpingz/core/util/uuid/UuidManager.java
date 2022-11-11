@@ -23,12 +23,12 @@ public class UuidManager {
         this.uuidToNameCollection = Core.getInstance().getRediGo().createCollection("uuid-name", UUID.class, UuidToNameEntry.class, 30, false, uuid -> {
             String name = this.uuidFetcher.fetchName(uuid);
             return new UuidToNameEntry(uuid, name);
-        });
+        }, UuidToNameEntry::new);
 
         this.nameToUuidCollection = Core.getInstance().getRediGo().createCollection("name-uuid", String.class, NameToUuidEntry.class, 30, false, name -> {
             UUID uuid = this.uuidFetcher.fetchUuid(name);
             return new NameToUuidEntry(name, uuid);
-        });
+        }, NameToUuidEntry::new);
     }
 
     public void beginCachingLocally(UUID playerId, String playerName) {
