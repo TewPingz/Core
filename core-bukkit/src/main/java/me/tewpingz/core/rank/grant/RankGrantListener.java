@@ -1,12 +1,18 @@
 package me.tewpingz.core.rank.grant;
 
-import lombok.AllArgsConstructor;
+import io.papermc.paper.chat.ChatRenderer;
+import io.papermc.paper.event.player.AsyncChatEvent;
+import io.papermc.paper.event.player.ChatEvent;
 import lombok.RequiredArgsConstructor;
 import me.tewpingz.core.Core;
 import me.tewpingz.core.CorePlugin;
 import me.tewpingz.core.profile.Profile;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -34,18 +40,20 @@ public class RankGrantListener implements Listener {
         });
     }
 
-    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-    public void onAsyncPlayerChatEvent(AsyncPlayerChatEvent event) {
-        Profile.ProfileSnapshot snapshot = Core.getInstance().getProfileManager().getCachedValue(event.getPlayer().getUniqueId());
-        String prefix = snapshot.getDisplayRank().getPrefix();
-        String suffix = snapshot.getDisplayRank().getSuffix();
-        String color = snapshot.getDisplayRank().getColor();
-        event.getPlayer().setDisplayName(color + event.getPlayer().getName());
-        event.setFormat(prefix + "%s" + suffix + ChatColor.WHITE + ": %s");
-    }
-
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
         Bukkit.getScheduler().runTaskAsynchronously(CorePlugin.getInstance(), () -> this.rankGrantScheduleManager.unscheduledTasks(event.getPlayer().getUniqueId()));
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onAsyncPlayerChatEvent(final AsyncChatEvent event) {
+        event.renderer(ChatRenderer.viewerUnaware((source, sourceDisplayName, message) -> {
+            Profile.ProfileSnapshot snapshot = Core.getInstance().getProfileManager().getCachedValue(event.getPlayer().getUniqueId());
+            TextComponent prefix = Component.text(snapshot.getDisplayRank().getPrefix());
+            TextComponent suffix = Component.text(snapshot.getDisplayRank().getSuffix());
+            TextComponent color = Component.text(snapshot.getDisplayRank().getColor());
+            TextComponent separator = Component.text(": ").color(TextColor.color(220,220,220));
+            return prefix.append(suffix).append(color).append(sourceDisplayName).append(suffix).append(separator).append(message);
+        }));
     }
 }

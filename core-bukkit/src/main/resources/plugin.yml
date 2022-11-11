@@ -2,6 +2,7 @@ name: Core
 version: '${project.version}'
 main: me.tewpingz.core.CorePlugin
 api-version: 1.19
+softdepend: [ FreedomChat ]
 authors: [ TewPingz ]
 description: A core made for Xenon Network
 website: https://www.tewpingz.me
