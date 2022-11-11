@@ -12,11 +12,11 @@ import java.util.UUID;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class RankGrantScheduleManager {
-    private final Table<UUID, RankGrant, BukkitTask> grantTasks = HashBasedTable.create();
+public class GrantScheduleManager {
+    private final Table<UUID, Grant, BukkitTask> grantTasks = HashBasedTable.create();
     private final Lock grantLock = new ReentrantLock();
 
-    protected void scheduleTask(UUID playerId, RankGrant grant) {
+    protected void scheduleTask(UUID playerId, Grant grant) {
         if (grant.isInfinite() || grant.hasExpired()) {
             return;
         }
@@ -31,7 +31,7 @@ public class RankGrantScheduleManager {
 
     protected void unscheduledTasks(UUID playerId) {
         this.grantLock.lock();
-        Map<RankGrant, BukkitTask> grantMap = this.grantTasks.rowMap().remove(playerId);
+        Map<Grant, BukkitTask> grantMap = this.grantTasks.rowMap().remove(playerId);
         if (grantMap != null) {
             grantMap.values().forEach(BukkitTask::cancel);
         }

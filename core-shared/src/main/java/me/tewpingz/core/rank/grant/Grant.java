@@ -7,7 +7,7 @@ import me.tewpingz.core.rank.Rank;
 @Data
 @EqualsAndHashCode
 @RequiredArgsConstructor
-public class RankGrant {
+public class Grant {
 
     private final String rankId;
     private final String executor;
@@ -40,7 +40,7 @@ public class RankGrant {
     @AllArgsConstructor
     public static class ExpiredRankGrant {
 
-        private final RankGrant rankGrant;
+        private final Grant grant;
         private final String removedBy, removedFor;
         private final long removedAt;
 

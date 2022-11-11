@@ -12,7 +12,7 @@ import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
 @CommandAlias("rankgrant|grant")
-public class RankGrantCommand extends BaseCommand {
+public class GrantCommand extends BaseCommand {
 
     @Default
     @CommandCompletion("@players @ranks")
