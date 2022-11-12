@@ -1,4 +1,4 @@
-package me.tewpingz.core.rank.grant;
+package me.tewpingz.core.profile.grant;
 
 import io.papermc.paper.chat.ChatRenderer;
 import io.papermc.paper.event.player.AsyncChatEvent;

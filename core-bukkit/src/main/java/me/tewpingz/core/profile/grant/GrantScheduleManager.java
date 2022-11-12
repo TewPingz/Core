@@ -1,9 +1,10 @@
-package me.tewpingz.core.rank.grant;
+package me.tewpingz.core.profile.grant;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import me.tewpingz.core.Core;
 import me.tewpingz.core.CorePlugin;
+import me.tewpingz.core.profile.grant.Grant;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitTask;
 

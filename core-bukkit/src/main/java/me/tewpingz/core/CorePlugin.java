@@ -7,6 +7,7 @@ import fr.mrmicky.fastinv.FastInvManager;
 import lombok.Getter;
 import me.tewpingz.core.command.ListCommand;
 import me.tewpingz.core.profile.ProfileListener;
+import me.tewpingz.core.profile.grant.*;
 import me.tewpingz.core.rank.*;
 import me.tewpingz.core.rank.grant.*;
 import me.tewpingz.core.util.duration.DurationContextResolver;

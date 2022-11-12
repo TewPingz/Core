@@ -1,9 +1,9 @@
-package me.tewpingz.core.rank.grant;
+package me.tewpingz.core.profile.grant;
 
 import me.tewpingz.core.Core;
 import me.tewpingz.core.CorePlugin;
-import me.tewpingz.core.rank.grant.event.GrantCreateEvent;
-import me.tewpingz.core.rank.grant.event.GrantRemoveEvent;
+import me.tewpingz.core.profile.grant.event.GrantCreateEvent;
+import me.tewpingz.core.profile.grant.event.GrantRemoveEvent;
 import me.tewpingz.message.MessageBuilderDefaults;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

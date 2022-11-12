@@ -1,6 +1,5 @@
-package me.tewpingz.core.rank.grant;
+package me.tewpingz.core.profile.grant;
 
-import fr.mrmicky.fastinv.FastInv;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;

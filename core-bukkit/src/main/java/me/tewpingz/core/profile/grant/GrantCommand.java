@@ -1,4 +1,4 @@
-package me.tewpingz.core.rank.grant;
+package me.tewpingz.core.profile.grant;
 
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;

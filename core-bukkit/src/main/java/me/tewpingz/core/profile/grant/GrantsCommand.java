@@ -1,4 +1,4 @@
-package me.tewpingz.core.rank.grant;
+package me.tewpingz.core.profile.grant;
 
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import me.tewpingz.core.Core;
 import me.tewpingz.core.CorePlugin;
 import me.tewpingz.core.profile.Profile;
+import me.tewpingz.core.profile.grant.Grant;
 import me.tewpingz.core.rank.Rank;
 import me.tewpingz.core.util.ItemBuilder;
 import me.tewpingz.core.util.TimeUtil;

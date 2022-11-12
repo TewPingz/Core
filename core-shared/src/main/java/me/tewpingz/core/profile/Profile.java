@@ -5,9 +5,9 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import me.tewpingz.core.Core;
 import me.tewpingz.core.rank.Rank;
-import me.tewpingz.core.rank.grant.Grant;
-import me.tewpingz.core.rank.grant.event.GrantCreateEvent;
-import me.tewpingz.core.rank.grant.event.GrantRemoveEvent;
+import me.tewpingz.core.profile.grant.Grant;
+import me.tewpingz.core.profile.grant.event.GrantCreateEvent;
+import me.tewpingz.core.profile.grant.event.GrantRemoveEvent;
 import me.tewpingz.redigo.data.RediGoObject;
 import me.tewpingz.redigo.data.RediGoValue;
 
