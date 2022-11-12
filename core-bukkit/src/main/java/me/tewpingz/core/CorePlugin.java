@@ -17,6 +17,7 @@ import me.tewpingz.core.profile.punishment.PunishmentScheduleManager;
 import me.tewpingz.core.profile.punishment.command.BanCommand;
 import me.tewpingz.core.profile.punishment.command.BlacklistCommand;
 import me.tewpingz.core.profile.punishment.command.MuteCommand;
+import me.tewpingz.core.profile.punishment.command.PunishmentsCommand;
 import me.tewpingz.core.profile.punishment.listener.BridgePunishmentListener;
 import me.tewpingz.core.profile.punishment.listener.PunishmentListener;
 import me.tewpingz.core.rank.*;
@@ -86,6 +87,7 @@ public class CorePlugin extends JavaPlugin {
         commandManager.registerCommand(new BlacklistCommand());
         commandManager.registerCommand(new MuteCommand());
         commandManager.registerCommand(new AltsCommand());
+        commandManager.registerCommand(new PunishmentsCommand());
     }
 
     private void registerListeners() {
