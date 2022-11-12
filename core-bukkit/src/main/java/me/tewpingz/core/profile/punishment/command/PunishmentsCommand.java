@@ -39,17 +39,17 @@ public class PunishmentsCommand extends BaseCommand {
     @CommandCompletion("@players")
     public void onCommand(Player player, AsyncUuid asyncUuid) {
         asyncUuid.fetchUuid(player, uuid -> {
-            Profile.ProfileSnapshot snapshot = Core.getInstance().getProfileManager().getRealValue(uuid);
+            Profile.ProfileSnapshot profile = Core.getInstance().getProfileManager().getRealValue(uuid);
             Bukkit.getScheduler().runTask(CorePlugin.getInstance(), () ->
-                    new PunishmentsInventory(snapshot, asyncUuid.getName()).open(player));
+                    new PunishmentsInventory(profile).open(player));
         });
     }
 
     private static class PunishmentsInventory extends PaginatedInv {
-        public PunishmentsInventory(Profile.ProfileSnapshot snapshot, String name) {
-            super("Punishments for " + (snapshot.getLastSeenName().isEmpty() ? name : snapshot.getLastSeenName()));
+        public PunishmentsInventory(Profile.ProfileSnapshot profile) {
+            super("Punishments for " + profile.getLastSeenName());
 
-            for (Punishment punishment : snapshot.getSortedActivePunishments()) {
+            for (Punishment punishment : profile.getSortedActivePunishments()) {
                 String addedAt = new Date(punishment.getStartTimestamp()).toString();
 
                 String duration = punishment.isInfinite() ? "Permanent" :
@@ -79,14 +79,14 @@ public class PunishmentsCommand extends BaseCommand {
 
                 this.addItem(itemStack, event -> {
                     if (event.isRightClick()) {
-                        new Conversation(CorePlugin.getInstance(), (Player)event.getWhoClicked(), new RemovePunishment(snapshot, punishment)).begin();
+                        new Conversation(CorePlugin.getInstance(), (Player)event.getWhoClicked(), new RemovePunishment(profile, punishment)).begin();
                         event.getInventory().close();
                     }
                     event.setCancelled(true);
                 });
             }
 
-            for (Punishment.ExpiredPunishment expiredPunishment : snapshot.getSortedExpiredPunishments()) {
+            for (Punishment.ExpiredPunishment expiredPunishment : profile.getSortedExpiredPunishments()) {
                 String addedAt = new Date(expiredPunishment.getPunishment().getStartTimestamp()).toString();
 
                 String duration = expiredPunishment.getPunishment().isInfinite() ? "Permanent" :
@@ -117,7 +117,7 @@ public class PunishmentsCommand extends BaseCommand {
     @RequiredArgsConstructor
     private static class RemovePunishment extends StringPrompt {
 
-        private final Profile.ProfileSnapshot snapshot;
+        private final Profile.ProfileSnapshot profile;
         private final Punishment punishment;
 
         @Override
@@ -130,7 +130,7 @@ public class PunishmentsCommand extends BaseCommand {
 
         @Override
         public @Nullable Prompt acceptInput(@NotNull ConversationContext context, @Nullable String input) {
-            Core.getInstance().getProfileManager().updateRealValueAsync(snapshot.getPlayerId(), profile -> {
+            Core.getInstance().getProfileManager().updateRealValueAsync(profile.getPlayerId(), profile -> {
                 profile.removePunishment(punishment, ((Player)context.getForWhom()).getName(), input);
             });
             return null;

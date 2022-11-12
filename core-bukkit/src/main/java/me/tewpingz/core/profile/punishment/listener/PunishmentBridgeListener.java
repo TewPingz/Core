@@ -14,9 +14,9 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-public class BridgePunishmentListener {
+public class PunishmentBridgeListener {
 
-    public BridgePunishmentListener(CorePlugin instance) {
+    public PunishmentBridgeListener(CorePlugin instance) {
         instance.getCore().getBridge().registerListener(PunishmentAddEvent.class, (charSequence, event) -> {
             Player player = Bukkit.getPlayer(event.getPlayerUuid());
             PunishmentType punishmentType = event.getPunishment().getPunishmentType();
@@ -41,9 +41,9 @@ public class BridgePunishmentListener {
             }
 
             if (punishmentType == PunishmentType.BLACKLIST) {
-                Profile.ProfileSnapshot snapshot = Core.getInstance().getProfileManager().getRealValue(event.getPlayerUuid());
-                if (snapshot.getLastIp() != null) {
-                    AltEntry.AltProfileSnapshot entry = Core.getInstance().getAltManager().getAlts(snapshot.getLastIp());
+                Profile.ProfileSnapshot profile = Core.getInstance().getProfileManager().getRealValue(event.getPlayerUuid());
+                if (profile.getLastIp() != null) {
+                    AltEntry.AltProfileSnapshot entry = Core.getInstance().getAltManager().getAlts(profile.getLastIp());
                     entry.getRelatedIds().forEach(uuid -> {
                         Player target = Bukkit.getPlayer(uuid);
                         if (target != null) {

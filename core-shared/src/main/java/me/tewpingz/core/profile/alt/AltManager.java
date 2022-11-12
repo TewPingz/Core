@@ -13,7 +13,7 @@ public class AltManager {
         this.collection = instance.getRediGo().createCollection("alts", String.class, AltEntry.class, 30, false, AltEntry::new);
     }
 
-    public AltEntry addUuid(String hashedIp, UUID uuid) {
+    public AltEntry.AltProfileSnapshot addUuid(String hashedIp, UUID uuid) {
         return this.collection.updateRealValue(hashedIp, altEntry -> altEntry.addUuid(uuid));
     }
 

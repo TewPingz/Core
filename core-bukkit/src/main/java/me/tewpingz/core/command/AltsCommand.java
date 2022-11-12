@@ -33,9 +33,9 @@ public class AltsCommand extends BaseCommand {
                 return;
             }
 
-            AltEntry.AltProfileSnapshot entry = Core.getInstance().getAltManager().getAlts(lastIp);
+            AltEntry.AltProfileSnapshot altEntry = Core.getInstance().getAltManager().getAlts(lastIp);
             MessageBuilder builder = MessageBuilderDefaults.normal();
-            Collection<UUID> alts = entry.getRelatedIds().stream().filter(altId -> !altId.equals(uuid)).toList();
+            Collection<UUID> alts = altEntry.getRelatedIds().stream().filter(altId -> !altId.equals(uuid)).toList();
 
             if (alts.size() > 0) {
                 for (UUID relatedId : alts) {

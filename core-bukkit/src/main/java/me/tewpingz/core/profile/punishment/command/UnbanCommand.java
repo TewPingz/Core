@@ -6,7 +6,6 @@ import co.aikar.commands.annotation.CommandCompletion;
 import co.aikar.commands.annotation.CommandPermission;
 import co.aikar.commands.annotation.Default;
 import me.tewpingz.core.Core;
-import me.tewpingz.core.profile.Profile;
 import me.tewpingz.core.profile.punishment.PunishmentType;
 import me.tewpingz.core.util.uuid.AsyncUuid;
 import org.bukkit.command.CommandSender;

@@ -45,7 +45,7 @@ public class RankManager {
         return this.collection.getOrCreateRealValueAsync(rankId.toLowerCase());
     }
 
-    public CompletableFuture<Rank> updateRealValueAsync(String rankId, Consumer<Rank> consumer) {
+    public CompletableFuture<Rank.RankSnapshot> updateRealValueAsync(String rankId, Consumer<Rank> consumer) {
         return this.collection.updateRealValueAsync(rankId.toLowerCase(), consumer);
     }
 }

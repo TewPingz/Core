@@ -35,8 +35,8 @@ public class PunishmentListener implements Listener {
 
     @EventHandler
     public void onAsyncChat(AsyncChatEvent event) {
-        Profile.ProfileSnapshot snapshot = Core.getInstance().getProfileManager().getCachedValue(event.getPlayer().getUniqueId());
-        Punishment mute = snapshot.getMute();
+        Profile.ProfileSnapshot profile = Core.getInstance().getProfileManager().getCachedValue(event.getPlayer().getUniqueId());
+        Punishment mute = profile.getMute();
 
         if (mute == null) {
             return;

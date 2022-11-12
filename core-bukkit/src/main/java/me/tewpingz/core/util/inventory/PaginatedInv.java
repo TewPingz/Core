@@ -17,7 +17,7 @@ public class PaginatedInv {
     private final List<PaginatedItem> items = new ArrayList<>();
 
     private int currentPage = 0;
-    private int pageCount = 0;
+    private int pageCount = 1;
 
     public PaginatedInv(String title) {
         this.title = title;

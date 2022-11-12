@@ -46,7 +46,7 @@ public class RankCommand extends BaseCommand {
                     .append(rank.getColor().apply(Component.text(rank.getDisplayName())))
                     .tertiary(".")
                     .build(commandSender::sendMessage);
-            Core.getInstance().getBridge().callEvent(new RankCreateEvent(commandSender.getName(), rank.getSnapshot()));
+            Core.getInstance().getBridge().callEvent(new RankCreateEvent(commandSender.getName(), rank));
         });
     }
 
@@ -67,7 +67,7 @@ public class RankCommand extends BaseCommand {
                     .secondary(String.valueOf(priority))
                     .tertiary(".")
                     .build(sender::sendMessage);
-            Core.getInstance().getBridge().callEvent(new RankUpdateEvent(sender.getName(), rank.getSnapshot()));
+            Core.getInstance().getBridge().callEvent(new RankUpdateEvent(sender.getName(), rank));
         });
     }
 
@@ -89,7 +89,7 @@ public class RankCommand extends BaseCommand {
                     .secondary(translatedPrefix)
                     .tertiary(".")
                     .build(sender::sendMessage);
-            Core.getInstance().getBridge().callEvent(new RankUpdateEvent(sender.getName(), rank.getSnapshot()));
+            Core.getInstance().getBridge().callEvent(new RankUpdateEvent(sender.getName(), rank));
         });
     }
 
@@ -110,7 +110,7 @@ public class RankCommand extends BaseCommand {
                     .secondary(translatedSuffix)
                     .tertiary(".")
                     .build(sender::sendMessage);
-            Core.getInstance().getBridge().callEvent(new RankUpdateEvent(sender.getName(), rank.getSnapshot()));
+            Core.getInstance().getBridge().callEvent(new RankUpdateEvent(sender.getName(), rank));
         });
     }
 
@@ -130,7 +130,7 @@ public class RankCommand extends BaseCommand {
                     .secondary(displayName)
                     .tertiary(".")
                     .build(sender::sendMessage);
-            Core.getInstance().getBridge().callEvent(new RankUpdateEvent(sender.getName(), rank.getSnapshot()));
+            Core.getInstance().getBridge().callEvent(new RankUpdateEvent(sender.getName(), rank));
         });
     }
 
@@ -151,7 +151,7 @@ public class RankCommand extends BaseCommand {
                     .append(rank.getColor().apply(Component.text(rank.getDisplayName()))).space()
                     .tertiary(".")
                     .build(sender::sendMessage);
-            Core.getInstance().getBridge().callEvent(new RankUpdateEvent(sender.getName(), rank.getSnapshot()));
+            Core.getInstance().getBridge().callEvent(new RankUpdateEvent(sender.getName(), rank));
         });
     }
 
@@ -172,7 +172,7 @@ public class RankCommand extends BaseCommand {
                     .append(rank.getColor().apply(Component.text(rank.getDisplayName()))).space()
                     .tertiary(".")
                     .build(sender::sendMessage);
-            Core.getInstance().getBridge().callEvent(new RankUpdateEvent(sender.getName(), rank.getSnapshot()));
+            Core.getInstance().getBridge().callEvent(new RankUpdateEvent(sender.getName(), rank));
         });
     }
 
@@ -191,7 +191,7 @@ public class RankCommand extends BaseCommand {
                     .append(rank.getColor().apply(Component.text(rank.getDisplayName()))).space()
                     .tertiary(".")
                     .build(sender::sendMessage);
-            Core.getInstance().getBridge().callEvent(new RankUpdateEvent(sender.getName(), rank.getSnapshot()));
+            Core.getInstance().getBridge().callEvent(new RankUpdateEvent(sender.getName(), rank));
         });
     }
 
@@ -210,7 +210,7 @@ public class RankCommand extends BaseCommand {
                     .append(rank.getColor().apply(Component.text(rank.getDisplayName()))).space()
                     .tertiary(".")
                     .build(sender::sendMessage);
-            Core.getInstance().getBridge().callEvent(new RankUpdateEvent(sender.getName(), rank.getSnapshot()));
+            Core.getInstance().getBridge().callEvent(new RankUpdateEvent(sender.getName(), rank));
         });
     }
 
@@ -238,7 +238,7 @@ public class RankCommand extends BaseCommand {
                     .append(rank.getColor().apply(Component.text(rank.getDisplayName())))
                     .tertiary(".")
                     .build());
-            Core.getInstance().getBridge().callEvent(new RankUpdateEvent(sender.getName(), rank.getSnapshot()));
+            Core.getInstance().getBridge().callEvent(new RankUpdateEvent(sender.getName(), rank));
         });
     }
 
@@ -265,7 +265,7 @@ public class RankCommand extends BaseCommand {
                     .append(rank.getColor().apply(Component.text(rank.getDisplayName())))
                     .tertiary(".")
                     .build());
-            Core.getInstance().getBridge().callEvent(new RankUpdateEvent(sender.getName(), rank.getSnapshot()));
+            Core.getInstance().getBridge().callEvent(new RankUpdateEvent(sender.getName(), rank));
         });
     }
 
