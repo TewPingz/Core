@@ -1,7 +1,6 @@
 package me.tewpingz.core.profile.punishment;
 
 import lombok.Data;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import me.tewpingz.core.Core;
 import me.tewpingz.core.CorePlugin;

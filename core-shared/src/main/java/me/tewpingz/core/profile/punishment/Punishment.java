@@ -1,7 +1,6 @@
 package me.tewpingz.core.profile.punishment;
 
 import lombok.*;
-import me.tewpingz.core.profile.grant.Grant;
 
 @Data
 @EqualsAndHashCode

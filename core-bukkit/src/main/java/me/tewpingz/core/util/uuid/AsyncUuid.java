@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import me.tewpingz.core.Core;
 import me.tewpingz.message.MessageBuilderDefaults;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import java.util.UUID;
 import java.util.function.Consumer;
