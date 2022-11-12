@@ -27,12 +27,12 @@ public class PaginatedPage extends FastInv {
                 .flags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DYE)
                 .build(itemStack -> this.setItem(31, itemStack, this::handleCurrentPage));
 
-        new ItemBuilder(this.paginatedInv.getCurrentPage() <= 0 ? Material.RED_DYE : Material.GREEN_DYE)
+        new ItemBuilder(this.paginatedInv.getCurrentPage() <= 0 ? Material.MAGENTA_DYE : Material.LIME_DYE)
                 .name(this.paginatedInv.getCurrentPage() <= 0 ? (ChatColor.RED + "You cannot go back any further") : (ChatColor.GREEN + "Go back!"))
                 .flags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DYE)
                 .build(itemStack -> this.setItem(30, itemStack, this::handlePreviousPage));
 
-        new ItemBuilder(this.paginatedInv.getCurrentPage() >= (this.paginatedInv.getPageCount() - 1) ? Material.RED_DYE : Material.GREEN_DYE)
+        new ItemBuilder(this.paginatedInv.getCurrentPage() >= (this.paginatedInv.getPageCount() - 1) ? Material.MAGENTA_DYE : Material.LIME_DYE)
                 .name(this.paginatedInv.getCurrentPage() >= (this.paginatedInv.getPageCount() - 1) ? (ChatColor.RED + "You cannot go any further") : (ChatColor.GREEN + "Next page!"))
                 .flags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DYE)
                 .build(itemStack -> this.setItem(32, itemStack, this::handleNextPage));
