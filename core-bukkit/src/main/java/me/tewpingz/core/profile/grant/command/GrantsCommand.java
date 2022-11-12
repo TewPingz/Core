@@ -39,17 +39,17 @@ public class GrantsCommand extends BaseCommand {
     @CommandCompletion("@players")
     public void onCommand(Player player, AsyncUuid asyncUuid) {
         asyncUuid.fetchUuid(player, uuid -> {
-            Profile.ProfileSnapshot snapshot = Core.getInstance().getProfileManager().getRealValue(uuid);
+            Profile.ProfileSnapshot profile = Core.getInstance().getProfileManager().getRealValue(uuid);
             Bukkit.getScheduler().runTask(CorePlugin.getInstance(), () ->
-                    new GrantsInventory(snapshot, asyncUuid.getName()).open(player));
+                    new GrantsInventory(profile, asyncUuid.getName()).open(player));
         });
     }
 
     private static class GrantsInventory extends PaginatedInv {
-        public GrantsInventory(Profile.ProfileSnapshot snapshot, String name) {
-            super(ChatColor.GOLD + "Grants for " + (snapshot.getLastSeenName().isEmpty() ? name : snapshot.getLastSeenName()));
+        public GrantsInventory(Profile.ProfileSnapshot profile, String name) {
+            super(ChatColor.GOLD + "Grants for " + (profile.getLastSeenName().isEmpty() ? name : profile.getLastSeenName()));
 
-            for (Grant activeGrant : snapshot.getSortedActiveGrants()) {
+            for (Grant activeGrant : profile.getSortedActiveGrants()) {
                 Rank.RankSnapshot rankSnapshot = activeGrant.getRankSnapshot();
 
                 String addedAt = new Date(activeGrant.getStartTimestamp()).toString();
@@ -82,14 +82,14 @@ public class GrantsCommand extends BaseCommand {
 
                 this.addItem(itemStack, event -> {
                     if (event.isRightClick()) {
-                        new Conversation(CorePlugin.getInstance(), (Player)event.getWhoClicked(), new RemoveGrantPrompt(snapshot, activeGrant)).begin();
+                        new Conversation(CorePlugin.getInstance(), (Player)event.getWhoClicked(), new RemoveGrantPrompt(profile, activeGrant)).begin();
                         event.setCancelled(true);
                     }
                     event.getInventory().close();
                 });
             }
 
-            for (Grant.ExpiredGrant expiredGrant : snapshot.getSortedExpiredGrants()) {
+            for (Grant.ExpiredGrant expiredGrant : profile.getSortedExpiredGrants()) {
                 Rank.RankSnapshot rankSnapshot = expiredGrant.getGrant().getRankSnapshot();
 
                 String addedAt = new Date(expiredGrant.getGrant().getStartTimestamp()).toString();
@@ -123,7 +123,7 @@ public class GrantsCommand extends BaseCommand {
     @RequiredArgsConstructor
     private static class RemoveGrantPrompt extends StringPrompt {
 
-        private final Profile.ProfileSnapshot snapshot;
+        private final Profile.ProfileSnapshot profile;
         private final Grant grant;
 
         @Override
@@ -136,7 +136,7 @@ public class GrantsCommand extends BaseCommand {
 
         @Override
         public @Nullable Prompt acceptInput(@NotNull ConversationContext context, @Nullable String input) {
-            Core.getInstance().getProfileManager().updateRealValueAsync(snapshot.getPlayerId(), profile -> {
+            Core.getInstance().getProfileManager().updateRealValueAsync(profile.getPlayerId(), profile -> {
                 profile.removeGrant(grant, ((Player)context.getForWhom()).getName(), input);
             });
             return null;

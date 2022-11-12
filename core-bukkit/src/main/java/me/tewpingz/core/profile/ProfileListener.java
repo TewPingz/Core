@@ -28,7 +28,7 @@ public class ProfileListener implements Listener {
         UUID uuid = event.getUniqueId();
         this.uuidManager.updateRealValues(event.getUniqueId(), event.getName());
         String hashedIp = HashUtil.hash(event.getAddress().getHostAddress());
-        AltEntry altEntry = Core.getInstance().getAltManager().addUuid(hashedIp, uuid);
+        AltEntry.AltProfileSnapshot altEntry = Core.getInstance().getAltManager().addUuid(hashedIp, uuid);
         for (UUID relatedId : altEntry.getRelatedIds()) {
             Profile.ProfileSnapshot relatedProfile = this.profileManager.getRealValue(relatedId);
             if (relatedProfile.getBlacklist() != null) {
@@ -37,7 +37,7 @@ public class ProfileListener implements Listener {
             }
         }
 
-        Profile fetchedProfile = this.profileManager.updateRealValue(uuid, profile -> {
+        Profile.ProfileSnapshot fetchedProfile = this.profileManager.updateRealValue(uuid, profile -> {
             if (profile.getJoinTime() == -1) {
                 profile.setJoinTime(System.currentTimeMillis());
             }
@@ -49,12 +49,12 @@ public class ProfileListener implements Listener {
             });
         });
 
-        if (fetchedProfile.getBlacklist().isPresent()) {
+        if (fetchedProfile.getBlacklist() != null) {
             event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, Component.text("You are currently blacklisted").color(NamedTextColor.RED));
             return;
         }
 
-        if (fetchedProfile.getBan().isPresent()) {
+        if (fetchedProfile.getBan() != null) {
             event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, Component.text("You are currently banned").color(NamedTextColor.RED));
             return;
         }

@@ -45,11 +45,11 @@ public class ProfileManager {
         return this.collection.getOrCreateRealValueAsync(playerId);
     }
 
-    public Profile updateRealValue(UUID playerId, Consumer<Profile> consumer) {
+    public Profile.ProfileSnapshot updateRealValue(UUID playerId, Consumer<Profile> consumer) {
         return this.collection.updateRealValue(playerId, consumer);
     }
 
-    public CompletableFuture<Profile> updateRealValueAsync(UUID playerId, Consumer<Profile> consumer) {
+    public CompletableFuture<Profile.ProfileSnapshot> updateRealValueAsync(UUID playerId, Consumer<Profile> consumer) {
         return this.collection.updateRealValueAsync(playerId, consumer);
     }
 }

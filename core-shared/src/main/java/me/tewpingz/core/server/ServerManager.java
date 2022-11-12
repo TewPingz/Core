@@ -34,11 +34,11 @@ public class ServerManager {
         return this.collection.getOrCreateRealValueAsync(serverId.toLowerCase());
     }
 
-    public Server updateRealValue(String serverId, Consumer<Server> consumer) {
+    public Server.ServerSnapshot updateRealValue(String serverId, Consumer<Server> consumer) {
         return this.collection.updateRealValue(serverId.toLowerCase(), consumer);
     }
 
-    public CompletableFuture<Server> updateRealValueAsync(String serverId, Consumer<Server> consumer) {
+    public CompletableFuture<Server.ServerSnapshot> updateRealValueAsync(String serverId, Consumer<Server> consumer) {
         return this.collection.updateRealValueAsync(serverId.toLowerCase(), consumer);
     }
 }
