@@ -14,13 +14,13 @@ public class AsyncUuid {
     private final String name;
 
     public UUID fetchUuid() {
+        if (name.length() > 16) {
+            return null;
+        }
         return Core.getInstance().getUuidManager().getUuid(this.name).getUuid();
     }
 
     public CompletableFuture<UUID> fetchUuidAsync() {
-        if (name.length() > 16) {
-            return null;
-        }
         return CompletableFuture.supplyAsync(this::fetchUuid);
     }
 }
