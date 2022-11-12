@@ -1,9 +1,10 @@
-package me.tewpingz.core.profile.grant;
+package me.tewpingz.core.profile.grant.command;
 
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
 import me.tewpingz.core.Core;
 import me.tewpingz.core.CorePlugin;
+import me.tewpingz.core.profile.grant.GrantProcedure;
 import me.tewpingz.core.rank.Rank;
 import me.tewpingz.core.util.uuid.AsyncUuid;
 import me.tewpingz.message.MessageBuilderDefaults;
@@ -26,7 +27,8 @@ public class GrantCommand extends BaseCommand {
             if (uuid == null) {
                 MessageBuilderDefaults.error()
                         .secondary(asyncUuid.getName()).space()
-                        .primary("has not joined the server before!")
+                        .primary("does not exist as a player")
+                        .tertiary("!")
                         .build(player::sendMessage);
                 return;
             }
@@ -46,7 +48,8 @@ public class GrantCommand extends BaseCommand {
             if (uuid == null) {
                 MessageBuilderDefaults.error()
                         .secondary(asyncUuid.getName()).space()
-                        .primary("has not joined the server before!")
+                        .primary("does not exist as a player")
+                        .tertiary("!")
                         .build(sender::sendMessage);
                 return;
             }

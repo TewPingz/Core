@@ -4,7 +4,6 @@ import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import me.tewpingz.core.Core;
 import me.tewpingz.core.CorePlugin;
-import me.tewpingz.core.profile.grant.Grant;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -14,41 +13,41 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class GrantScheduleManager {
-    private final Table<UUID, Grant, BukkitTask> grantTasks = HashBasedTable.create();
-    private final Lock grantLock = new ReentrantLock();
+    private final Table<UUID, Grant, BukkitTask> tasks = HashBasedTable.create();
+    private final Lock lock = new ReentrantLock();
 
-    protected void scheduleTask(UUID playerId, Grant grant) {
+    public void schedule(UUID playerId, Grant grant) {
         if (grant.isInfinite() || grant.hasExpired()) {
             return;
         }
 
-        this.grantLock.lock();
+        this.lock.lock();
         int ticks = (int) (grant.getTimeLeft() / 1000 * 20);
-        BukkitTask task = Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> Core.getInstance().getProfileManager().updateRealValueAsync(playerId, profile -> profile.removeGrant(grant, "CONSOLE", "Expired")), ticks);
-        this.grantTasks.put(playerId, grant, task);
-        this.grantLock.unlock();
+        Runnable runnable = () -> Core.getInstance().getProfileManager().updateRealValueAsync(playerId, profile -> profile.removeGrant(grant, "CONSOLE", "Expired"));
+        BukkitTask task = Bukkit.getScheduler().runTaskLaterAsynchronously(CorePlugin.getInstance(), runnable, ticks);
+        this.tasks.put(playerId, grant, task);
+        this.lock.unlock();
     }
 
-    protected void unscheduleTask(UUID playerId, Grant.ExpiredGrant expiredGrant) {
+    public void unschedule(UUID playerId, Grant.ExpiredGrant expiredGrant) {
         if (expiredGrant.getGrant().isInfinite()) {
             return;
         }
 
-        this.grantLock.lock();
-        BukkitTask task = this.grantTasks.remove(playerId, expiredGrant.getGrant());
+        this.lock.lock();
+        BukkitTask task = this.tasks.remove(playerId, expiredGrant.getGrant());
         if (task != null) {
-            System.out.println("Removed task");
             task.cancel();
         }
-        this.grantLock.unlock();
+        this.lock.unlock();
     }
 
-    protected void unscheduledTasks(UUID playerId) {
-        this.grantLock.lock();
-        Map<Grant, BukkitTask> grantMap = this.grantTasks.rowMap().remove(playerId);
+    public void terminate(UUID playerId) {
+        this.lock.lock();
+        Map<Grant, BukkitTask> grantMap = this.tasks.rowMap().remove(playerId);
         if (grantMap != null) {
             grantMap.values().forEach(BukkitTask::cancel);
         }
-        this.grantLock.unlock();
+        this.lock.unlock();
     }
 }

@@ -1,10 +1,12 @@
-package me.tewpingz.core.profile.grant;
+package me.tewpingz.core.profile.grant.listener;
 
 import io.papermc.paper.chat.ChatRenderer;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import me.tewpingz.core.Core;
 import me.tewpingz.core.CorePlugin;
 import me.tewpingz.core.profile.Profile;
+import me.tewpingz.core.profile.grant.Grant;
+import me.tewpingz.core.profile.grant.GrantScheduleManager;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -47,15 +49,13 @@ public class GrantListener implements Listener {
                 profile.removeGrant(grant, "CONSOLE", "Expired");
             });
 
-            profile.getActiveGrants().forEach(grant -> this.grantScheduleManager.scheduleTask(event.getPlayer().getUniqueId(), grant));
-        }).thenAccept(profile -> {
-
+            profile.getActiveGrants().forEach(grant -> this.grantScheduleManager.schedule(event.getPlayer().getUniqueId(), grant));
         });
     }
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
-        Bukkit.getScheduler().runTaskAsynchronously(CorePlugin.getInstance(), () -> this.grantScheduleManager.unscheduledTasks(event.getPlayer().getUniqueId()));
+        Bukkit.getScheduler().runTaskAsynchronously(CorePlugin.getInstance(), () -> this.grantScheduleManager.terminate(event.getPlayer().getUniqueId()));
     }
 
     @EventHandler(priority = EventPriority.LOWEST)

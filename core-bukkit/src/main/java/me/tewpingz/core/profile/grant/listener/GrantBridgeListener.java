@@ -1,4 +1,4 @@
-package me.tewpingz.core.profile.grant;
+package me.tewpingz.core.profile.grant.listener;
 
 import me.tewpingz.core.Core;
 import me.tewpingz.core.CorePlugin;
@@ -14,7 +14,7 @@ public class GrantBridgeListener {
             Player player = Bukkit.getPlayer(event.getPlayerUuid());
 
             if (player != null) {
-                instance.getGrantScheduleManager().scheduleTask(event.getPlayerUuid(), event.getGrant());
+                instance.getGrantScheduleManager().schedule(event.getPlayerUuid(), event.getGrant());
                 MessageBuilderDefaults.success()
                         .primary("You have been given").space()
                         .append(event.getGrant().getRankNameComponent()).space()
@@ -37,7 +37,7 @@ public class GrantBridgeListener {
             Player player = Bukkit.getPlayer(event.getPlayerUuid());
 
             if (player != null) {
-                instance.getGrantScheduleManager().unscheduleTask(event.getPlayerUuid(), event.getExpiredGrant());
+                instance.getGrantScheduleManager().unschedule(event.getPlayerUuid(), event.getExpiredGrant());
 
                 MessageBuilderDefaults.error().primary("Your").space()
                         .append(event.getExpiredGrant().getGrant().getRankNameComponent()).space()
@@ -47,15 +47,17 @@ public class GrantBridgeListener {
                         .build(player::sendMessage);
             }
 
-            MessageBuilderDefaults.normal()
-                    .tertiary("[Server Monitor]").space()
-                    .secondary(event.getExecutorName()).space()
-                    .primary("has removed").space()
-                    .append(event.getExpiredGrant().getGrant().getRankNameComponent()).space()
-                    .primary("from").space()
-                    .secondary(Core.getInstance().getUuidManager().getName(event.getPlayerUuid()).getName())
-                    .tertiary(".")
-                    .toString(this::broadcast);
+            if (!event.getExpiredGrant().getRemovedFor().equals("Expired")) {
+                MessageBuilderDefaults.normal()
+                        .tertiary("[Server Monitor]").space()
+                        .secondary(event.getExecutorName()).space()
+                        .primary("has removed").space()
+                        .append(event.getExpiredGrant().getGrant().getRankNameComponent()).space()
+                        .primary("from").space()
+                        .secondary(Core.getInstance().getUuidManager().getName(event.getPlayerUuid()).getName())
+                        .tertiary(".")
+                        .toString(this::broadcast);
+            }
         });
     }
 

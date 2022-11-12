@@ -8,8 +8,16 @@ import lombok.Getter;
 import me.tewpingz.core.command.ListCommand;
 import me.tewpingz.core.profile.ProfileListener;
 import me.tewpingz.core.profile.grant.*;
+import me.tewpingz.core.profile.grant.command.GrantCommand;
+import me.tewpingz.core.profile.grant.command.GrantsCommand;
+import me.tewpingz.core.profile.grant.listener.GrantBridgeListener;
+import me.tewpingz.core.profile.grant.listener.GrantListener;
+import me.tewpingz.core.profile.punishment.command.BanCommand;
+import me.tewpingz.core.profile.punishment.PunishmentListener;
+import me.tewpingz.core.profile.punishment.PunishmentScheduleManager;
+import me.tewpingz.core.profile.punishment.command.BlacklistCommand;
+import me.tewpingz.core.profile.punishment.command.MuteCommand;
 import me.tewpingz.core.rank.*;
-import me.tewpingz.core.rank.grant.*;
 import me.tewpingz.core.util.duration.DurationContextResolver;
 import me.tewpingz.core.util.uuid.AsyncUuid;
 import me.tewpingz.core.util.uuid.AsyncUuidCommandCompletion;
@@ -28,6 +36,7 @@ public class CorePlugin extends JavaPlugin {
     private Core core;
 
     private GrantScheduleManager grantScheduleManager;
+    private PunishmentScheduleManager punishmentScheduleManager;
 
     @Override
     public void onEnable() {
@@ -40,6 +49,7 @@ public class CorePlugin extends JavaPlugin {
         this.core = new Core(this.gson);
 
         this.grantScheduleManager = new GrantScheduleManager();
+        this.punishmentScheduleManager = new PunishmentScheduleManager();
 
         FastInvManager.register(this);
         this.registerListeners();
@@ -70,15 +80,19 @@ public class CorePlugin extends JavaPlugin {
         commandManager.registerCommand(new GrantCommand());
         commandManager.registerCommand(new GrantsCommand());
         commandManager.registerCommand(new ListCommand());
+        commandManager.registerCommand(new BanCommand());
+        commandManager.registerCommand(new BlacklistCommand());
+        commandManager.registerCommand(new MuteCommand());
     }
 
     private void registerListeners() {
-        // Profile listener
-        this.getServer().getPluginManager().registerEvents(new ProfileListener(this.core.getUuidManager(), this.core.getProfileManager()), this);
-
-        // Ranks and grants listeners
+        // Bridge listeners
         new RankBridgeListener(this);
         new GrantBridgeListener(this);
+
+        // Bukkit listeners
         this.getServer().getPluginManager().registerEvents(new GrantListener(this.grantScheduleManager), this);
+        this.getServer().getPluginManager().registerEvents(new PunishmentListener(this.punishmentScheduleManager), this);
+        this.getServer().getPluginManager().registerEvents(new ProfileListener(this.core.getUuidManager(), this.core.getProfileManager()), this);
     }
 }

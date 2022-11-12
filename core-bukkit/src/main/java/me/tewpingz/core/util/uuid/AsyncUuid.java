@@ -18,6 +18,9 @@ public class AsyncUuid {
     }
 
     public CompletableFuture<UUID> fetchUuidAsync() {
+        if (name.length() > 16) {
+            return null;
+        }
         return CompletableFuture.supplyAsync(this::fetchUuid);
     }
 }

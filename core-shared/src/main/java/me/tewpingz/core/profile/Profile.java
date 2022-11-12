@@ -4,6 +4,8 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import me.tewpingz.core.Core;
+import me.tewpingz.core.profile.punishment.Punishment;
+import me.tewpingz.core.profile.punishment.PunishmentType;
 import me.tewpingz.core.rank.Rank;
 import me.tewpingz.core.profile.grant.Grant;
 import me.tewpingz.core.profile.grant.event.GrantCreateEvent;
@@ -28,11 +30,20 @@ public class Profile implements RediGoObject<UUID, Profile.ProfileSnapshot> {
     @RediGoValue(key = "lastSeenName")
     private String lastSeenName;
 
+    @RediGoValue(key = "lastIp")
+    private String lastIp;
+
     @RediGoValue(key = "activeGrants")
     private Set<Grant> activeGrants = new HashSet<>();
 
     @RediGoValue(key = "expiredGrants")
     private Set<Grant.ExpiredGrant> expiredGrants = new HashSet<>();
+
+    @RediGoValue(key = "activePunishments")
+    private Set<Punishment> activePunishments = new HashSet<>();
+
+    @RediGoValue(key = "expiredPunishments")
+    private Set<Punishment.ExpiredPunishment> expiredPunishments = new HashSet<>();
 
     public boolean addGrant(Rank rank, String executor, String reason, long duration) {
         return this.addGrant(rank.getRankId(), executor, reason, duration);
@@ -57,6 +68,36 @@ public class Profile implements RediGoObject<UUID, Profile.ProfileSnapshot> {
             }
         }
         return false;
+    }
+
+    public boolean addPunishment(PunishmentType punishmentType, String executor, String reason, long duration) {
+        Punishment punishment = new Punishment(punishmentType, executor, reason, System.currentTimeMillis(), duration);
+        return this.activePunishments.add(punishment);
+    }
+
+    public boolean removePunishment(Punishment punishment, String removedBy, String removedFor) {
+        if (this.activePunishments.remove(punishment)) {
+            Punishment.ExpiredPunishment expiredPunishment = new Punishment.ExpiredPunishment(punishment, removedBy, removedFor, System.currentTimeMillis());
+            if (this.expiredPunishments.add(expiredPunishment)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Optional<Punishment> getBan() {
+        return this.activePunishments.stream().filter(punishment -> !punishment.hasExpired())
+                .filter(punishment -> punishment.getPunishmentType() == PunishmentType.BAN).findFirst();
+    }
+
+    public Optional<Punishment> getMute() {
+        return this.activePunishments.stream().filter(punishment -> !punishment.hasExpired())
+                .filter(punishment -> punishment.getPunishmentType() == PunishmentType.MUTE).findFirst();
+    }
+
+    public Optional<Punishment> getBlacklist() {
+        return this.activePunishments.stream().filter(punishment -> !punishment.hasExpired())
+                .filter(punishment -> punishment.getPunishmentType() == PunishmentType.BLACKLIST).findFirst();
     }
 
     public List<Grant> getSortedActiveGrants() {
@@ -117,6 +158,9 @@ public class Profile implements RediGoObject<UUID, Profile.ProfileSnapshot> {
         private final List<Grant> sortedActiveGrants;
         private final List<Grant.ExpiredGrant> sortedExpiredGrants;
         private final String displayRankId;
+        private final Optional<Punishment> ban;
+        private final Optional<Punishment> mute;
+        private final Optional<Punishment> blacklist;
 
         public ProfileSnapshot(Profile profile) {
             this.playerId = profile.getPlayerId();
@@ -128,6 +172,9 @@ public class Profile implements RediGoObject<UUID, Profile.ProfileSnapshot> {
             this.displayRankId = profile.getDisplayRank().getRankId();
             this.sortedActiveGrants = profile.getSortedActiveGrants();
             this.sortedExpiredGrants = profile.getExpiredActiveGrants();
+            this.ban = profile.getBan();
+            this.mute = profile.getMute();
+            this.blacklist = profile.getBlacklist();
         }
 
         public Rank.RankSnapshot getDisplayRank() {

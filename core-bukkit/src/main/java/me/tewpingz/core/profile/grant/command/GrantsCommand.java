@@ -1,4 +1,4 @@
-package me.tewpingz.core.profile.grant;
+package me.tewpingz.core.profile.grant.command;
 
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
@@ -88,7 +88,9 @@ public class GrantsCommand extends BaseCommand {
                         TimeUtil.formatLongIntoDetailedString(activeGrant.getDuration());
 
                 String expires = activeGrant.isInfinite() ? "Never" :
-                        TimeUtil.formatLongIntoDetailedString(activeGrant.getTimeLeft());
+                        (activeGrant.hasExpired() ? "This grant is already expired. They will lose it once they log back on!"
+                                : TimeUtil.formatLongIntoDetailedString(activeGrant.getTimeLeft()));
+
 
                 ItemStack itemStack = new ItemBuilder(Material.LEATHER_CHESTPLATE)
                         .flags(ItemFlag.HIDE_DYE, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS)

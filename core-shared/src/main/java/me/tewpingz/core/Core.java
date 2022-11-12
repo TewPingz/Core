@@ -6,6 +6,7 @@ import com.mongodb.client.MongoClients;
 import lombok.Getter;
 import me.tewpingz.core.bridge.Bridge;
 import me.tewpingz.core.profile.ProfileManager;
+import me.tewpingz.core.profile.alt.AltManager;
 import me.tewpingz.core.rank.RankManager;
 import me.tewpingz.core.util.uuid.UuidManager;
 import me.tewpingz.redigo.RediGo;
@@ -29,6 +30,7 @@ public class Core {
     private final UuidManager uuidManager;
     private final RankManager rankManager;
     private final ProfileManager profileManager;
+    private final AltManager altManager;
 
     public Core(Gson gson) {
         instance = this;
@@ -42,5 +44,6 @@ public class Core {
         this.uuidManager = new UuidManager();
         this.rankManager = new RankManager(this);
         this.profileManager = new ProfileManager(this);
+        this.altManager = new AltManager(this);
     }
 }
