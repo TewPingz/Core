@@ -1,16 +1,15 @@
 package me.tewpingz.core.server;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import me.tewpingz.redigo.data.RediGoObject;
 import me.tewpingz.redigo.data.RediGoValue;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 @Data
 @RequiredArgsConstructor
@@ -22,7 +21,7 @@ public class Server implements RediGoObject<String, Server.ServerSnapshot> {
     private String displayName;
 
     @RediGoValue(key = "players")
-    private Set<ServerPlayer> players = new HashSet<>();
+    private Map<UUID, ServerPlayer> players = new HashMap<>();
 
     @RediGoValue(key = "whitelisted")
     private boolean whitelisted = false;
@@ -32,6 +31,14 @@ public class Server implements RediGoObject<String, Server.ServerSnapshot> {
 
     @RediGoValue(key = "maxPlayers")
     private int maxPlayers = 0;
+
+    public void addPlayer(UUID playerId, String playerName) {
+        this.players.put(playerId, new ServerPlayer(playerId, playerName));
+    }
+
+    public void removePlayer(UUID playerId) {
+        this.players.remove(playerId);
+    }
 
     @Override
     public String getKey() {
@@ -48,9 +55,16 @@ public class Server implements RediGoObject<String, Server.ServerSnapshot> {
     public static class ServerSnapshot implements Snapshot {
 
         private final String serverId, displayName;
-        private final Set<ServerPlayer> players;
+        private final Map<UUID, ServerPlayer> players;
         private final boolean whitelisted, online;
         private final int maxPlayers;
 
+        public ServerPlayer getPlayer(UUID uuid) {
+            return this.players.get(uuid);
+        }
+
+        public Collection<ServerPlayer> getPlayers() {
+            return this.players.values();
+        }
     }
 }

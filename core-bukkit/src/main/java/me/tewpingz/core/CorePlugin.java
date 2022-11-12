@@ -7,6 +7,7 @@ import fr.mrmicky.fastinv.FastInvManager;
 import lombok.Getter;
 import me.tewpingz.core.command.AltsCommand;
 import me.tewpingz.core.command.ListCommand;
+import me.tewpingz.core.command.SetMaxCommand;
 import me.tewpingz.core.profile.ProfileListener;
 import me.tewpingz.core.profile.grant.GrantScheduleManager;
 import me.tewpingz.core.profile.grant.command.GrantCommand;
@@ -15,14 +16,18 @@ import me.tewpingz.core.profile.grant.listener.GrantBridgeListener;
 import me.tewpingz.core.profile.grant.listener.GrantListener;
 import me.tewpingz.core.profile.punishment.PunishmentScheduleManager;
 import me.tewpingz.core.profile.punishment.command.*;
-import me.tewpingz.core.profile.punishment.listener.BridgePunishmentListener;
+import me.tewpingz.core.profile.punishment.listener.PunishmentBridgeListener;
 import me.tewpingz.core.profile.punishment.listener.PunishmentListener;
 import me.tewpingz.core.rank.*;
+import me.tewpingz.core.server.ServerInitializer;
+import me.tewpingz.core.server.listener.ServerBridgeListener;
+import me.tewpingz.core.server.listener.ServerListener;
 import me.tewpingz.core.util.duration.DurationCommandCompletion;
 import me.tewpingz.core.util.duration.DurationContextResolver;
 import me.tewpingz.core.util.uuid.AsyncUuid;
 import me.tewpingz.core.util.uuid.AsyncUuidCommandCompletion;
 import me.tewpingz.core.util.uuid.AsyncUuidContextResolver;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.time.Duration;
@@ -36,6 +41,7 @@ public class CorePlugin extends JavaPlugin {
     private Gson gson;
     private Core core;
 
+    private ServerInitializer serverInitializer;
     private GrantScheduleManager grantScheduleManager;
     private PunishmentScheduleManager punishmentScheduleManager;
 
@@ -44,12 +50,13 @@ public class CorePlugin extends JavaPlugin {
         instance = this;
         FastInvManager.register(this);
 
-        this.gson = new GsonBuilder()
-                .disableHtmlEscaping()
-                .enableComplexMapKeySerialization()
-                .create();
+        this.getConfig().options().copyDefaults();
+        this.saveDefaultConfig();
+
+        this.gson = new GsonBuilder().disableHtmlEscaping().enableComplexMapKeySerialization().create();
         this.core = new Core(this.gson);
 
+        this.serverInitializer = new ServerInitializer(this);
         this.grantScheduleManager = new GrantScheduleManager();
         this.punishmentScheduleManager = new PunishmentScheduleManager();
 
@@ -59,7 +66,8 @@ public class CorePlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
-
+        this.serverInitializer.shutdown();
+        this.core.shutdown();
     }
 
     private void registerCommands() {
@@ -91,17 +99,21 @@ public class CorePlugin extends JavaPlugin {
         commandManager.registerCommand(new UnbanCommand());
         commandManager.registerCommand(new UnblacklistCommand());
         commandManager.registerCommand(new UnmuteCommand());
+        commandManager.registerCommand(new SetMaxCommand());
     }
 
     private void registerListeners() {
         // Bridge listeners
         new RankBridgeListener(this);
         new GrantBridgeListener(this);
-        new BridgePunishmentListener(this);
+        new PunishmentBridgeListener(this);
+        new ServerBridgeListener(this);
 
         // Bukkit listeners
-        this.getServer().getPluginManager().registerEvents(new GrantListener(this.grantScheduleManager), this);
-        this.getServer().getPluginManager().registerEvents(new PunishmentListener(this.punishmentScheduleManager), this);
-        this.getServer().getPluginManager().registerEvents(new ProfileListener(this.core.getUuidManager(), this.core.getProfileManager()), this);
+        PluginManager pluginManager = this.getServer().getPluginManager();
+        pluginManager.registerEvents(new GrantListener(this.grantScheduleManager), this);
+        pluginManager.registerEvents(new PunishmentListener(this.punishmentScheduleManager), this);
+        pluginManager.registerEvents(new ProfileListener(this.core.getUuidManager(), this.core.getProfileManager()), this);
+        pluginManager.registerEvents(new ServerListener(this.serverInitializer), this);
     }
 }

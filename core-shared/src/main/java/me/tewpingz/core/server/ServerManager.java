@@ -1,12 +1,9 @@
 package me.tewpingz.core.server;
 
 import me.tewpingz.core.Core;
-import me.tewpingz.core.rank.Rank;
 import me.tewpingz.redigo.RediGoCollection;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
@@ -22,11 +19,11 @@ public class ServerManager {
         }, Server::new);
     }
 
-    public Server.ServerSnapshot getServer(String serverId) {
+    public Server.ServerSnapshot getCachedValue(String serverId) {
         return this.collection.getCachedValued(serverId.toLowerCase());
     }
 
-    public Collection<Server.ServerSnapshot> getServers() {
+    public Collection<Server.ServerSnapshot> getCachedValues() {
         return this.collection.getCachedValues();
     }
 

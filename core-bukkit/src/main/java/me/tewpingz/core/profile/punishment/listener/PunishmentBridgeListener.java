@@ -14,9 +14,9 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-public class BridgePunishmentListener {
+public class PunishmentBridgeListener {
 
-    public BridgePunishmentListener(CorePlugin instance) {
+    public PunishmentBridgeListener(CorePlugin instance) {
         instance.getCore().getBridge().registerListener(PunishmentAddEvent.class, (charSequence, event) -> {
             Player player = Bukkit.getPlayer(event.getPlayerUuid());
             PunishmentType punishmentType = event.getPunishment().getPunishmentType();
