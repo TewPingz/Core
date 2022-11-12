@@ -30,8 +30,8 @@ public class ProfileListener implements Listener {
         String hashedIp = HashUtil.hash(event.getAddress().getHostAddress());
         AltEntry altEntry = Core.getInstance().getAltManager().addUuid(hashedIp, uuid);
         for (UUID relatedId : altEntry.getRelatedIds()) {
-            Profile relatedProfile = this.profileManager.getRealValue(relatedId);
-            if (relatedProfile.getBlacklist().isPresent()) {
+            Profile.ProfileSnapshot relatedProfile = this.profileManager.getRealValue(relatedId);
+            if (relatedProfile.getBlacklist() != null) {
                 event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, Component.text("Your account is linked to account that is blacklisted").color(NamedTextColor.RED));
                 return;
             }

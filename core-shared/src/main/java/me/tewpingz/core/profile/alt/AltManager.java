@@ -17,7 +17,7 @@ public class AltManager {
         return this.collection.updateRealValue(hashedIp, altEntry -> altEntry.addUuid(uuid));
     }
 
-    public AltEntry getAlts(String hashedIp) {
+    public AltEntry.AltProfileSnapshot getAlts(String hashedIp) {
         return this.collection.getOrCreateRealValue(hashedIp);
     }
 }

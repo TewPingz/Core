@@ -22,7 +22,7 @@ public class AltsCommand extends BaseCommand {
     @Syntax("<target>")
     public void onCommand(CommandSender sender, AsyncUuid asyncUuid) {
         asyncUuid.fetchUuid(sender, uuid -> {
-            Profile profile = Core.getInstance().getProfileManager().getRealValue(uuid);
+            Profile.ProfileSnapshot profile = Core.getInstance().getProfileManager().getRealValue(uuid);
             String lastIp = profile.getLastIp();
 
             if (lastIp == null) {
@@ -33,7 +33,7 @@ public class AltsCommand extends BaseCommand {
                 return;
             }
 
-            AltEntry entry = Core.getInstance().getAltManager().getAlts(lastIp);
+            AltEntry.AltProfileSnapshot entry = Core.getInstance().getAltManager().getAlts(lastIp);
             MessageBuilder builder = MessageBuilderDefaults.normal();
             Collection<UUID> alts = entry.getRelatedIds().stream().filter(altId -> !altId.equals(uuid)).toList();
 

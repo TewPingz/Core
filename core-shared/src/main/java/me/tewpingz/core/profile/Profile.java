@@ -168,7 +168,7 @@ public class Profile implements RediGoObject<UUID, Profile.ProfileSnapshot> {
     public static class ProfileSnapshot implements Snapshot {
         private final UUID playerId;
         private final long joinTime, lastSeen;
-        private final String lastSeenName, displayRankId;
+        private final String lastIp, lastSeenName, displayRankId;
 
         private final List<Grant> sortedActiveGrants;
         private final List<Grant.ExpiredGrant> sortedExpiredGrants;
@@ -183,6 +183,7 @@ public class Profile implements RediGoObject<UUID, Profile.ProfileSnapshot> {
         public ProfileSnapshot(Profile profile) {
             this.playerId = profile.getPlayerId();
             this.joinTime = profile.getJoinTime();
+            this.lastIp = profile.getLastIp();
             this.lastSeen = profile.getLastSeen();
             this.lastSeenName = profile.getLastSeenName();
             this.displayRankId = profile.getDisplayRank().getRankId();

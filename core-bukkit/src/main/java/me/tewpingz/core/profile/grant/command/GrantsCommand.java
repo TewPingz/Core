@@ -39,9 +39,9 @@ public class GrantsCommand extends BaseCommand {
     @CommandCompletion("@players")
     public void onCommand(Player player, AsyncUuid asyncUuid) {
         asyncUuid.fetchUuid(player, uuid -> {
-            Profile profile = Core.getInstance().getProfileManager().getRealValue(uuid);
+            Profile.ProfileSnapshot snapshot = Core.getInstance().getProfileManager().getRealValue(uuid);
             Bukkit.getScheduler().runTask(CorePlugin.getInstance(), () ->
-                    new GrantsInventory(profile.getSnapshot(), asyncUuid.getName()).open(player));
+                    new GrantsInventory(snapshot, asyncUuid.getName()).open(player));
         });
     }
 

@@ -37,11 +37,11 @@ public class ProfileManager {
         this.collection.stopCachingLocally(playerId);
     }
 
-    public Profile getRealValue(UUID playerId) {
+    public Profile.ProfileSnapshot getRealValue(UUID playerId) {
         return this.collection.getOrCreateRealValue(playerId);
     }
 
-    public CompletableFuture<Profile> getRealValueAsync(UUID playerId) {
+    public CompletableFuture<Profile.ProfileSnapshot> getRealValueAsync(UUID playerId) {
         return this.collection.getOrCreateRealValueAsync(playerId);
     }
 

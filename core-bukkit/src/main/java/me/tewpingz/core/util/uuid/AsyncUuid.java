@@ -21,7 +21,7 @@ public class AsyncUuid {
             return;
         }
 
-        UuidManager.NameToUuidEntry entry = Core.getInstance().getUuidManager().getUuid(this.name);
+        UuidManager.NameToUuidEntry.NameToUuidSnapshot entry = Core.getInstance().getUuidManager().getUuid(this.name);
 
         if (entry.getUuid() == null) {
             this.promptPlayerDoesNotExist(executor);

@@ -39,9 +39,9 @@ public class PunishmentsCommand extends BaseCommand {
     @CommandCompletion("@players")
     public void onCommand(Player player, AsyncUuid asyncUuid) {
         asyncUuid.fetchUuid(player, uuid -> {
-            Profile profile = Core.getInstance().getProfileManager().getRealValue(uuid);
+            Profile.ProfileSnapshot snapshot = Core.getInstance().getProfileManager().getRealValue(uuid);
             Bukkit.getScheduler().runTask(CorePlugin.getInstance(), () ->
-                    new PunishmentsInventory(profile.getSnapshot(), asyncUuid.getName()).open(player));
+                    new PunishmentsInventory(snapshot, asyncUuid.getName()).open(player));
         });
     }
 

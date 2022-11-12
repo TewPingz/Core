@@ -49,19 +49,19 @@ public class UuidManager {
         return this.uuidToNameCollection.getCachedValued(uuid);
     }
 
-    public NameToUuidEntry getUuid(String name) {
+    public NameToUuidEntry.NameToUuidSnapshot getUuid(String name) {
         return this.nameToUuidCollection.getOrCreateRealValue(name.toLowerCase());
     }
 
-    public UuidToNameEntry getName(UUID uuid) {
+    public UuidToNameEntry.UuidToEntrySnapshot getName(UUID uuid) {
         return this.uuidToNameCollection.getOrCreateRealValue(uuid);
     }
 
-    public CompletableFuture<NameToUuidEntry> getUuidAsync(String name) {
+    public CompletableFuture<NameToUuidEntry.NameToUuidSnapshot> getUuidAsync(String name) {
         return this.nameToUuidCollection.getOrCreateRealValueAsync(name.toLowerCase());
     }
 
-    public CompletableFuture<UuidToNameEntry> getNameAsync(UUID uuid) {
+    public CompletableFuture<UuidToNameEntry.UuidToEntrySnapshot> getNameAsync(UUID uuid) {
         return this.uuidToNameCollection.getOrCreateRealValueAsync(uuid);
     }
 

@@ -41,7 +41,7 @@ public class RankManager {
         return CompletableFuture.supplyAsync(this::getSortedRanks);
     }
 
-    public CompletableFuture<Rank> getRealValueAsync(String rankId) {
+    public CompletableFuture<Rank.RankSnapshot> getRealValueAsync(String rankId) {
         return this.collection.getOrCreateRealValueAsync(rankId.toLowerCase());
     }
 

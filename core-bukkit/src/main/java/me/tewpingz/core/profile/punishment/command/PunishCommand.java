@@ -28,8 +28,9 @@ public class PunishCommand extends BaseCommand {
     @Syntax("<player> <duration> [reason...]")
     public void onBan(CommandSender sender, AsyncUuid asyncUuid, Duration duration, String reason) {
         asyncUuid.fetchUuid(sender, uuid -> {
-            Profile profile = Core.getInstance().getProfileManager().getRealValue(uuid);
-            profile.addPunishment(PunishmentType.BAN, sender.getName(), reason, duration.toMillis());
+            Core.getInstance().getProfileManager().updateRealValue(uuid, profile -> {
+                profile.addPunishment(PunishmentType.BAN, sender.getName(), reason, duration.toMillis());
+            });
         });
     }
 
@@ -39,8 +40,9 @@ public class PunishCommand extends BaseCommand {
     @Syntax("<player> <duration> [reason...]")
     public void onMute(CommandSender sender, AsyncUuid asyncUuid, Duration duration, String reason) {
         asyncUuid.fetchUuid(sender, uuid -> {
-            Profile profile = Core.getInstance().getProfileManager().getRealValue(uuid);
-            profile.addPunishment(PunishmentType.MUTE, sender.getName(), reason, duration.toMillis());
+            Core.getInstance().getProfileManager().updateRealValue(uuid, profile -> {
+                profile.addPunishment(PunishmentType.MUTE, sender.getName(), reason, duration.toMillis());
+            });
         });
     }
 
@@ -50,8 +52,9 @@ public class PunishCommand extends BaseCommand {
     @CommandCompletion("@players @duration Blacklisted")
     public void onBlacklist(CommandSender sender, AsyncUuid asyncUuid, Duration duration, String reason) {
         asyncUuid.fetchUuid(sender, uuid -> {
-            Profile profile = Core.getInstance().getProfileManager().getRealValue(uuid);
-            profile.addPunishment(PunishmentType.BLACKLIST, sender.getName(), reason, duration.toMillis());
+            Core.getInstance().getProfileManager().updateRealValue(uuid, profile -> {
+                profile.addPunishment(PunishmentType.BLACKLIST, sender.getName(), reason, duration.toMillis());
+            });
         });
     }
 }
