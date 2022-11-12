@@ -38,6 +38,9 @@ public class ProfileListener implements Listener {
         }
 
         Profile fetchedProfile = this.profileManager.updateRealValue(uuid, profile -> {
+            if (profile.getJoinTime() == -1) {
+                profile.setJoinTime(System.currentTimeMillis());
+            }
             profile.setLastSeenName(event.getName());
             profile.setLastSeen(-1);
             profile.setLastIp(hashedIp);

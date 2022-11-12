@@ -24,7 +24,7 @@ public class Profile implements RediGoObject<UUID, Profile.ProfileSnapshot> {
     private final UUID playerId;
 
     @RediGoValue(key = "joinTime")
-    private long joinTime;
+    private long joinTime = -1;
 
     @RediGoValue(key = "lastSeen")
     private long lastSeen;

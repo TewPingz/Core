@@ -14,13 +14,11 @@ import me.tewpingz.core.profile.grant.command.GrantsCommand;
 import me.tewpingz.core.profile.grant.listener.GrantBridgeListener;
 import me.tewpingz.core.profile.grant.listener.GrantListener;
 import me.tewpingz.core.profile.punishment.PunishmentScheduleManager;
-import me.tewpingz.core.profile.punishment.command.BanCommand;
-import me.tewpingz.core.profile.punishment.command.BlacklistCommand;
-import me.tewpingz.core.profile.punishment.command.MuteCommand;
-import me.tewpingz.core.profile.punishment.command.PunishmentsCommand;
+import me.tewpingz.core.profile.punishment.command.*;
 import me.tewpingz.core.profile.punishment.listener.BridgePunishmentListener;
 import me.tewpingz.core.profile.punishment.listener.PunishmentListener;
 import me.tewpingz.core.rank.*;
+import me.tewpingz.core.util.duration.DurationCommandCompletion;
 import me.tewpingz.core.util.duration.DurationContextResolver;
 import me.tewpingz.core.util.uuid.AsyncUuid;
 import me.tewpingz.core.util.uuid.AsyncUuidCommandCompletion;
@@ -76,6 +74,7 @@ public class CorePlugin extends JavaPlugin {
         // Register command completions
         commandManager.getCommandCompletions().registerCompletion("players", new AsyncUuidCommandCompletion());
         commandManager.getCommandCompletions().registerAsyncCompletion("ranks", new RankCommandCompletion());
+        commandManager.getCommandCompletions().registerAsyncCompletion("duration", new DurationCommandCompletion());
 
         // Register commands
         commandManager.registerCommand(new RankCommand());
@@ -88,6 +87,10 @@ public class CorePlugin extends JavaPlugin {
         commandManager.registerCommand(new MuteCommand());
         commandManager.registerCommand(new AltsCommand());
         commandManager.registerCommand(new PunishmentsCommand());
+        commandManager.registerCommand(new PunishCommand());
+        commandManager.registerCommand(new UnbanCommand());
+        commandManager.registerCommand(new UnblacklistCommand());
+        commandManager.registerCommand(new UnmuteCommand());
     }
 
     private void registerListeners() {
