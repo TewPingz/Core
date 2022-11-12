@@ -5,11 +5,20 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import fr.mrmicky.fastinv.FastInvManager;
 import lombok.Getter;
+import me.tewpingz.core.command.AltsCommand;
 import me.tewpingz.core.command.ListCommand;
 import me.tewpingz.core.profile.ProfileListener;
-import me.tewpingz.core.profile.grant.*;
+import me.tewpingz.core.profile.grant.GrantScheduleManager;
+import me.tewpingz.core.profile.grant.command.GrantCommand;
+import me.tewpingz.core.profile.grant.command.GrantsCommand;
+import me.tewpingz.core.profile.grant.listener.GrantBridgeListener;
+import me.tewpingz.core.profile.grant.listener.GrantListener;
+import me.tewpingz.core.profile.punishment.PunishmentScheduleManager;
+import me.tewpingz.core.profile.punishment.command.*;
+import me.tewpingz.core.profile.punishment.listener.BridgePunishmentListener;
+import me.tewpingz.core.profile.punishment.listener.PunishmentListener;
 import me.tewpingz.core.rank.*;
-import me.tewpingz.core.rank.grant.*;
+import me.tewpingz.core.util.duration.DurationCommandCompletion;
 import me.tewpingz.core.util.duration.DurationContextResolver;
 import me.tewpingz.core.util.uuid.AsyncUuid;
 import me.tewpingz.core.util.uuid.AsyncUuidCommandCompletion;
@@ -28,10 +37,12 @@ public class CorePlugin extends JavaPlugin {
     private Core core;
 
     private GrantScheduleManager grantScheduleManager;
+    private PunishmentScheduleManager punishmentScheduleManager;
 
     @Override
     public void onEnable() {
         instance = this;
+        FastInvManager.register(this);
 
         this.gson = new GsonBuilder()
                 .disableHtmlEscaping()
@@ -40,8 +51,8 @@ public class CorePlugin extends JavaPlugin {
         this.core = new Core(this.gson);
 
         this.grantScheduleManager = new GrantScheduleManager();
+        this.punishmentScheduleManager = new PunishmentScheduleManager();
 
-        FastInvManager.register(this);
         this.registerListeners();
         this.registerCommands();
     }
@@ -63,6 +74,7 @@ public class CorePlugin extends JavaPlugin {
         // Register command completions
         commandManager.getCommandCompletions().registerCompletion("players", new AsyncUuidCommandCompletion());
         commandManager.getCommandCompletions().registerAsyncCompletion("ranks", new RankCommandCompletion());
+        commandManager.getCommandCompletions().registerAsyncCompletion("duration", new DurationCommandCompletion());
 
         // Register commands
         commandManager.registerCommand(new RankCommand());
@@ -70,15 +82,26 @@ public class CorePlugin extends JavaPlugin {
         commandManager.registerCommand(new GrantCommand());
         commandManager.registerCommand(new GrantsCommand());
         commandManager.registerCommand(new ListCommand());
+        commandManager.registerCommand(new BanCommand());
+        commandManager.registerCommand(new BlacklistCommand());
+        commandManager.registerCommand(new MuteCommand());
+        commandManager.registerCommand(new AltsCommand());
+        commandManager.registerCommand(new PunishmentsCommand());
+        commandManager.registerCommand(new PunishCommand());
+        commandManager.registerCommand(new UnbanCommand());
+        commandManager.registerCommand(new UnblacklistCommand());
+        commandManager.registerCommand(new UnmuteCommand());
     }
 
     private void registerListeners() {
-        // Profile listener
-        this.getServer().getPluginManager().registerEvents(new ProfileListener(this.core.getUuidManager(), this.core.getProfileManager()), this);
-
-        // Ranks and grants listeners
+        // Bridge listeners
         new RankBridgeListener(this);
         new GrantBridgeListener(this);
+        new BridgePunishmentListener(this);
+
+        // Bukkit listeners
         this.getServer().getPluginManager().registerEvents(new GrantListener(this.grantScheduleManager), this);
+        this.getServer().getPluginManager().registerEvents(new PunishmentListener(this.punishmentScheduleManager), this);
+        this.getServer().getPluginManager().registerEvents(new ProfileListener(this.core.getUuidManager(), this.core.getProfileManager()), this);
     }
 }

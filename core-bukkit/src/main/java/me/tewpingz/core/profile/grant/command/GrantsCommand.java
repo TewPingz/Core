@@ -1,4 +1,4 @@
-package me.tewpingz.core.profile.grant;
+package me.tewpingz.core.profile.grant.command;
 
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
@@ -35,49 +35,19 @@ import java.util.Date;
 public class GrantsCommand extends BaseCommand {
 
     @Default
-    @CommandCompletion("@players")
     @Syntax("<player>")
+    @CommandCompletion("@players")
     public void onCommand(Player player, AsyncUuid asyncUuid) {
-        asyncUuid.fetchUuidAsync().thenAccept(uuid -> {
-            if (uuid == null) {
-                MessageBuilderDefaults.error()
-                        .secondary(asyncUuid.getName()).space()
-                        .primary("has not joined the server before!")
-                        .build(player::sendMessage);
-                return;
-            }
-
+        asyncUuid.fetchUuid(player, uuid -> {
             Profile profile = Core.getInstance().getProfileManager().getRealValue(uuid);
-            Bukkit.getScheduler().runTask(CorePlugin.getInstance(), () -> new GrantsInventory(profile.getSnapshot()).open(player));
+            Bukkit.getScheduler().runTask(CorePlugin.getInstance(), () ->
+                    new GrantsInventory(profile.getSnapshot(), asyncUuid.getName()).open(player));
         });
     }
 
-    @RequiredArgsConstructor
-    private static class RemoveGrantPrompt extends StringPrompt {
-
-        private final Profile.ProfileSnapshot snapshot;
-        private final Grant grant;
-
-        @Override
-        public @NotNull String getPromptText(@NotNull ConversationContext context) {
-            return MessageBuilderDefaults.normal()
-                    .primary("Please type a reason for removing this grant")
-                    .tertiary(".")
-                    .toString();
-        }
-
-        @Override
-        public @Nullable Prompt acceptInput(@NotNull ConversationContext context, @Nullable String input) {
-            Core.getInstance().getProfileManager().updateRealValueAsync(snapshot.getPlayerId(), profile -> {
-                profile.removeGrant(grant, ((Player)context.getForWhom()).getName(), input);
-            });
-            return null;
-        }
-    }
-
     private static class GrantsInventory extends PaginatedInv {
-        public GrantsInventory(Profile.ProfileSnapshot snapshot) {
-            super(ChatColor.GOLD + "Grants for " + snapshot.getLastSeenName());
+        public GrantsInventory(Profile.ProfileSnapshot snapshot, String name) {
+            super(ChatColor.GOLD + "Grants for " + (snapshot.getLastSeenName().isEmpty() ? name : snapshot.getLastSeenName()));
 
             for (Grant activeGrant : snapshot.getSortedActiveGrants()) {
                 Rank.RankSnapshot rankSnapshot = activeGrant.getRankSnapshot();
@@ -88,7 +58,9 @@ public class GrantsCommand extends BaseCommand {
                         TimeUtil.formatLongIntoDetailedString(activeGrant.getDuration());
 
                 String expires = activeGrant.isInfinite() ? "Never" :
-                        TimeUtil.formatLongIntoDetailedString(activeGrant.getTimeLeft());
+                        (activeGrant.hasExpired() ? "This grant is already expired. They will lose it once they log back on!"
+                                : TimeUtil.formatLongIntoDetailedString(activeGrant.getTimeLeft()));
+
 
                 ItemStack itemStack = new ItemBuilder(Material.LEATHER_CHESTPLATE)
                         .flags(ItemFlag.HIDE_DYE, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS)
@@ -104,11 +76,15 @@ public class GrantsCommand extends BaseCommand {
                         .lore("&6Expires in&f: %s".formatted(expires))
                         .lore("")
                         .lore("&aThis is currently an active grant.")
+                        .lore("&aRight click to remove.")
+                        .lore("")
                         .build();
 
                 this.addItem(itemStack, event -> {
-                    new Conversation(CorePlugin.getInstance(), (Player)event.getWhoClicked(), new RemoveGrantPrompt(snapshot, activeGrant)).begin();
-                    event.setCancelled(true);
+                    if (event.isRightClick()) {
+                        new Conversation(CorePlugin.getInstance(), (Player)event.getWhoClicked(), new RemoveGrantPrompt(snapshot, activeGrant)).begin();
+                        event.setCancelled(true);
+                    }
                     event.getInventory().close();
                 });
             }
@@ -137,14 +113,33 @@ public class GrantsCommand extends BaseCommand {
                         .lore("&6Removed for&f: %s".formatted(expiredGrant.getRemovedFor()))
                         .lore("&6Removed at&f: %s".formatted(removedAt))
                         .lore("")
-                        .lore("&aThis is currently an active grant.")
                         .build();
 
-                this.addItem(itemStack, event -> {
-                    event.setCancelled(true);
-                    event.getInventory().close();
-                });
+                this.addItem(itemStack, event -> event.setCancelled(true));
             }
+        }
+    }
+
+    @RequiredArgsConstructor
+    private static class RemoveGrantPrompt extends StringPrompt {
+
+        private final Profile.ProfileSnapshot snapshot;
+        private final Grant grant;
+
+        @Override
+        public @NotNull String getPromptText(@NotNull ConversationContext context) {
+            return MessageBuilderDefaults.normal()
+                    .primary("Please type a reason for removing this grant")
+                    .tertiary(".")
+                    .toString();
+        }
+
+        @Override
+        public @Nullable Prompt acceptInput(@NotNull ConversationContext context, @Nullable String input) {
+            Core.getInstance().getProfileManager().updateRealValueAsync(snapshot.getPlayerId(), profile -> {
+                profile.removeGrant(grant, ((Player)context.getForWhom()).getName(), input);
+            });
+            return null;
         }
     }
 }

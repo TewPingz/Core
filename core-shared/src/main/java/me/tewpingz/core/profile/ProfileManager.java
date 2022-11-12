@@ -13,11 +13,7 @@ public class ProfileManager {
     private final RediGoCollection<Profile.ProfileSnapshot, UUID, Profile> collection;
 
     public ProfileManager(Core instance) {
-        this.collection = instance.getRediGo().createCollection("profile", UUID.class, Profile.class, 30, false, playerId -> {
-            Profile profile = new Profile(playerId);
-            profile.setJoinTime(System.currentTimeMillis());
-            return profile;
-        });
+        this.collection = instance.getRediGo().createCollection("profile", UUID.class, Profile.class, 30, false, Profile::new);
     }
 
     public Profile.ProfileSnapshot beginCachingLocally(UUID playerId) {
@@ -47,6 +43,10 @@ public class ProfileManager {
 
     public CompletableFuture<Profile> getRealValueAsync(UUID playerId) {
         return this.collection.getOrCreateRealValueAsync(playerId);
+    }
+
+    public Profile updateRealValue(UUID playerId, Consumer<Profile> consumer) {
+        return this.collection.updateRealValue(playerId, consumer);
     }
 
     public CompletableFuture<Profile> updateRealValueAsync(UUID playerId, Consumer<Profile> consumer) {

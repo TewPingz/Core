@@ -1,7 +1,13 @@
 package me.tewpingz.core.profile;
 
 import lombok.RequiredArgsConstructor;
+import me.tewpingz.core.Core;
+import me.tewpingz.core.profile.alt.AltEntry;
+import me.tewpingz.core.profile.punishment.Punishment;
+import me.tewpingz.core.util.HashUtil;
 import me.tewpingz.core.util.uuid.UuidManager;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -20,13 +26,38 @@ public class ProfileListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onAsyncPlayerPreLogin(AsyncPlayerPreLoginEvent event) {
         UUID uuid = event.getUniqueId();
-
         this.uuidManager.updateRealValues(event.getUniqueId(), event.getName());
+        String hashedIp = HashUtil.hash(event.getAddress().getHostAddress());
+        AltEntry altEntry = Core.getInstance().getAltManager().addUuid(hashedIp, uuid);
+        for (UUID relatedId : altEntry.getRelatedIds()) {
+            Profile relatedProfile = this.profileManager.getRealValue(relatedId);
+            if (relatedProfile.getBlacklist().isPresent()) {
+                event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, Component.text("Your account is linked to account that is blacklisted").color(NamedTextColor.RED));
+                return;
+            }
+        }
 
-        this.profileManager.updateRealValueAsync(uuid, profile -> {
+        Profile fetchedProfile = this.profileManager.updateRealValue(uuid, profile -> {
+            if (profile.getJoinTime() == -1) {
+                profile.setJoinTime(System.currentTimeMillis());
+            }
             profile.setLastSeenName(event.getName());
             profile.setLastSeen(-1);
+            profile.setLastIp(hashedIp);
+            profile.getActivePunishments().stream().filter(Punishment::hasExpired).toList().forEach(punishment -> {
+                profile.removePunishment(punishment, "CONSOLE", "Expired");
+            });
         });
+
+        if (fetchedProfile.getBlacklist().isPresent()) {
+            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, Component.text("You are currently blacklisted").color(NamedTextColor.RED));
+            return;
+        }
+
+        if (fetchedProfile.getBan().isPresent()) {
+            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, Component.text("You are currently banned").color(NamedTextColor.RED));
+            return;
+        }
 
         this.uuidManager.beginCachingLocally(event.getUniqueId(), event.getName());
         this.profileManager.beginCachingLocally(uuid);
