@@ -11,10 +11,14 @@ import me.tewpingz.core.util.ItemBuilder;
 import me.tewpingz.core.util.TimeUtil;
 import me.tewpingz.message.MessageBuilderDefaults;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.conversations.*;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -71,14 +75,14 @@ public class GrantProcedure {
                         .primary("You have successfully applied that").space()
                         .append(this.procedure.getSelectedRank().getColor().apply(Component.text(this.procedure.getSelectedRank().getDisplayName()))).space()
                         .primary("grant").tertiary(".")
-                        .build(message -> ((Player)context.getForWhom()).sendMessage(message));
+                        .build(message -> ((Player) context.getForWhom()).sendMessage(message));
                 this.procedure.apply((Player) context.getForWhom());
             } else {
                 MessageBuilderDefaults.success()
                         .primary("You have successfully cancelled that").space()
                         .append(this.procedure.getSelectedRank().getColor().apply(Component.text(this.procedure.getSelectedRank().getDisplayName()))).space()
                         .primary("grant").tertiary(".")
-                        .build(message -> ((Player)context.getForWhom()).sendMessage(message));
+                        .build(message -> ((Player) context.getForWhom()).sendMessage(message));
             }
             return null;
         }
@@ -147,7 +151,16 @@ public class GrantProcedure {
             this.setItems(this.getBorders(), new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE).name(" ").build(), event -> event.setCancelled(true));
             Core.getInstance().getRankManager().getSortedRanks().forEach(rankSnapshot -> {
                 Component displayName = rankSnapshot.getColor().apply(Component.text(rankSnapshot.getDisplayName()));
-                this.addItem(new ItemBuilder(Material.LEATHER_CHESTPLATE).color(rankSnapshot.getColor().toTextColor()).name(displayName).build(), event -> {
+
+                ItemStack itemStack = new ItemBuilder(Material.LEATHER_CHESTPLATE)
+                        .color(rankSnapshot.getColor().toTextColor())
+                        .name(displayName)
+                        .lore(Component.text("Click to begin granting").color(NamedTextColor.YELLOW).append(Component.space()).append(displayName))
+                        .flags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DYE, ItemFlag.HIDE_ENCHANTS)
+                        .enchants(Enchantment.PROTECTION_ENVIRONMENTAL)
+                        .build();
+
+                this.addItem(itemStack, event -> {
                     procedure.setSelectedRank(rankSnapshot);
                     event.getInventory().close();
                     procedure.promptForDuration((Player) event.getWhoClicked());

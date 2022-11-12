@@ -6,7 +6,6 @@ import co.aikar.commands.annotation.*;
 import me.tewpingz.core.Core;
 import me.tewpingz.core.rank.event.RankCreateEvent;
 import me.tewpingz.core.rank.event.RankUpdateEvent;
-import me.tewpingz.message.MessageBuilder;
 import me.tewpingz.message.MessageBuilderDefaults;
 import net.kyori.adventure.text.Component;
 import org.bukkit.ChatColor;
@@ -62,10 +61,11 @@ public class RankCommand extends BaseCommand {
             realRank.setPriority(priority);
         }).thenAccept(rank -> {
             MessageBuilderDefaults.success()
-                    .primary("You have successfully updated the priority of")
+                    .primary("You have successfully updated the priority of").space()
                     .append(rank.getColor().apply(Component.text(rank.getDisplayName()))).space()
                     .primary("to").space()
-                    .secondary(String.valueOf(priority)).tertiary(".")
+                    .secondary(String.valueOf(priority))
+                    .tertiary(".")
                     .build(sender::sendMessage);
             Core.getInstance().getBridge().callEvent(new RankUpdateEvent(sender.getName(), rank.getSnapshot()));
         });
@@ -86,7 +86,8 @@ public class RankCommand extends BaseCommand {
                     .primary("You have successfully updated the prefix of").space()
                     .append(rank.getColor().apply(Component.text(rank.getDisplayName()))).space()
                     .primary("to").space()
-                    .secondary(translatedPrefix).tertiary(".")
+                    .secondary(translatedPrefix)
+                    .tertiary(".")
                     .build(sender::sendMessage);
             Core.getInstance().getBridge().callEvent(new RankUpdateEvent(sender.getName(), rank.getSnapshot()));
         });
@@ -107,6 +108,69 @@ public class RankCommand extends BaseCommand {
                     .primary("You have successfully updated the suffix of").space()
                     .append(rank.getColor().apply(Component.text(rank.getDisplayName()))).space()
                     .secondary(translatedSuffix)
+                    .tertiary(".")
+                    .build(sender::sendMessage);
+            Core.getInstance().getBridge().callEvent(new RankUpdateEvent(sender.getName(), rank.getSnapshot()));
+        });
+    }
+
+    @Subcommand("setdisplayname|setdp")
+    @Description("Set a ranks display name")
+    @CommandPermission("core.rank.setdisplayname")
+    @Syntax("<rank> <displayName>")
+    @CommandCompletion("@ranks")
+    public void onSetDisplayName(CommandSender sender, Rank.RankSnapshot rankSnapshot, String displayName) {
+        RankManager rankManager = Core.getInstance().getRankManager();
+        rankManager.updateRealValueAsync(rankSnapshot.getRankId(), realRank -> {
+            realRank.setDisplayName(displayName);
+        }).thenAccept(rank -> {
+            MessageBuilderDefaults.success()
+                    .primary("You have successfully updated the suffix of").space()
+                    .append(rank.getColor().apply(Component.text(rank.getDisplayName()))).space()
+                    .secondary(displayName)
+                    .tertiary(".")
+                    .build(sender::sendMessage);
+            Core.getInstance().getBridge().callEvent(new RankUpdateEvent(sender.getName(), rank.getSnapshot()));
+        });
+    }
+
+    @Subcommand("setbold")
+    @Description("Set a ranks display name to bold")
+    @CommandPermission("core.rank.setbold")
+    @Syntax("<rank> <true|false>")
+    @CommandCompletion("@ranks true|false")
+    public void onSetBold(CommandSender sender, Rank.RankSnapshot rankSnapshot, boolean state) {
+        RankManager rankManager = Core.getInstance().getRankManager();
+        rankManager.updateRealValueAsync(rankSnapshot.getRankId(), realRank -> {
+            realRank.getColor().setBold(state);
+        }).thenAccept(rank -> {
+            MessageBuilderDefaults.success()
+                    .primary("You have").space()
+                    .primary(state ? "bolded" : "unbloded").space()
+                    .primary("the display name of").space()
+                    .append(rank.getColor().apply(Component.text(rank.getDisplayName()))).space()
+                    .tertiary(".")
+                    .build(sender::sendMessage);
+            Core.getInstance().getBridge().callEvent(new RankUpdateEvent(sender.getName(), rank.getSnapshot()));
+        });
+    }
+
+    @Subcommand("setitalic")
+    @Description("Set a ranks display name to italic")
+    @CommandPermission("core.rank.setitalic")
+    @Syntax("<rank> <true|false>")
+    @CommandCompletion("@ranks true|false")
+    public void onSetItalic(CommandSender sender, Rank.RankSnapshot rankSnapshot, boolean state) {
+        RankManager rankManager = Core.getInstance().getRankManager();
+        rankManager.updateRealValueAsync(rankSnapshot.getRankId(), realRank -> {
+            realRank.getColor().setItalic(state);
+        }).thenAccept(rank -> {
+            MessageBuilderDefaults.success()
+                    .primary("You have").space()
+                    .primary(state ? "italicized" : "unitalicized").space()
+                    .primary("the display name of").space()
+                    .append(rank.getColor().apply(Component.text(rank.getDisplayName()))).space()
+                    .tertiary(".")
                     .build(sender::sendMessage);
             Core.getInstance().getBridge().callEvent(new RankUpdateEvent(sender.getName(), rank.getSnapshot()));
         });
@@ -125,6 +189,7 @@ public class RankCommand extends BaseCommand {
             MessageBuilderDefaults.success()
                     .primary("You have successfully updated the color of").space()
                     .append(rank.getColor().apply(Component.text(rank.getDisplayName()))).space()
+                    .tertiary(".")
                     .build(sender::sendMessage);
             Core.getInstance().getBridge().callEvent(new RankUpdateEvent(sender.getName(), rank.getSnapshot()));
         });
@@ -143,6 +208,7 @@ public class RankCommand extends BaseCommand {
             MessageBuilderDefaults.success()
                     .primary("You have successfully updated the color of").space()
                     .append(rank.getColor().apply(Component.text(rank.getDisplayName()))).space()
+                    .tertiary(".")
                     .build(sender::sendMessage);
             Core.getInstance().getBridge().callEvent(new RankUpdateEvent(sender.getName(), rank.getSnapshot()));
         });

@@ -3,6 +3,7 @@ package me.tewpingz.core.rank.grant;
 import lombok.*;
 import me.tewpingz.core.Core;
 import me.tewpingz.core.rank.Rank;
+import net.kyori.adventure.text.Component;
 
 @Data
 @EqualsAndHashCode
@@ -31,6 +32,15 @@ public class Grant {
         return this.getTimeLeft() <= 0;
     }
 
+    public Component getRankNameComponent() {
+        Rank.RankSnapshot rankSnapshot = this.getRankSnapshot();
+        if (rankSnapshot != null) {
+            return rankSnapshot.getColor().apply(Component.text(rankSnapshot.getDisplayName()));
+        } else {
+            return Component.text(this.rankId);
+        }
+    }
+
     public Rank.RankSnapshot getRankSnapshot() {
         return Core.getInstance().getRankManager().getRank(this.rankId);
     }
@@ -38,7 +48,7 @@ public class Grant {
     @Getter
     @EqualsAndHashCode
     @AllArgsConstructor
-    public static class ExpiredRankGrant {
+    public static class ExpiredGrant {
 
         private final Grant grant;
         private final String removedBy, removedFor;

@@ -23,9 +23,22 @@ public class GrantScheduleManager {
 
         this.grantLock.lock();
         int ticks = (int) (grant.getTimeLeft() / 1000 * 20);
-        BukkitTask task = Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(),
-                () -> Core.getInstance().getProfileManager().updateRealValueAsync(playerId, profile -> profile.removeGrant(grant, "CONSOLE", "Expired")), ticks);
+        BukkitTask task = Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> Core.getInstance().getProfileManager().updateRealValueAsync(playerId, profile -> profile.removeGrant(grant, "CONSOLE", "Expired")), ticks);
         this.grantTasks.put(playerId, grant, task);
+        this.grantLock.unlock();
+    }
+
+    protected void unscheduleTask(UUID playerId, Grant.ExpiredGrant expiredGrant) {
+        if (expiredGrant.getGrant().isInfinite()) {
+            return;
+        }
+
+        this.grantLock.lock();
+        BukkitTask task = this.grantTasks.remove(playerId, expiredGrant.getGrant());
+        if (task != null) {
+            System.out.println("Removed task");
+            task.cancel();
+        }
         this.grantLock.unlock();
     }
 

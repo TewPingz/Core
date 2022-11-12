@@ -70,6 +70,10 @@ public class TimeUtil {
                 + minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
     }
 
+    public static String formatLongIntoDetailedString(long milis) {
+        return formatIntoDetailedString((int) (milis / 1000));
+    }
+
     public static String formatIntoDetailedString(int secs) {
         if (secs <= 0) {
             return "0 seconds";
@@ -150,10 +154,4 @@ public class TimeUtil {
         }
         return String.format("%02d:%02d", seconds / 60L, seconds % 60L);
     }
-
-    public static String formatLongIntoDetailedString(long secs) {
-        int unconvertedSeconds = (int) secs;
-        return formatIntoDetailedString(unconvertedSeconds);
-    }
-
 }

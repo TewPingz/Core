@@ -7,6 +7,7 @@ import me.tewpingz.core.Core;
 import me.tewpingz.core.rank.Rank;
 import me.tewpingz.core.rank.grant.Grant;
 import me.tewpingz.core.rank.grant.event.GrantCreateEvent;
+import me.tewpingz.core.rank.grant.event.GrantRemoveEvent;
 import me.tewpingz.redigo.data.RediGoObject;
 import me.tewpingz.redigo.data.RediGoValue;
 
@@ -31,7 +32,7 @@ public class Profile implements RediGoObject<UUID, Profile.ProfileSnapshot> {
     private Set<Grant> activeGrants = new HashSet<>();
 
     @RediGoValue(key = "expiredGrants")
-    private Set<Grant.ExpiredRankGrant> expiredGrants = new HashSet<>();
+    private Set<Grant.ExpiredGrant> expiredGrants = new HashSet<>();
 
     public boolean addGrant(Rank rank, String executor, String reason, long duration) {
         return this.addGrant(rank.getRankId(), executor, reason, duration);
@@ -49,9 +50,25 @@ public class Profile implements RediGoObject<UUID, Profile.ProfileSnapshot> {
 
     public boolean removeGrant(Grant grant, String removedBy, String removedFor) {
         if (this.activeGrants.remove(grant)) {
-            return this.expiredGrants.add(new Grant.ExpiredRankGrant(grant, removedBy, removedFor, System.currentTimeMillis()));
+            Grant.ExpiredGrant removedGrant = new Grant.ExpiredGrant(grant, removedBy, removedFor, System.currentTimeMillis());
+            if (this.expiredGrants.add(removedGrant)) {
+                Core.getInstance().getBridge().callEvent(new GrantRemoveEvent(removedBy, this.playerId, removedGrant));
+                return true;
+            }
         }
         return false;
+    }
+
+    public List<Grant> getSortedActiveGrants() {
+        List<Grant> activeGrants = new ArrayList<>(this.activeGrants);
+        activeGrants.sort(Comparator.comparingLong(Grant::getStartTimestamp));
+        return activeGrants;
+    }
+
+    public List<Grant.ExpiredGrant> getExpiredActiveGrants() {
+        List<Grant.ExpiredGrant> expiredGrants = new ArrayList<>(this.expiredGrants);
+        expiredGrants.sort(Comparator.comparingLong(value -> value.getGrant().getStartTimestamp()));
+        return expiredGrants;
     }
 
     public Grant getDisplayGrant() {
@@ -96,7 +113,9 @@ public class Profile implements RediGoObject<UUID, Profile.ProfileSnapshot> {
         private final long joinTime, lastSeen;
         private final String lastSeenName;
         private final Set<Grant> activeGrants;
-        private final Set<Grant.ExpiredRankGrant> expiredGrants;
+        private final Set<Grant.ExpiredGrant> expiredGrants;
+        private final List<Grant> sortedActiveGrants;
+        private final List<Grant.ExpiredGrant> sortedExpiredGrants;
         private final String displayRankId;
 
         public ProfileSnapshot(Profile profile) {
@@ -107,6 +126,8 @@ public class Profile implements RediGoObject<UUID, Profile.ProfileSnapshot> {
             this.activeGrants = profile.getActiveGrants();
             this.expiredGrants = profile.getExpiredGrants();
             this.displayRankId = profile.getDisplayRank().getRankId();
+            this.sortedActiveGrants = profile.getSortedActiveGrants();
+            this.sortedExpiredGrants = profile.getExpiredActiveGrants();
         }
 
         public Rank.RankSnapshot getDisplayRank() {

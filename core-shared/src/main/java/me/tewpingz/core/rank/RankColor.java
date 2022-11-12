@@ -22,17 +22,9 @@ public class RankColor {
     }
 
     public Component apply(Component component) {
-        component = component.color(this.toTextColor());
-
-        if (bold) {
-            component = component.decorate(TextDecoration.BOLD);
-        }
-
-        if (italic) {
-            component = component.decorate(TextDecoration.ITALIC);
-        }
-
-        return component;
+        return component.color(this.toTextColor())
+                .decoration(TextDecoration.BOLD, this.bold)
+                .decoration(TextDecoration.ITALIC, this.italic);
     }
 
     public TextColor toTextColor() {

@@ -8,7 +8,6 @@ import me.tewpingz.core.profile.Profile;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -45,10 +44,12 @@ public class GrantListener implements Listener {
             });
 
             profile.getActiveGrants().stream().filter(Grant::hasExpired).toList().forEach(grant -> {
-                profile.removeGrant(grant, "CONSOLE", "Expired while offline");
+                profile.removeGrant(grant, "CONSOLE", "Expired");
             });
 
             profile.getActiveGrants().forEach(grant -> this.grantScheduleManager.scheduleTask(event.getPlayer().getUniqueId(), grant));
+        }).thenAccept(profile -> {
+
         });
     }
 

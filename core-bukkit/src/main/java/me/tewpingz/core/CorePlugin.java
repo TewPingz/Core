@@ -9,10 +9,7 @@ import lombok.Getter;
 import me.tewpingz.core.command.ListCommand;
 import me.tewpingz.core.profile.ProfileListener;
 import me.tewpingz.core.rank.*;
-import me.tewpingz.core.rank.grant.GrantBridgeListener;
-import me.tewpingz.core.rank.grant.GrantCommand;
-import me.tewpingz.core.rank.grant.GrantListener;
-import me.tewpingz.core.rank.grant.GrantScheduleManager;
+import me.tewpingz.core.rank.grant.*;
 import me.tewpingz.core.util.duration.DurationContextResolver;
 import me.tewpingz.core.util.uuid.AsyncUuid;
 import me.tewpingz.core.util.uuid.AsyncUuidCommandCompletion;
@@ -72,6 +69,7 @@ public class CorePlugin extends JavaPlugin {
         commandManager.registerCommand(new RankCommand());
         commandManager.registerCommand(new RanksCommand());
         commandManager.registerCommand(new GrantCommand());
+        commandManager.registerCommand(new GrantsCommand());
         commandManager.registerCommand(new ListCommand());
     }
 
