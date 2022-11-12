@@ -12,7 +12,6 @@ import me.tewpingz.core.util.TimeUtil;
 import me.tewpingz.core.util.inventory.PaginatedInv;
 import me.tewpingz.core.util.uuid.AsyncUuid;
 import me.tewpingz.message.MessageBuilderDefaults;
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

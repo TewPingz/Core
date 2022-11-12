@@ -6,10 +6,8 @@ import me.tewpingz.core.Core;
 import me.tewpingz.core.CorePlugin;
 import me.tewpingz.core.rank.Rank;
 import me.tewpingz.core.util.uuid.AsyncUuid;
-import me.tewpingz.core.util.uuid.UuidManager;
 import me.tewpingz.message.MessageBuilderDefaults;
 import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 

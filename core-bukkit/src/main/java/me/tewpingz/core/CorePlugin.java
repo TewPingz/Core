@@ -3,7 +3,6 @@ package me.tewpingz.core;
 import co.aikar.commands.PaperCommandManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import fr.mrmicky.fastinv.FastInv;
 import fr.mrmicky.fastinv.FastInvManager;
 import lombok.Getter;
 import me.tewpingz.core.command.ListCommand;
@@ -14,7 +13,6 @@ import me.tewpingz.core.util.duration.DurationContextResolver;
 import me.tewpingz.core.util.uuid.AsyncUuid;
 import me.tewpingz.core.util.uuid.AsyncUuidCommandCompletion;
 import me.tewpingz.core.util.uuid.AsyncUuidContextResolver;
-import me.tewpingz.core.util.uuid.UuidManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.time.Duration;

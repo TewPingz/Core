@@ -7,10 +7,8 @@ import me.tewpingz.core.Core;
 import me.tewpingz.message.MessageBuilder;
 import me.tewpingz.message.MessageBuilderDefaults;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 @CommandAlias("list|players")
