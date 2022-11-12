@@ -16,4 +16,8 @@ public class AltManager {
     public AltEntry addUuid(String hashedIp, UUID uuid) {
         return this.collection.updateRealValue(hashedIp, altEntry -> altEntry.addUuid(uuid));
     }
+
+    public AltEntry getAlts(String hashedIp) {
+        return this.collection.getOrCreateRealValue(hashedIp);
+    }
 }

@@ -5,18 +5,20 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import fr.mrmicky.fastinv.FastInvManager;
 import lombok.Getter;
+import me.tewpingz.core.command.AltsCommand;
 import me.tewpingz.core.command.ListCommand;
 import me.tewpingz.core.profile.ProfileListener;
-import me.tewpingz.core.profile.grant.*;
+import me.tewpingz.core.profile.grant.GrantScheduleManager;
 import me.tewpingz.core.profile.grant.command.GrantCommand;
 import me.tewpingz.core.profile.grant.command.GrantsCommand;
 import me.tewpingz.core.profile.grant.listener.GrantBridgeListener;
 import me.tewpingz.core.profile.grant.listener.GrantListener;
-import me.tewpingz.core.profile.punishment.command.BanCommand;
-import me.tewpingz.core.profile.punishment.PunishmentListener;
 import me.tewpingz.core.profile.punishment.PunishmentScheduleManager;
+import me.tewpingz.core.profile.punishment.command.BanCommand;
 import me.tewpingz.core.profile.punishment.command.BlacklistCommand;
 import me.tewpingz.core.profile.punishment.command.MuteCommand;
+import me.tewpingz.core.profile.punishment.listener.BridgePunishmentListener;
+import me.tewpingz.core.profile.punishment.listener.PunishmentListener;
 import me.tewpingz.core.rank.*;
 import me.tewpingz.core.util.duration.DurationContextResolver;
 import me.tewpingz.core.util.uuid.AsyncUuid;
@@ -41,6 +43,7 @@ public class CorePlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
+        FastInvManager.register(this);
 
         this.gson = new GsonBuilder()
                 .disableHtmlEscaping()
@@ -51,7 +54,6 @@ public class CorePlugin extends JavaPlugin {
         this.grantScheduleManager = new GrantScheduleManager();
         this.punishmentScheduleManager = new PunishmentScheduleManager();
 
-        FastInvManager.register(this);
         this.registerListeners();
         this.registerCommands();
     }
@@ -83,12 +85,14 @@ public class CorePlugin extends JavaPlugin {
         commandManager.registerCommand(new BanCommand());
         commandManager.registerCommand(new BlacklistCommand());
         commandManager.registerCommand(new MuteCommand());
+        commandManager.registerCommand(new AltsCommand());
     }
 
     private void registerListeners() {
         // Bridge listeners
         new RankBridgeListener(this);
         new GrantBridgeListener(this);
+        new BridgePunishmentListener(this);
 
         // Bukkit listeners
         this.getServer().getPluginManager().registerEvents(new GrantListener(this.grantScheduleManager), this);

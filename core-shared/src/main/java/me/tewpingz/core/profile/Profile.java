@@ -5,10 +5,12 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import me.tewpingz.core.Core;
 import me.tewpingz.core.profile.grant.Grant;
-import me.tewpingz.core.profile.grant.event.GrantCreateEvent;
+import me.tewpingz.core.profile.grant.event.GrantAddEvent;
 import me.tewpingz.core.profile.grant.event.GrantRemoveEvent;
 import me.tewpingz.core.profile.punishment.Punishment;
 import me.tewpingz.core.profile.punishment.PunishmentType;
+import me.tewpingz.core.profile.punishment.event.PunishmentAddEvent;
+import me.tewpingz.core.profile.punishment.event.PunishmentRemoveEvent;
 import me.tewpingz.core.rank.Rank;
 import me.tewpingz.redigo.data.RediGoObject;
 import me.tewpingz.redigo.data.RediGoValue;
@@ -55,15 +57,15 @@ public class Profile implements RediGoObject<UUID, Profile.ProfileSnapshot> {
 
     public boolean addGrant(String rankId, String executor, String reason, long duration) {
         Grant grant = new Grant(rankId, executor, reason, System.currentTimeMillis(), duration);
-        Core.getInstance().getBridge().callEvent(new GrantCreateEvent(executor, this.playerId, grant));
+        Core.getInstance().getBridge().callEvent(new GrantAddEvent(executor, this.playerId, grant));
         return this.activeGrants.add(grant);
     }
 
     public boolean removeGrant(Grant grant, String removedBy, String removedFor) {
         if (this.activeGrants.remove(grant)) {
-            Grant.ExpiredGrant removedGrant = new Grant.ExpiredGrant(grant, removedBy, removedFor, System.currentTimeMillis());
-            if (this.expiredGrants.add(removedGrant)) {
-                Core.getInstance().getBridge().callEvent(new GrantRemoveEvent(removedBy, this.playerId, removedGrant));
+            Grant.ExpiredGrant expiredGrant = new Grant.ExpiredGrant(grant, removedBy, removedFor, System.currentTimeMillis());
+            if (this.expiredGrants.add(expiredGrant)) {
+                Core.getInstance().getBridge().callEvent(new GrantRemoveEvent(removedBy, this.playerId, expiredGrant));
                 return true;
             }
         }
@@ -72,6 +74,7 @@ public class Profile implements RediGoObject<UUID, Profile.ProfileSnapshot> {
 
     public boolean addPunishment(PunishmentType punishmentType, String executor, String reason, long duration) {
         Punishment punishment = new Punishment(punishmentType, executor, reason, System.currentTimeMillis(), duration);
+        Core.getInstance().getBridge().callEvent(new PunishmentAddEvent(executor, this.playerId, punishment));
         return this.activePunishments.add(punishment);
     }
 
@@ -79,6 +82,7 @@ public class Profile implements RediGoObject<UUID, Profile.ProfileSnapshot> {
         if (this.activePunishments.remove(punishment)) {
             Punishment.ExpiredPunishment expiredPunishment = new Punishment.ExpiredPunishment(punishment, removedBy, removedFor, System.currentTimeMillis());
             if (this.expiredPunishments.add(expiredPunishment)) {
+                Core.getInstance().getBridge().callEvent(new PunishmentRemoveEvent(removedBy, this.playerId, expiredPunishment));
                 return true;
             }
         }
@@ -106,9 +110,21 @@ public class Profile implements RediGoObject<UUID, Profile.ProfileSnapshot> {
         return activeGrants;
     }
 
-    public List<Grant.ExpiredGrant> getExpiredActiveGrants() {
+    public List<Grant.ExpiredGrant> getSortedExpiredGrants() {
         List<Grant.ExpiredGrant> expiredGrants = new ArrayList<>(this.expiredGrants);
         expiredGrants.sort(Comparator.comparingLong(value -> value.getGrant().getStartTimestamp()));
+        return expiredGrants;
+    }
+
+    public List<Punishment> getSortedActivePunishments() {
+        List<Punishment> punishments = new ArrayList<>(this.activePunishments);
+        punishments.sort(Comparator.comparingLong(Punishment::getStartTimestamp));
+        return punishments;
+    }
+
+    public List<Punishment.ExpiredPunishment> getSortedExpiredPunishments() {
+        List<Punishment.ExpiredPunishment> expiredGrants = new ArrayList<>(this.expiredPunishments);
+        expiredGrants.sort(Comparator.comparingLong(value -> value.getPunishment().getStartTimestamp()));
         return expiredGrants;
     }
 
@@ -152,29 +168,31 @@ public class Profile implements RediGoObject<UUID, Profile.ProfileSnapshot> {
     public static class ProfileSnapshot implements Snapshot {
         private final UUID playerId;
         private final long joinTime, lastSeen;
-        private final String lastSeenName;
-        private final Set<Grant> activeGrants;
-        private final Set<Grant.ExpiredGrant> expiredGrants;
+        private final String lastSeenName, displayRankId;
+
         private final List<Grant> sortedActiveGrants;
         private final List<Grant.ExpiredGrant> sortedExpiredGrants;
-        private final String displayRankId;
-        private final Optional<Punishment> ban;
-        private final Optional<Punishment> mute;
-        private final Optional<Punishment> blacklist;
+
+        private final List<Punishment> sortedActivePunishments;
+        private final List<Punishment.ExpiredPunishment> sortedExpiredPunishments;
+
+        private final Punishment ban;
+        private final Punishment mute;
+        private final Punishment blacklist;
 
         public ProfileSnapshot(Profile profile) {
             this.playerId = profile.getPlayerId();
             this.joinTime = profile.getJoinTime();
             this.lastSeen = profile.getLastSeen();
             this.lastSeenName = profile.getLastSeenName();
-            this.activeGrants = profile.getActiveGrants();
-            this.expiredGrants = profile.getExpiredGrants();
             this.displayRankId = profile.getDisplayRank().getRankId();
-            this.sortedActiveGrants = profile.getSortedActiveGrants();
-            this.sortedExpiredGrants = profile.getExpiredActiveGrants();
-            this.ban = profile.getBan();
-            this.mute = profile.getMute();
-            this.blacklist = profile.getBlacklist();
+            this.sortedActiveGrants = List.copyOf(profile.getSortedActiveGrants());
+            this.sortedExpiredGrants = List.copyOf(profile.getSortedExpiredGrants());
+            this.sortedActivePunishments = List.copyOf(profile.getSortedActivePunishments());
+            this.sortedExpiredPunishments = List.copyOf(profile.getSortedExpiredPunishments());
+            this.ban = profile.getBan().orElse(null);
+            this.mute = profile.getMute().orElse(null);
+            this.blacklist = profile.getBlacklist().orElse(null);
         }
 
         public Rank.RankSnapshot getDisplayRank() {

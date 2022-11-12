@@ -4,7 +4,6 @@ import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import me.tewpingz.core.Core;
 import me.tewpingz.core.CorePlugin;
-import me.tewpingz.core.profile.grant.Grant;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -17,7 +16,7 @@ public class PunishmentScheduleManager {
     private final Table<UUID, Punishment, BukkitTask> tasks = HashBasedTable.create();
     private final Lock lock = new ReentrantLock();
 
-    protected void schedule(UUID playerId, Punishment punishment) {
+    public void schedule(UUID playerId, Punishment punishment) {
         if (punishment.isInfinite() || punishment.hasExpired()) {
             return;
         }
@@ -30,20 +29,20 @@ public class PunishmentScheduleManager {
         this.lock.unlock();
     }
 
-    protected void unschedule(UUID playerId, Punishment.ExpiredPunishment punishment) {
-        if (punishment.getGrant().isInfinite()) {
+    public void unschedule(UUID playerId, Punishment.ExpiredPunishment punishment) {
+        if (punishment.getPunishment().isInfinite()) {
             return;
         }
 
         this.lock.lock();
-        BukkitTask task = this.tasks.remove(playerId, punishment.getGrant());
+        BukkitTask task = this.tasks.remove(playerId, punishment.getPunishment());
         if (task != null) {
             task.cancel();
         }
         this.lock.unlock();
     }
 
-    protected void terminate(UUID playerId) {
+    public void terminate(UUID playerId) {
         this.lock.lock();
         Map<Punishment, BukkitTask> punishmentMap = this.tasks.rowMap().remove(playerId);
         if (punishmentMap != null) {

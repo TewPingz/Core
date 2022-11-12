@@ -2,15 +2,16 @@ package me.tewpingz.core.profile.grant.listener;
 
 import me.tewpingz.core.Core;
 import me.tewpingz.core.CorePlugin;
-import me.tewpingz.core.profile.grant.event.GrantCreateEvent;
+import me.tewpingz.core.profile.grant.event.GrantAddEvent;
 import me.tewpingz.core.profile.grant.event.GrantRemoveEvent;
+import me.tewpingz.core.util.Broadcast;
 import me.tewpingz.message.MessageBuilderDefaults;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 public class GrantBridgeListener {
     public GrantBridgeListener(CorePlugin instance) {
-        instance.getCore().getBridge().registerListener(GrantCreateEvent.class, (charSequence, event) -> {
+        instance.getCore().getBridge().registerListener(GrantAddEvent.class, (charSequence, event) -> {
             Player player = Bukkit.getPlayer(event.getPlayerUuid());
 
             if (player != null) {
@@ -30,7 +31,7 @@ public class GrantBridgeListener {
                     .primary("to").space()
                     .secondary(Core.getInstance().getUuidManager().getName(event.getPlayerUuid()).getName())
                     .tertiary(".")
-                    .toString(this::broadcast);
+                    .toString(message -> Broadcast.broadcast(message, "core.grant.alert"));
         });
 
         instance.getCore().getBridge().registerListener(GrantRemoveEvent.class, (charSequence, event) -> {
@@ -56,16 +57,8 @@ public class GrantBridgeListener {
                         .primary("from").space()
                         .secondary(Core.getInstance().getUuidManager().getName(event.getPlayerUuid()).getName())
                         .tertiary(".")
-                        .toString(this::broadcast);
+                        .toString(message -> Broadcast.broadcast(message, "core.grant.alert"));
             }
         });
-    }
-
-    private void broadcast(String message) {
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            if (player.hasPermission("core.grant.alert") || player.isOp()) {
-                player.sendMessage(message);
-            }
-        }
     }
 }

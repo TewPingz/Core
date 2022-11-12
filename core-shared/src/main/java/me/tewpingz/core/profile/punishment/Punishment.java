@@ -34,7 +34,7 @@ public class Punishment {
     @AllArgsConstructor
     public static class ExpiredPunishment {
 
-        private final Punishment grant;
+        private final Punishment punishment;
         private final String removedBy, removedFor;
         private final long removedAt;
 

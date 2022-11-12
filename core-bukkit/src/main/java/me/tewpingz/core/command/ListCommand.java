@@ -20,7 +20,7 @@ public class ListCommand extends BaseCommand {
             MessageBuilder builder = MessageBuilderDefaults.normal();
             ranks.forEach(rank -> {
                 if (!builder.isEmpty()) {
-                    builder.append(Component.text(",").color(NamedTextColor.YELLOW)).space();
+                    builder.tertiary(",").space();
                 }
                 builder.append(rank.getColor().apply(Component.text(rank.getDisplayName())));
             });
@@ -29,7 +29,7 @@ public class ListCommand extends BaseCommand {
             MessageBuilder builder = MessageBuilderDefaults.normal();
             Core.getInstance().getProfileManager().forEachCachedValue(profile -> {
                 if (!builder.isEmpty()) {
-                    builder.append(Component.text(",").color(NamedTextColor.WHITE)).space();
+                    builder.tertiary(",").space();
                 }
                 builder.append(profile.getDisplayRank().getColor().apply(Component.text(profile.getLastSeenName())));
             });
