@@ -20,6 +20,7 @@ import me.tewpingz.core.profile.punishment.listener.PunishmentBridgeListener;
 import me.tewpingz.core.profile.punishment.listener.PunishmentListener;
 import me.tewpingz.core.rank.*;
 import me.tewpingz.core.server.ServerInitializer;
+import me.tewpingz.core.server.ServersCommand;
 import me.tewpingz.core.server.listener.ServerBridgeListener;
 import me.tewpingz.core.server.listener.ServerListener;
 import me.tewpingz.core.util.duration.DurationCommandCompletion;
@@ -48,8 +49,8 @@ public class CorePlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
-        FastInvManager.register(this);
 
+        FastInvManager.register(this);
         this.getConfig().options().copyDefaults();
         this.saveDefaultConfig();
 
@@ -100,6 +101,7 @@ public class CorePlugin extends JavaPlugin {
         commandManager.registerCommand(new UnblacklistCommand());
         commandManager.registerCommand(new UnmuteCommand());
         commandManager.registerCommand(new SetMaxCommand());
+        commandManager.registerCommand(new ServersCommand());
     }
 
     private void registerListeners() {

@@ -41,13 +41,13 @@ public class GrantsCommand extends BaseCommand {
         asyncUuid.fetchUuid(player, uuid -> {
             Profile.ProfileSnapshot profile = Core.getInstance().getProfileManager().getRealValue(uuid);
             Bukkit.getScheduler().runTask(CorePlugin.getInstance(), () ->
-                    new GrantsInventory(profile, asyncUuid.getName()).open(player));
+                    new GrantsInventory(profile).open(player));
         });
     }
 
     private static class GrantsInventory extends PaginatedInv {
-        public GrantsInventory(Profile.ProfileSnapshot profile, String name) {
-            super(ChatColor.GOLD + "Grants for " + (profile.getLastSeenName().isEmpty() ? name : profile.getLastSeenName()));
+        public GrantsInventory(Profile.ProfileSnapshot profile) {
+            super("Grants for " + profile.getLastSeenName());
 
             for (Grant activeGrant : profile.getSortedActiveGrants()) {
                 Rank.RankSnapshot rankSnapshot = activeGrant.getRankSnapshot();

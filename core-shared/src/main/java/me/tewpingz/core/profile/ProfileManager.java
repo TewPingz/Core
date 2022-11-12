@@ -13,7 +13,12 @@ public class ProfileManager {
     private final RediGoCollection<Profile.ProfileSnapshot, UUID, Profile> collection;
 
     public ProfileManager(Core instance) {
-        this.collection = instance.getRediGo().createCollection("profile", UUID.class, Profile.class, 30, false, Profile::new);
+        this.collection = instance.getRediGo().createCollection("profile", UUID.class, Profile.class, 30, false, playerId -> {
+            String name = Core.getInstance().getUuidManager().getName(playerId).getName();
+            Profile profile = new Profile(playerId);
+            profile.setLastSeenName(name);
+            return profile;
+        }, Profile::new);
     }
 
     public Profile.ProfileSnapshot beginCachingLocally(UUID playerId) {

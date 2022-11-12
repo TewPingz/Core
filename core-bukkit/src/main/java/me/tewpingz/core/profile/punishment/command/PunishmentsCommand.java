@@ -41,13 +41,13 @@ public class PunishmentsCommand extends BaseCommand {
         asyncUuid.fetchUuid(player, uuid -> {
             Profile.ProfileSnapshot profile = Core.getInstance().getProfileManager().getRealValue(uuid);
             Bukkit.getScheduler().runTask(CorePlugin.getInstance(), () ->
-                    new PunishmentsInventory(profile, asyncUuid.getName()).open(player));
+                    new PunishmentsInventory(profile).open(player));
         });
     }
 
     private static class PunishmentsInventory extends PaginatedInv {
-        public PunishmentsInventory(Profile.ProfileSnapshot profile, String name) {
-            super("Punishments for " + (profile.getLastSeenName().isEmpty() ? name : profile.getLastSeenName()));
+        public PunishmentsInventory(Profile.ProfileSnapshot profile) {
+            super("Punishments for " + profile.getLastSeenName());
 
             for (Punishment punishment : profile.getSortedActivePunishments()) {
                 String addedAt = new Date(punishment.getStartTimestamp()).toString();
