@@ -9,6 +9,7 @@ import me.tewpingz.core.CorePlugin;
 import me.tewpingz.core.rank.Rank;
 import me.tewpingz.core.util.ItemBuilder;
 import me.tewpingz.core.util.TimeUtil;
+import me.tewpingz.core.util.inventory.PaginatedInv;
 import me.tewpingz.message.MessageBuilderDefaults;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -145,13 +146,11 @@ public class GrantProcedure {
         }
     }
 
-    private static class RankPrompt extends FastInv {
+    private static class RankPrompt extends PaginatedInv {
         public RankPrompt(GrantProcedure procedure) {
-            super(9 * 5, ChatColor.GOLD + "Select a rank");
-            this.setItems(this.getBorders(), new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE).name(" ").build(), event -> event.setCancelled(true));
+            super(ChatColor.GOLD + "Select a rank");
             Core.getInstance().getRankManager().getSortedRanks().forEach(rankSnapshot -> {
                 Component displayName = rankSnapshot.getColor().apply(Component.text(rankSnapshot.getDisplayName()));
-
                 ItemStack itemStack = new ItemBuilder(Material.LEATHER_CHESTPLATE)
                         .color(rankSnapshot.getColor().toTextColor())
                         .name(displayName)
