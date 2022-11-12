@@ -38,11 +38,12 @@ public class GrantsCommand extends BaseCommand {
     @CommandCompletion("@players")
     @Syntax("<player>")
     public void onCommand(Player player, AsyncUuid asyncUuid) {
-        asyncUuid.fetchUuidAsync().thenAccept(uuid -> {
+        asyncUuid.fetchUuid(player, uuid -> {
             if (uuid == null) {
                 MessageBuilderDefaults.error()
                         .secondary(asyncUuid.getName()).space()
-                        .primary("has not joined the server before!")
+                        .primary("does not exist as a player")
+                        .tertiary("!")
                         .build(player::sendMessage);
                 return;
             }

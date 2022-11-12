@@ -7,7 +7,6 @@ import me.tewpingz.core.CorePlugin;
 import me.tewpingz.core.profile.grant.GrantProcedure;
 import me.tewpingz.core.rank.Rank;
 import me.tewpingz.core.util.uuid.AsyncUuid;
-import me.tewpingz.message.MessageBuilderDefaults;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -23,16 +22,7 @@ public class GrantCommand extends BaseCommand {
     @CommandPermission("core.grant.add")
     @CommandCompletion("@players")
     public void onCommand(Player player, AsyncUuid asyncUuid) {
-        asyncUuid.fetchUuidAsync().thenAccept(uuid -> {
-            if (uuid == null) {
-                MessageBuilderDefaults.error()
-                        .secondary(asyncUuid.getName()).space()
-                        .primary("does not exist as a player")
-                        .tertiary("!")
-                        .build(player::sendMessage);
-                return;
-            }
-
+        asyncUuid.fetchUuid(player, uuid -> {
             Bukkit.getScheduler().runTask(CorePlugin.getInstance(), () -> {
                 new GrantProcedure(uuid).start(player);
             });
@@ -44,16 +34,7 @@ public class GrantCommand extends BaseCommand {
     @Syntax("<target> <rank> <duration> <reason>")
     @CommandCompletion("@players @ranks perm")
     public void addGrant(CommandSender sender, AsyncUuid asyncUuid, Rank.RankSnapshot rankSnapshot, Duration duration, String reason) {
-        asyncUuid.fetchUuidAsync().thenAccept(uuid -> {
-            if (uuid == null) {
-                MessageBuilderDefaults.error()
-                        .secondary(asyncUuid.getName()).space()
-                        .primary("does not exist as a player")
-                        .tertiary("!")
-                        .build(sender::sendMessage);
-                return;
-            }
-
+        asyncUuid.fetchUuid(sender, uuid -> {
             Core.getInstance().getProfileManager().updateRealValueAsync(uuid, profile -> {
                 profile.addGrant(rankSnapshot.getRankId(), sender.getName(), reason, duration.toMillis());
             });
