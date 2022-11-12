@@ -2,13 +2,10 @@ package me.tewpingz.core.rank;
 
 import lombok.Data;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import me.tewpingz.redigo.data.RediGoObject;
 import me.tewpingz.redigo.data.RediGoValue;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Data
@@ -17,13 +14,13 @@ public class Rank implements RediGoObject<String, Rank.RankSnapshot>, Comparable
     private final String rankId;
 
     @RediGoValue(key = "displayName")
-    private String displayName;
+    private String displayName = "";
 
     @RediGoValue(key = "priority")
     private int priority = -1;
 
     @RediGoValue(key = "color")
-    private String color = "";
+    private RankColor color = new RankColor("#FFFFFF", false, false);
 
     @RediGoValue(key = "prefix")
     private String prefix = "";
@@ -37,9 +34,8 @@ public class Rank implements RediGoObject<String, Rank.RankSnapshot>, Comparable
     @RediGoValue(key = "inherits")
     private Set<String> inherits = new HashSet<>();
 
-    public Rank(String rankId, String displayName) {
+    public Rank(String rankId) {
         this.rankId = rankId;
-        this.displayName = displayName;
     }
 
     @Override
@@ -61,7 +57,8 @@ public class Rank implements RediGoObject<String, Rank.RankSnapshot>, Comparable
     public static class RankSnapshot implements Snapshot, Comparable<RankSnapshot> {
         private final String rankId, displayName;
         private final int priority;
-        private final String color, prefix, suffix;
+        private final RankColor color;
+        private final String prefix, suffix;
         private final Set<String> permissions, inherits;
 
         public RankSnapshot(Rank rank) {
