@@ -13,7 +13,6 @@ import org.bukkit.command.CommandSender;
 
 @CommandAlias("list|players")
 public class ListCommand extends BaseCommand {
-
     @Default
     public void onCommand(CommandSender sender) {
         Core.getInstance().getRankManager().getSortedRanksAsync().thenApply(ranks -> {

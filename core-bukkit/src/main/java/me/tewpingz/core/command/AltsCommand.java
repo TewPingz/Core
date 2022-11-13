@@ -16,7 +16,6 @@ import java.util.UUID;
 @CommandAlias("alts|accounts")
 @CommandPermission("core.alts")
 public class AltsCommand extends BaseCommand {
-
     @Default
     @CommandCompletion("@players")
     @Syntax("<target>")

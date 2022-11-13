@@ -1,10 +1,7 @@
 package me.tewpingz.core.profile.punishment.command;
 
 import co.aikar.commands.BaseCommand;
-import co.aikar.commands.annotation.CommandAlias;
-import co.aikar.commands.annotation.CommandCompletion;
-import co.aikar.commands.annotation.CommandPermission;
-import co.aikar.commands.annotation.Default;
+import co.aikar.commands.annotation.*;
 import me.tewpingz.core.CorePlugin;
 import me.tewpingz.core.profile.punishment.PunishmentProcedure;
 import me.tewpingz.core.profile.punishment.PunishmentType;
@@ -16,6 +13,7 @@ import org.bukkit.entity.Player;
 @CommandPermission("core.blacklist")
 public class BlacklistCommand extends BaseCommand {
     @Default
+    @Syntax("<target>")
     @CommandCompletion("@players")
     public void onCommand(Player player, AsyncUuid asyncUuid) {
         asyncUuid.fetchUuid(player, uuid -> {

@@ -1,10 +1,7 @@
 package me.tewpingz.core.profile.punishment.command;
 
 import co.aikar.commands.BaseCommand;
-import co.aikar.commands.annotation.CommandAlias;
-import co.aikar.commands.annotation.CommandCompletion;
-import co.aikar.commands.annotation.CommandPermission;
-import co.aikar.commands.annotation.Default;
+import co.aikar.commands.annotation.*;
 import me.tewpingz.core.Core;
 import me.tewpingz.core.profile.punishment.PunishmentType;
 import me.tewpingz.core.util.uuid.AsyncUuid;
@@ -14,6 +11,7 @@ import org.bukkit.command.CommandSender;
 @CommandPermission("core.unban")
 public class UnbanCommand extends BaseCommand {
     @Default
+    @Syntax("<target> <reason>")
     @CommandCompletion("@players Unbanned")
     public void onCommand(CommandSender commandSender, AsyncUuid asyncUuid, String reason) {
         asyncUuid.fetchUuid(commandSender, uuid -> {

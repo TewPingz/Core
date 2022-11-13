@@ -5,9 +5,11 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import fr.mrmicky.fastinv.FastInvManager;
 import lombok.Getter;
-import me.tewpingz.core.command.AltsCommand;
-import me.tewpingz.core.command.ListCommand;
-import me.tewpingz.core.command.SetMaxCommand;
+import me.tewpingz.core.chat.ChatManager;
+import me.tewpingz.core.chat.command.*;
+import me.tewpingz.core.chat.listener.ChatBridgeListener;
+import me.tewpingz.core.chat.listener.ChatListener;
+import me.tewpingz.core.command.*;
 import me.tewpingz.core.profile.ProfileListener;
 import me.tewpingz.core.profile.grant.GrantScheduleManager;
 import me.tewpingz.core.profile.grant.command.GrantCommand;
@@ -45,6 +47,7 @@ public class CorePlugin extends JavaPlugin {
     private ServerInitializer serverInitializer;
     private GrantScheduleManager grantScheduleManager;
     private PunishmentScheduleManager punishmentScheduleManager;
+    private ChatManager chatManager;
 
     @Override
     public void onEnable() {
@@ -60,6 +63,7 @@ public class CorePlugin extends JavaPlugin {
         this.serverInitializer = new ServerInitializer(this);
         this.grantScheduleManager = new GrantScheduleManager();
         this.punishmentScheduleManager = new PunishmentScheduleManager();
+        this.chatManager = new ChatManager();
 
         this.registerListeners();
         this.registerCommands();
@@ -102,6 +106,13 @@ public class CorePlugin extends JavaPlugin {
         commandManager.registerCommand(new UnmuteCommand());
         commandManager.registerCommand(new SetMaxCommand());
         commandManager.registerCommand(new ServersCommand());
+        commandManager.registerCommand(new StaffChatCommand());
+        commandManager.registerCommand(new AdminChatCommand());
+        commandManager.registerCommand(new ReportCommand());
+        commandManager.registerCommand(new ClearChatCommand());
+        commandManager.registerCommand(new SlowChatCommand());
+        commandManager.registerCommand(new MuteChatCommand());
+        commandManager.registerCommand(new RequestCommand());
     }
 
     private void registerListeners() {
@@ -110,6 +121,7 @@ public class CorePlugin extends JavaPlugin {
         new GrantBridgeListener(this);
         new PunishmentBridgeListener(this);
         new ServerBridgeListener(this);
+        new ChatBridgeListener(this);
 
         // Bukkit listeners
         PluginManager pluginManager = this.getServer().getPluginManager();
@@ -117,5 +129,6 @@ public class CorePlugin extends JavaPlugin {
         pluginManager.registerEvents(new PunishmentListener(this.punishmentScheduleManager), this);
         pluginManager.registerEvents(new ProfileListener(this.core.getUuidManager(), this.core.getProfileManager()), this);
         pluginManager.registerEvents(new ServerListener(this.serverInitializer), this);
+        pluginManager.registerEvents(new ChatListener(this.chatManager), this);
     }
 }

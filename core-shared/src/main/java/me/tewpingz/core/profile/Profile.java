@@ -27,7 +27,7 @@ public class Profile implements RediGoObject<UUID, Profile.ProfileSnapshot> {
     private long joinTime = -1;
 
     @RediGoValue(key = "lastSeen")
-    private long lastSeen;
+    private long lastSeen = -1;
 
     @RediGoValue(key = "lastSeenName")
     private String lastSeenName;
@@ -46,6 +46,12 @@ public class Profile implements RediGoObject<UUID, Profile.ProfileSnapshot> {
 
     @RediGoValue(key = "expiredPunishments")
     private Set<Punishment.ExpiredPunishment> expiredPunishments = new HashSet<>();
+
+    @RediGoValue(key = "lastReportExecuted")
+    private long lastReportExecuted = -1;
+
+    @RediGoValue(key = "lastRequestExecuted")
+    private long lastRequestExecuted = -1;
 
     public boolean addGrant(Rank rank, String executor, String reason, long duration) {
         return this.addGrant(rank.getRankId(), executor, reason, duration);
@@ -167,7 +173,7 @@ public class Profile implements RediGoObject<UUID, Profile.ProfileSnapshot> {
     @Getter
     public static class ProfileSnapshot implements Snapshot {
         private final UUID playerId;
-        private final long joinTime, lastSeen;
+        private final long joinTime, lastSeen, lastRequestExecuted, lastReportExecuted;
         private final String lastIp, lastSeenName, displayRankId;
 
         private final List<Grant> sortedActiveGrants;
@@ -185,6 +191,8 @@ public class Profile implements RediGoObject<UUID, Profile.ProfileSnapshot> {
             this.joinTime = profile.getJoinTime();
             this.lastIp = profile.getLastIp();
             this.lastSeen = profile.getLastSeen();
+            this.lastReportExecuted = profile.getLastReportExecuted();
+            this.lastRequestExecuted = profile.getLastRequestExecuted();
             this.lastSeenName = profile.getLastSeenName();
             this.displayRankId = profile.getDisplayRank().getRankId();
             this.sortedActiveGrants = List.copyOf(profile.getSortedActiveGrants());
