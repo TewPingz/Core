@@ -36,7 +36,7 @@ public class ReportCommand extends BaseCommand {
                 }
 
                 profile.setLastReportExecuted(System.currentTimeMillis());
-                String server = CorePlugin.getInstance().getServerInitializer().getServerDisplayName();
+                String server = CorePlugin.getInstance().getServerInitializer().getConfig().getServerName();
                 Core.getInstance().getBridge().callEvent(new PlayerReportEvent(player.getName(), server, reason, uuid));
             });
         });

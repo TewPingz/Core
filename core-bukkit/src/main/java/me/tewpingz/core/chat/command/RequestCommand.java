@@ -27,7 +27,7 @@ public class RequestCommand extends BaseCommand {
             }
 
             profile.setLastRequestExecuted(System.currentTimeMillis());
-            String server = CorePlugin.getInstance().getServerInitializer().getServerDisplayName();
+            String server = CorePlugin.getInstance().getServerInitializer().getConfig().getServerName();
             Core.getInstance().getBridge().callEvent(new PlayerRequestEvent(player.getName(), server, message));
         });
     }

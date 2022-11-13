@@ -18,7 +18,7 @@ public class AdminChatCommand extends BaseCommand {
     @Syntax("<message>")
     public void onCommand(CommandSender sender, String message) {
         Bukkit.getScheduler().runTaskAsynchronously(CorePlugin.getInstance(), () -> {
-            String server = CorePlugin.getInstance().getServerInitializer().getServerDisplayName();
+            String server = CorePlugin.getInstance().getServerInitializer().getConfig().getServerName();
             Core.getInstance().getBridge().callEvent(new AdminChatEvent(sender.getName(), server, message));
         });
     }

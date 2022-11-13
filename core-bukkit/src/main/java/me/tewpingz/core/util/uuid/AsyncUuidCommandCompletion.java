@@ -17,10 +17,6 @@ public class AsyncUuidCommandCompletion implements CommandCompletions.AsyncComma
     public Collection<String> getCompletions(BukkitCommandCompletionContext context) throws InvalidCommandArgument {
         Set<String> completion = new HashSet<>();
 
-        for (OfflinePlayer offlinePlayer : Bukkit.getOfflinePlayers()) {
-            completion.add(offlinePlayer.getName());
-        }
-
         for (Player player : Bukkit.getOnlinePlayers()) {
             completion.add(player.getName());
         }

@@ -6,19 +6,18 @@ import me.tewpingz.core.CorePlugin;
 import me.tewpingz.core.server.event.ServerOnlineEvent;
 import me.tewpingz.core.server.event.ServerShutdownEvent;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.ConfigurationSection;
+
+import java.io.IOException;
 
 @Getter
 public class ServerInitializer {
 
-    private final String serverId, serverDisplayName;
+    private final ServerConfig config;
 
     public ServerInitializer(CorePlugin instance) {
-        ConfigurationSection section = instance.getConfig().getConfigurationSection("server");
-        this.serverId = section.getString("server-id").toLowerCase();
-        this.serverDisplayName = section.getString("server-display-name");
-        Core.getInstance().getServerManager().updateRealValueAsync(this.serverId, server -> {
-            server.setDisplayName(this.serverDisplayName);
+        this.config = ServerConfig.getServerConfig(instance.getDataFolder());
+        Core.getInstance().getServerManager().updateRealValueAsync(this.config.getServerId(), server -> {
+            server.setDisplayName(this.config.getServerName());
             server.setWhitelisted(Bukkit.hasWhitelist());
             server.setMaxPlayers(Bukkit.getMaxPlayers());
             server.setOnline(true);
@@ -26,7 +25,7 @@ public class ServerInitializer {
     }
 
     public void shutdown() {
-        Server.ServerSnapshot snapshot = Core.getInstance().getServerManager().updateRealValue(this.serverId, server -> {
+        Server.ServerSnapshot snapshot = Core.getInstance().getServerManager().updateRealValue(this.config.getServerId(), server -> {
             server.getPlayers().clear();
             server.setOnline(false);
         });

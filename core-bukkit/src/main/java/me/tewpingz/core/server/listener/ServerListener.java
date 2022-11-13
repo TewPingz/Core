@@ -3,6 +3,7 @@ package me.tewpingz.core.server.listener;
 import com.destroystokyo.paper.event.server.WhitelistToggleEvent;
 import lombok.RequiredArgsConstructor;
 import me.tewpingz.core.Core;
+import me.tewpingz.core.CorePlugin;
 import me.tewpingz.core.server.ServerInitializer;
 import me.tewpingz.core.server.event.ServerWhitelistEvent;
 import org.bukkit.event.EventHandler;
@@ -17,21 +18,24 @@ public class ServerListener implements Listener {
 
     @EventHandler
     public void onWhitelistToggle(WhitelistToggleEvent event) {
-        Core.getInstance().getServerManager().updateRealValueAsync(this.serverInitializer.getServerId(), server -> {
+        String serverId = CorePlugin.getInstance().getServerInitializer().getConfig().getServerId();
+        Core.getInstance().getServerManager().updateRealValueAsync(serverId, server -> {
             server.setWhitelisted(event.isEnabled());
         }).thenAccept(server -> Core.getInstance().getBridge().callEvent(new ServerWhitelistEvent(server)));
     }
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        Core.getInstance().getServerManager().updateRealValueAsync(this.serverInitializer.getServerId(), server -> {
+        String serverId = CorePlugin.getInstance().getServerInitializer().getConfig().getServerId();
+        Core.getInstance().getServerManager().updateRealValueAsync(serverId, server -> {
             server.addPlayer(event.getPlayer().getUniqueId(), event.getPlayer().getName());
         });
     }
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
-        Core.getInstance().getServerManager().updateRealValueAsync(this.serverInitializer.getServerId(), server -> {
+        String serverId = CorePlugin.getInstance().getServerInitializer().getConfig().getServerId();
+        Core.getInstance().getServerManager().updateRealValueAsync(serverId, server -> {
             server.removePlayer(event.getPlayer().getUniqueId());
         });
     }

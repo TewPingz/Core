@@ -37,6 +37,7 @@ import me.tewpingz.core.util.uuid.AsyncUuidContextResolver;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.IOException;
 import java.time.Duration;
 
 @Getter

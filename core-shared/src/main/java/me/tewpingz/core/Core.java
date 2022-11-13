@@ -39,7 +39,7 @@ public class Core {
 
         this.redissonClient = Redisson.create();
         this.mongoClient = MongoClients.create();
-        this.gson = gson.newBuilder().create();
+        this.gson = gson.newBuilder().setPrettyPrinting().create();
         this.rediGo = new RediGo("core", this.mongoClient, this.redissonClient, this.gson);
         this.bridge = new Bridge(this);
 
