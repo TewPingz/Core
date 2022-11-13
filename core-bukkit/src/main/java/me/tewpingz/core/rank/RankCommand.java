@@ -6,6 +6,7 @@ import co.aikar.commands.annotation.*;
 import me.tewpingz.core.Core;
 import me.tewpingz.core.rank.event.RankCreateEvent;
 import me.tewpingz.core.rank.event.RankUpdateEvent;
+import me.tewpingz.core.rank.event.RankUpdatePermissionEvent;
 import me.tewpingz.message.MessageBuilderDefaults;
 import net.kyori.adventure.text.Component;
 import org.bukkit.ChatColor;
@@ -239,6 +240,7 @@ public class RankCommand extends BaseCommand {
                     .tertiary(".")
                     .build());
             Core.getInstance().getBridge().callEvent(new RankUpdateEvent(sender.getName(), rank));
+            Core.getInstance().getBridge().callEvent(new RankUpdatePermissionEvent(rank));
         });
     }
 
@@ -266,6 +268,7 @@ public class RankCommand extends BaseCommand {
                     .tertiary(".")
                     .build());
             Core.getInstance().getBridge().callEvent(new RankUpdateEvent(sender.getName(), rank));
+            Core.getInstance().getBridge().callEvent(new RankUpdatePermissionEvent(rank));
         });
     }
 

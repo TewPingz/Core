@@ -36,6 +36,8 @@ public class GrantAttachmentManager {
             PermissionAttachment attachment = player.addAttachment(CorePlugin.getInstance());
             permissions.forEach(permission -> attachment.setPermission(permission, true));
             CorePlugin.getInstance().getGrantAttachmentManager().track(player.getUniqueId(), attachment);
+            player.recalculatePermissions();
+            player.updateCommands();
         });
     }
 

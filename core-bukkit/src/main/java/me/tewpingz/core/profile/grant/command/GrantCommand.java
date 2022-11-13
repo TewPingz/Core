@@ -19,7 +19,6 @@ public class GrantCommand extends BaseCommand {
 
     @Default
     @Syntax("<target>")
-    @CommandPermission("core.grant.add")
     @CommandCompletion("@players")
     public void onCommand(Player player, AsyncUuid asyncUuid) {
         asyncUuid.fetchUuid(player, uuid -> {
