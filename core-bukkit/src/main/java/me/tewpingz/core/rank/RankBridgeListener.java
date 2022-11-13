@@ -2,7 +2,6 @@ package me.tewpingz.core.rank;
 
 import me.tewpingz.core.Core;
 import me.tewpingz.core.CorePlugin;
-import me.tewpingz.core.profile.Profile;
 import me.tewpingz.core.rank.event.RankCreateEvent;
 import me.tewpingz.core.rank.event.RankUpdateEvent;
 import me.tewpingz.core.rank.event.RankUpdatePermissionEvent;

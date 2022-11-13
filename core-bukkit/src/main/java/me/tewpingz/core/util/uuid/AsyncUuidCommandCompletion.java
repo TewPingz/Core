@@ -5,7 +5,6 @@ import co.aikar.commands.CommandCompletions;
 import co.aikar.commands.InvalidCommandArgument;
 import me.tewpingz.core.Core;
 import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import java.util.Collection;

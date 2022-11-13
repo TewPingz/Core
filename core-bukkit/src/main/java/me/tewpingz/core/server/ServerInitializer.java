@@ -7,8 +7,6 @@ import me.tewpingz.core.server.event.ServerOnlineEvent;
 import me.tewpingz.core.server.event.ServerShutdownEvent;
 import org.bukkit.Bukkit;
 
-import java.io.IOException;
-
 @Getter
 public class ServerInitializer {
 
