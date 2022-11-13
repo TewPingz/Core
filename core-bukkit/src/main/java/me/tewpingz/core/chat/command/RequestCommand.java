@@ -8,6 +8,7 @@ import co.aikar.commands.annotation.Syntax;
 import me.tewpingz.core.Core;
 import me.tewpingz.core.CorePlugin;
 import me.tewpingz.core.chat.PlayerRequestEvent;
+import me.tewpingz.core.util.TimeUtil;
 import me.tewpingz.message.MessageBuilderDefaults;
 import org.bukkit.entity.Player;
 
@@ -18,17 +19,21 @@ public class RequestCommand extends BaseCommand {
     @Syntax("<message>")
     public void onCommand(Player player, String message) {
         Core.getInstance().getProfileManager().updateRealValueAsync(player.getUniqueId(), profile -> {
-            if (!(profile.getLastRequestExecuted() == -1 || (System.currentTimeMillis() - profile.getLastRequestExecuted()) > 30_000)) {
+            if (!(profile.getRequestCooldown() == -1 || (profile.getRequestCooldown() - System.currentTimeMillis()) < 0)) {
                 MessageBuilderDefaults.error()
-                        .primary("You are currently on request cooldown")
+                        .primary("You are currently on request cooldown for").space()
+                        .secondary(TimeUtil.formatLongIntoDetailedString(profile.getRequestCooldown() - System.currentTimeMillis()))
                         .tertiary(".")
                         .build(player::sendMessage);
                 return;
             }
 
-            profile.setLastRequestExecuted(System.currentTimeMillis());
+            profile.setRequestCooldown(System.currentTimeMillis() + 30_000);
             String server = CorePlugin.getInstance().getServerInitializer().getConfig().getServerName();
             Core.getInstance().getBridge().callEvent(new PlayerRequestEvent(player.getName(), server, message));
+            MessageBuilderDefaults.success()
+                    .primary("Your report has been successfully received")
+                    .build(player::sendMessage);
         });
     }
 }
