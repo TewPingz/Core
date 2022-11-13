@@ -50,6 +50,8 @@ public class GrantListener implements Listener {
             });
 
             profile.getActiveGrants().forEach(grant -> this.grantScheduleManager.schedule(event.getPlayer().getUniqueId(), grant));
+        }).thenAccept(profile -> {
+            CorePlugin.getInstance().getGrantAttachmentManager().createAttachment(event.getPlayer(), profile);
         });
     }
 

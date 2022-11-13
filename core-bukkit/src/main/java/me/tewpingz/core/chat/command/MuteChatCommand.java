@@ -5,7 +5,6 @@ import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.CommandPermission;
 import co.aikar.commands.annotation.Default;
 import me.tewpingz.core.CorePlugin;
-import me.tewpingz.message.MessageBuilder;
 import me.tewpingz.message.MessageBuilderDefaults;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;

@@ -15,7 +15,6 @@ import me.tewpingz.core.util.uuid.AsyncUuid;
 import me.tewpingz.message.MessageBuilderDefaults;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.conversations.Conversation;
 import org.bukkit.conversations.ConversationContext;

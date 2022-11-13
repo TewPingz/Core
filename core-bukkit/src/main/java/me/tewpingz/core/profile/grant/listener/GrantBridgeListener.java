@@ -2,6 +2,7 @@ package me.tewpingz.core.profile.grant.listener;
 
 import me.tewpingz.core.Core;
 import me.tewpingz.core.CorePlugin;
+import me.tewpingz.core.profile.Profile;
 import me.tewpingz.core.profile.grant.event.GrantAddEvent;
 import me.tewpingz.core.profile.grant.event.GrantRemoveEvent;
 import me.tewpingz.core.util.Broadcast;
@@ -21,6 +22,9 @@ public class GrantBridgeListener {
                         .append(event.getGrant().getRankNameComponent()).space()
                         .tertiary(".")
                         .build(player::sendMessage);
+
+                Profile.ProfileSnapshot profile = Core.getInstance().getProfileManager().getRealValue(player.getUniqueId());
+                CorePlugin.getInstance().getGrantAttachmentManager().createAttachment(player, profile);
             }
 
             MessageBuilderDefaults.normal()
@@ -46,6 +50,9 @@ public class GrantBridgeListener {
                         .primary(event.getExpiredGrant().getRemovedFor().equals("Expired") ? "expired" : "removed")
                         .tertiary("!")
                         .build(player::sendMessage);
+
+                Profile.ProfileSnapshot profile = Core.getInstance().getProfileManager().getRealValue(player.getUniqueId());
+                CorePlugin.getInstance().getGrantAttachmentManager().createAttachment(player, profile);
             }
 
             if (!event.getExpiredGrant().getRemovedFor().equals("Expired")) {

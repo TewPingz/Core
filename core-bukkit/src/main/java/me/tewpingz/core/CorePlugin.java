@@ -9,8 +9,11 @@ import me.tewpingz.core.chat.ChatManager;
 import me.tewpingz.core.chat.command.*;
 import me.tewpingz.core.chat.listener.ChatBridgeListener;
 import me.tewpingz.core.chat.listener.ChatListener;
-import me.tewpingz.core.command.*;
+import me.tewpingz.core.command.AltsCommand;
+import me.tewpingz.core.command.ListCommand;
+import me.tewpingz.core.command.SetMaxCommand;
 import me.tewpingz.core.profile.ProfileListener;
+import me.tewpingz.core.profile.grant.GrantAttachmentManager;
 import me.tewpingz.core.profile.grant.GrantScheduleManager;
 import me.tewpingz.core.profile.grant.command.GrantCommand;
 import me.tewpingz.core.profile.grant.command.GrantsCommand;
@@ -46,6 +49,7 @@ public class CorePlugin extends JavaPlugin {
 
     private ServerInitializer serverInitializer;
     private GrantScheduleManager grantScheduleManager;
+    private GrantAttachmentManager grantAttachmentManager;
     private PunishmentScheduleManager punishmentScheduleManager;
     private ChatManager chatManager;
 
@@ -62,6 +66,7 @@ public class CorePlugin extends JavaPlugin {
 
         this.serverInitializer = new ServerInitializer(this);
         this.grantScheduleManager = new GrantScheduleManager();
+        this.grantAttachmentManager = new GrantAttachmentManager();
         this.punishmentScheduleManager = new PunishmentScheduleManager();
         this.chatManager = new ChatManager();
 
