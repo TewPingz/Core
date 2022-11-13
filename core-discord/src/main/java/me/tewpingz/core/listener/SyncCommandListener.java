@@ -65,6 +65,7 @@ public class SyncCommandListener extends ListenerAdapter {
                 .setTitle("Discord Sync")
                 .setColor(Color.RED.getRGB())
                 .setDescription("The code that you have provided is invalid!")
+                .setThumbnail("https://media.tenor.com/ldpxxfq73qIAAAAC/its-invalid-jon-taffer.gif")
                 .build();
     }
 
@@ -73,6 +74,7 @@ public class SyncCommandListener extends ListenerAdapter {
                 .setTitle("Discord Sync")
                 .setColor(Color.RED.getRGB())
                 .setDescription("Your discord account is already synced with that minecraft account.")
+                .setThumbnail("https://media.tenor.com/PxDdW7PyM5EAAAAS/curious-xavier-smith-curious.gif")
                 .build();
     }
 
@@ -81,6 +83,7 @@ public class SyncCommandListener extends ListenerAdapter {
                 .setTitle("Discord Sync")
                 .setColor(Color.GREEN.getRGB())
                 .setDescription("You have successfully linked your discord account to " + name)
+                .setThumbnail("https://media.tenor.com/1kztu9dQoKEAAAAC/okay-nice.gif")
                 .build();
     }
 }
