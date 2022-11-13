@@ -3,8 +3,6 @@ package me.tewpingz.core.listener;
 import me.tewpingz.core.Core;
 import me.tewpingz.core.profile.grant.event.GrantAddEvent;
 import me.tewpingz.core.profile.grant.event.GrantRemoveEvent;
-import me.tewpingz.core.profile.punishment.event.PunishmentAddEvent;
-import me.tewpingz.core.profile.punishment.event.PunishmentRemoveEvent;
 import me.tewpingz.core.util.TimeUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;

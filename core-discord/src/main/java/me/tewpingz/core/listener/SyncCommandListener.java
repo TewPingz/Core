@@ -1,7 +1,6 @@
 package me.tewpingz.core.listener;
 
 import me.tewpingz.core.Core;
-import me.tewpingz.core.profile.Profile;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.MessageEmbed;
