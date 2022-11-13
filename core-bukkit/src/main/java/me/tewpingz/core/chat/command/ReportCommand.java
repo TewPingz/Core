@@ -8,6 +8,7 @@ import co.aikar.commands.annotation.Syntax;
 import me.tewpingz.core.Core;
 import me.tewpingz.core.CorePlugin;
 import me.tewpingz.core.chat.PlayerReportEvent;
+import me.tewpingz.core.util.TimeUtil;
 import me.tewpingz.core.util.uuid.AsyncUuid;
 import me.tewpingz.message.MessageBuilderDefaults;
 import org.bukkit.entity.Player;
@@ -27,17 +28,21 @@ public class ReportCommand extends BaseCommand {
             }
 
             Core.getInstance().getProfileManager().updateRealValue(player.getUniqueId(), profile -> {
-                if (!(profile.getLastReportExecuted() == -1 || (System.currentTimeMillis() - profile.getLastReportExecuted()) > 30_000)) {
+                if (!(profile.getReportCooldown() == -1 || (profile.getReportCooldown() - System.currentTimeMillis()) < 0)) {
                     MessageBuilderDefaults.error()
-                            .primary("You are currently on report cooldown")
+                            .primary("You are currently on report cooldown for").space()
+                            .secondary(TimeUtil.formatLongIntoDetailedString(profile.getReportCooldown() - System.currentTimeMillis()))
                             .tertiary(".")
                             .build(player::sendMessage);
                     return;
                 }
 
-                profile.setLastReportExecuted(System.currentTimeMillis());
+                profile.setReportCooldown(System.currentTimeMillis() + 30_000);
                 String server = CorePlugin.getInstance().getServerInitializer().getConfig().getServerName();
                 Core.getInstance().getBridge().callEvent(new PlayerReportEvent(player.getName(), server, reason, uuid));
+                MessageBuilderDefaults.success()
+                        .primary("Your report has been successfully received")
+                        .build(player::sendMessage);
             });
         });
     }

@@ -50,6 +50,9 @@ public class UuidManager {
     }
 
     public NameToUuidEntry.NameToUuidSnapshot getUuid(String name) {
+        if (name.length() > 16) {
+            return new NameToUuidEntry.NameToUuidSnapshot(null, name);
+        }
         return this.nameToUuidCollection.getOrCreateRealValue(name.toLowerCase());
     }
 
@@ -58,6 +61,9 @@ public class UuidManager {
     }
 
     public CompletableFuture<NameToUuidEntry.NameToUuidSnapshot> getUuidAsync(String name) {
+        if (name.length() > 16) {
+            return CompletableFuture.supplyAsync(() -> new NameToUuidEntry.NameToUuidSnapshot(null, name));
+        }
         return this.nameToUuidCollection.getOrCreateRealValueAsync(name.toLowerCase());
     }
 

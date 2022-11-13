@@ -47,11 +47,20 @@ public class Profile implements RediGoObject<UUID, Profile.ProfileSnapshot> {
     @RediGoValue(key = "expiredPunishments")
     private Set<Punishment.ExpiredPunishment> expiredPunishments = new HashSet<>();
 
-    @RediGoValue(key = "lastReportExecuted")
-    private long lastReportExecuted = -1;
+    @RediGoValue(key = "reportCooldown")
+    private long reportCooldown = -1;
 
-    @RediGoValue(key = "lastRequestExecuted")
-    private long lastRequestExecuted = -1;
+    @RediGoValue(key = "requestCooldown")
+    private long requestCooldown = -1;
+
+    @RediGoValue(key = "syncCode")
+    private String syncCode;
+
+    @RediGoValue(key = "syncCooldown")
+    private long syncCooldown;
+
+    @RediGoValue(key = "discordId")
+    private String discordId;
 
     public boolean addGrant(Rank rank, String executor, String reason, long duration) {
         return this.addGrant(rank.getRankId(), executor, reason, duration);
@@ -173,8 +182,8 @@ public class Profile implements RediGoObject<UUID, Profile.ProfileSnapshot> {
     @Getter
     public static class ProfileSnapshot implements Snapshot {
         private final UUID playerId;
-        private final long joinTime, lastSeen, lastRequestExecuted, lastReportExecuted;
-        private final String lastIp, lastSeenName, displayRankId;
+        private final long joinTime, lastSeen, requestCooldown, reportCooldown, syncCooldown;
+        private final String lastIp, lastSeenName, displayRankId, discordId, syncCode;
 
         private final List<Grant> sortedActiveGrants;
         private final List<Grant.ExpiredGrant> sortedExpiredGrants;
@@ -191,8 +200,11 @@ public class Profile implements RediGoObject<UUID, Profile.ProfileSnapshot> {
             this.joinTime = profile.getJoinTime();
             this.lastIp = profile.getLastIp();
             this.lastSeen = profile.getLastSeen();
-            this.lastReportExecuted = profile.getLastReportExecuted();
-            this.lastRequestExecuted = profile.getLastRequestExecuted();
+            this.reportCooldown = profile.getReportCooldown();
+            this.requestCooldown = profile.getRequestCooldown();
+            this.syncCooldown = profile.getSyncCooldown();
+            this.syncCode = profile.getSyncCode();
+            this.discordId = profile.getDiscordId();
             this.lastSeenName = profile.getLastSeenName();
             this.displayRankId = profile.getDisplayRank().getRankId();
             this.sortedActiveGrants = List.copyOf(profile.getSortedActiveGrants());

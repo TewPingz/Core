@@ -9,10 +9,7 @@ import me.tewpingz.core.chat.ChatManager;
 import me.tewpingz.core.chat.command.*;
 import me.tewpingz.core.chat.listener.ChatBridgeListener;
 import me.tewpingz.core.chat.listener.ChatListener;
-import me.tewpingz.core.command.AltsCommand;
-import me.tewpingz.core.command.ListCommand;
-import me.tewpingz.core.command.SetMaxCommand;
-import me.tewpingz.core.command.WhoIsCommand;
+import me.tewpingz.core.command.*;
 import me.tewpingz.core.profile.ProfileListener;
 import me.tewpingz.core.profile.grant.GrantAttachmentManager;
 import me.tewpingz.core.profile.grant.GrantScheduleManager;
@@ -120,6 +117,7 @@ public class CorePlugin extends JavaPlugin {
         commandManager.registerCommand(new MuteChatCommand());
         commandManager.registerCommand(new RequestCommand());
         commandManager.registerCommand(new WhoIsCommand());
+        commandManager.registerCommand(new SyncCommand());
     }
 
     private void registerListeners() {

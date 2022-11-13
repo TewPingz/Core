@@ -63,6 +63,12 @@ public class WhoIsCommand extends BaseCommand {
                     .primary("Display Rank").tertiary(":").space()
                     .append(profile.getDisplayRank().getColor().apply(Component.text(profile.getDisplayRank().getDisplayName())))
                     .build(sender::sendMessage);
+
+            MessageBuilderDefaults.normal()
+                    .space().tertiary("-").space()
+                    .primary("Discord ID").tertiary(":").space()
+                    .secondary(profile.getDiscordId() == null ? "N/A" : profile.getDiscordId())
+                    .build(sender::sendMessage);
         });
     }
 }
