@@ -27,9 +27,8 @@ public class ClearChatCommand extends BaseCommand {
         }
 
         MessageBuilderDefaults.normal()
-                .tertiary("[Server Monitor]").space()
                 .secondary(sender.getName()).space()
                 .primary("has cleared the chat").tertiary(".")
-                .build(component -> Broadcast.broadcast(component, "core.clearchat"));
+                .build(Bukkit::broadcast);
     }
 }

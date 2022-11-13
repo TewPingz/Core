@@ -15,7 +15,7 @@ import java.time.Duration;
 public class SlowChatCommand extends BaseCommand {
     @Default
     @Syntax("<duration>")
-    @CommandCompletion("0s:10s:30s:1m:10m")
+    @CommandCompletion("0s|10s|30s|1m|10m")
     public void onCommand(CommandSender commandSender, Duration duration) {
         if (duration.isNegative()) {
             MessageBuilderDefaults.error()
