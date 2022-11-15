@@ -2,6 +2,7 @@ package me.tewpingz.core.command;
 
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
+import co.aikar.commands.annotation.CommandPermission;
 import co.aikar.commands.annotation.Default;
 import me.tewpingz.core.Core;
 import me.tewpingz.core.profile.Profile;
@@ -16,6 +17,7 @@ import java.util.Comparator;
 import java.util.List;
 
 @CommandAlias("list|players")
+@CommandPermission("core.list")
 public class ListCommand extends BaseCommand {
     @Default
     public void onCommand(CommandSender sender) {

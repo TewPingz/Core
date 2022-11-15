@@ -9,7 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
 @CommandAlias("adminchat|ac")
-@CommandPermission("core.staffchat")
+@CommandPermission("core.adminchat")
 public class AdminChatCommand extends BaseCommand {
     @Default
     @Syntax("<message>")

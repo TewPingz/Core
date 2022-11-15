@@ -28,7 +28,7 @@ public class ChatListener implements Listener {
             return;
         }
 
-        if (this.chatManager.getChatSlow() < 0) {
+        if (this.chatManager.getChatSlow() < 0 || event.getPlayer().hasPermission("core.slowchat.bypass")) {
             return;
         }
 
