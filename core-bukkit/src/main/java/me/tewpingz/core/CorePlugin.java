@@ -62,9 +62,6 @@ public class CorePlugin extends JavaPlugin {
         instance = this;
 
         FastInvManager.register(this);
-        this.getConfig().options().copyDefaults();
-        this.saveDefaultConfig();
-
         this.gson = new GsonBuilder().disableHtmlEscaping().enableComplexMapKeySerialization().create();
         this.core = new Core(this.gson);
 
