@@ -57,7 +57,7 @@ public class Profile implements RediGoObject<UUID, Profile.ProfileSnapshot> {
     private String syncCode;
 
     @RediGoValue(key = "syncCooldown")
-    private long syncCooldown;
+    private long syncCooldown = -1;
 
     @RediGoValue(key = "discordId")
     private String discordId;

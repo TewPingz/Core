@@ -1,6 +1,6 @@
 package me.tewpingz.core;
 
-import co.aikar.commands.PaperCommandManager;
+import co.aikar.commands.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import fr.mrmicky.fastinv.FastInvManager;
@@ -21,9 +21,15 @@ import me.tewpingz.core.profile.punishment.PunishmentScheduleManager;
 import me.tewpingz.core.profile.punishment.command.*;
 import me.tewpingz.core.profile.punishment.listener.PunishmentBridgeListener;
 import me.tewpingz.core.profile.punishment.listener.PunishmentListener;
+import me.tewpingz.core.queue.QueuePollTask;
+import me.tewpingz.core.queue.command.JoinQueueCommand;
+import me.tewpingz.core.queue.command.LeaveQueueCommand;
 import me.tewpingz.core.rank.*;
+import me.tewpingz.core.server.Server;
 import me.tewpingz.core.server.ServerInitializer;
-import me.tewpingz.core.server.ServersCommand;
+import me.tewpingz.core.server.command.ServerCommandComplete;
+import me.tewpingz.core.server.command.ServerContextResolver;
+import me.tewpingz.core.server.command.ServersCommand;
 import me.tewpingz.core.server.listener.ServerBridgeListener;
 import me.tewpingz.core.server.listener.ServerListener;
 import me.tewpingz.core.util.duration.DurationCommandCompletion;
@@ -68,6 +74,8 @@ public class CorePlugin extends JavaPlugin {
         this.punishmentScheduleManager = new PunishmentScheduleManager();
         this.chatManager = new ChatManager();
 
+        this.getServer().getScheduler().runTaskTimerAsynchronously(this, new QueuePollTask(), 20L, 20L);
+
         this.registerListeners();
         this.registerCommands();
     }
@@ -83,14 +91,18 @@ public class CorePlugin extends JavaPlugin {
         commandManager.enableUnstableAPI("help");
 
         // Register contexts
-        commandManager.getCommandContexts().registerContext(AsyncUuid.class, new AsyncUuidContextResolver());
-        commandManager.getCommandContexts().registerContext(Duration.class, new DurationContextResolver());
-        commandManager.getCommandContexts().registerContext(Rank.RankSnapshot.class, new RankContextResolver());
+        CommandContexts<BukkitCommandExecutionContext> commandContexts = commandManager.getCommandContexts();
+        commandContexts.registerContext(AsyncUuid.class, new AsyncUuidContextResolver());
+        commandContexts.registerContext(Duration.class, new DurationContextResolver());
+        commandContexts.registerContext(Rank.RankSnapshot.class, new RankContextResolver());
+        commandContexts.registerContext(Server.ServerSnapshot.class, new ServerContextResolver());
 
         // Register command completions
-        commandManager.getCommandCompletions().registerCompletion("players", new AsyncUuidCommandCompletion());
-        commandManager.getCommandCompletions().registerAsyncCompletion("ranks", new RankCommandCompletion());
-        commandManager.getCommandCompletions().registerAsyncCompletion("duration", new DurationCommandCompletion());
+        CommandCompletions<BukkitCommandCompletionContext> commandCompletions = commandManager.getCommandCompletions();
+        commandCompletions.registerAsyncCompletion("players", new AsyncUuidCommandCompletion());
+        commandCompletions.registerAsyncCompletion("ranks", new RankCommandCompletion());
+        commandCompletions.registerAsyncCompletion("duration", new DurationCommandCompletion());
+        commandCompletions.registerAsyncCompletion("servers", new ServerCommandComplete());
 
         // Register commands
         commandManager.registerCommand(new RankCommand());
@@ -118,6 +130,8 @@ public class CorePlugin extends JavaPlugin {
         commandManager.registerCommand(new RequestCommand());
         commandManager.registerCommand(new WhoIsCommand());
         commandManager.registerCommand(new SyncCommand());
+        commandManager.registerCommand(new JoinQueueCommand());
+        commandManager.registerCommand(new LeaveQueueCommand());
     }
 
     private void registerListeners() {
