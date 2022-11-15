@@ -12,6 +12,7 @@
         <module>core-shared</module>
         <module>core-bukkit</module>
         <module>core-discord</module>
+        <module>core-velocity</module>
     </modules>
 
     <name>Core-Parent</name>

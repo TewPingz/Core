@@ -7,6 +7,7 @@ import lombok.Getter;
 import me.tewpingz.core.bridge.Bridge;
 import me.tewpingz.core.profile.ProfileManager;
 import me.tewpingz.core.profile.alt.AltManager;
+import me.tewpingz.core.queue.QueueManager;
 import me.tewpingz.core.rank.RankManager;
 import me.tewpingz.core.server.ServerManager;
 import me.tewpingz.core.util.uuid.UuidManager;
@@ -33,6 +34,7 @@ public class Core {
     private final ProfileManager profileManager;
     private final AltManager altManager;
     private final ServerManager serverManager;
+    private final QueueManager queueManager;
 
     public Core(Gson gson) {
         instance = this;
@@ -48,6 +50,7 @@ public class Core {
         this.profileManager = new ProfileManager(this);
         this.altManager = new AltManager(this);
         this.serverManager = new ServerManager(this);
+        this.queueManager = new QueueManager(this);
     }
 
     public void shutdown() {

@@ -20,22 +20,9 @@ import org.bukkit.event.player.PlayerQuitEvent;
 public class GrantListener implements Listener {
 
     private final GrantScheduleManager grantScheduleManager;
-    private final ChatRenderer formatRenderer;
 
     public GrantListener(GrantScheduleManager grantScheduleManager) {
         this.grantScheduleManager = grantScheduleManager;
-        this.formatRenderer = ChatRenderer.viewerUnaware((source, displayName, message) -> {
-            Profile.ProfileSnapshot profile = Core.getInstance().getProfileManager().getCachedValue(source.getUniqueId());
-            TextComponent prefix = Component.text(profile.getDisplayRank().getPrefix());
-            TextComponent suffix = Component.text(profile.getDisplayRank().getSuffix());
-            TextComponent separator = Component.text(": ").color(NamedTextColor.GRAY);
-            return prefix
-                    .append(suffix)
-                    .append(profile.getDisplayRank().getColor().apply(displayName))
-                    .append(suffix)
-                    .append(separator)
-                    .append(message);
-        });
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -62,6 +49,17 @@ public class GrantListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onAsyncPlayerChatEvent(final AsyncChatEvent event) {
-        event.renderer(this.formatRenderer);
+        event.renderer(ChatRenderer.viewerUnaware((source, displayName, message) -> {
+            Profile.ProfileSnapshot profile = Core.getInstance().getProfileManager().getCachedValue(source.getUniqueId());
+            TextComponent prefix = Component.text(profile.getDisplayRank().getPrefix());
+            TextComponent suffix = Component.text(profile.getDisplayRank().getSuffix());
+            TextComponent separator = Component.text(": ").color(NamedTextColor.GRAY);
+            return prefix
+                    .append(suffix)
+                    .append(profile.getDisplayRank().getColor().apply(displayName))
+                    .append(suffix)
+                    .append(separator)
+                    .append(message);
+        }));
     }
 }

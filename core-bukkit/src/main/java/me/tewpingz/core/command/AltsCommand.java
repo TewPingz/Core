@@ -41,13 +41,13 @@ public class AltsCommand extends BaseCommand {
                     if (!builder.isEmpty()) {
                         builder.tertiary(",").space();
                     }
-                    builder.primary(Core.getInstance().getUuidManager().getName(relatedId));
+                    builder.primary(Core.getInstance().getUuidManager().getName(relatedId).getName());
                 }
 
                 MessageBuilderDefaults.normal().primary("There are").space()
                         .secondary(alts.size()).space()
                         .primary("Alts for").space()
-                        .secondary(profile.getLastSeenName()).tertiary(":")
+                        .secondary(profile.getLastSeenName()).tertiary(":").space()
                         .append(builder.build())
                         .build(sender::sendMessage);
             } else {
