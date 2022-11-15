@@ -23,7 +23,7 @@ public class PunishCommand extends BaseCommand {
 
     @Subcommand("ban")
     @CommandPermission("core.punish.ban")
-    @CommandCompletion("@players @duration Banned")
+    @CommandCompletion("@players @duration @empty")
     @Syntax("<player> <duration> [reason...]")
     public void onBan(CommandSender sender, AsyncUuid asyncUuid, Duration duration, String reason) {
         asyncUuid.fetchUuid(sender, uuid -> {
@@ -35,7 +35,7 @@ public class PunishCommand extends BaseCommand {
 
     @Subcommand("mute")
     @CommandPermission("core.punish.mute")
-    @CommandCompletion("@players @duration Muted")
+    @CommandCompletion("@players @duration @empty")
     @Syntax("<player> <duration> [reason...]")
     public void onMute(CommandSender sender, AsyncUuid asyncUuid, Duration duration, String reason) {
         asyncUuid.fetchUuid(sender, uuid -> {
@@ -48,7 +48,7 @@ public class PunishCommand extends BaseCommand {
     @Subcommand("blacklist")
     @CommandPermission("core.punish.blacklist")
     @Syntax("<player> <duration> [reason...]")
-    @CommandCompletion("@players @duration Blacklisted")
+    @CommandCompletion("@players @duration @empty")
     public void onBlacklist(CommandSender sender, AsyncUuid asyncUuid, Duration duration, String reason) {
         asyncUuid.fetchUuid(sender, uuid -> {
             Core.getInstance().getProfileManager().updateRealValue(uuid, profile -> {

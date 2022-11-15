@@ -44,7 +44,9 @@ public class GrantListener implements Listener {
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
-        Bukkit.getScheduler().runTaskAsynchronously(CorePlugin.getInstance(), () -> this.grantScheduleManager.terminate(event.getPlayer().getUniqueId()));
+        Bukkit.getScheduler().runTaskAsynchronously(CorePlugin.getInstance(),
+                () -> this.grantScheduleManager.terminate(event.getPlayer().getUniqueId()));
+        CorePlugin.getInstance().getGrantAttachmentManager().untrack(event.getPlayer().getUniqueId());
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -53,12 +55,13 @@ public class GrantListener implements Listener {
             Profile.ProfileSnapshot profile = Core.getInstance().getProfileManager().getCachedValue(source.getUniqueId());
             TextComponent prefix = Component.text(profile.getDisplayRank().getPrefix());
             TextComponent suffix = Component.text(profile.getDisplayRank().getSuffix());
-            TextComponent separator = Component.text(": ").color(NamedTextColor.GRAY);
+            TextComponent separator = Component.text(":").color(NamedTextColor.GRAY);
             return prefix
                     .append(suffix)
                     .append(profile.getDisplayRank().getColor().apply(displayName))
                     .append(suffix)
                     .append(separator)
+                    .append(Component.space())
                     .append(message);
         }));
     }

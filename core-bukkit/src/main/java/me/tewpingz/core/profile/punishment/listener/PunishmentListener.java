@@ -24,7 +24,7 @@ public class PunishmentListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Core.getInstance().getProfileManager().getRealValueAsync(event.getPlayer().getUniqueId()).thenAccept(profile -> {
-            profile.getSortedActivePunishments().forEach(punishment -> this.punishmentScheduleManager.schedule(event.getPlayer().getUniqueId(), punishment));;
+            profile.getActivePunishments().forEach(punishment -> this.punishmentScheduleManager.schedule(event.getPlayer().getUniqueId(), punishment));;
         });
     }
 

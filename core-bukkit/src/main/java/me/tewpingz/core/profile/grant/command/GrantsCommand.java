@@ -48,7 +48,7 @@ public class GrantsCommand extends BaseCommand {
         public GrantsInventory(Profile.ProfileSnapshot profile) {
             super("Grants for " + profile.getLastSeenName());
 
-            for (Grant activeGrant : profile.getSortedActiveGrants()) {
+            for (Grant activeGrant : profile.getActiveGrants()) {
                 Rank.RankSnapshot rankSnapshot = activeGrant.getRankSnapshot();
 
                 String addedAt = new Date(activeGrant.getStartTimestamp()).toString();
@@ -88,7 +88,7 @@ public class GrantsCommand extends BaseCommand {
                 });
             }
 
-            for (Grant.ExpiredGrant expiredGrant : profile.getSortedExpiredGrants()) {
+            for (Grant.ExpiredGrant expiredGrant : profile.getExpiredGrants()) {
                 Rank.RankSnapshot rankSnapshot = expiredGrant.getGrant().getRankSnapshot();
 
                 String addedAt = new Date(expiredGrant.getGrant().getStartTimestamp()).toString();

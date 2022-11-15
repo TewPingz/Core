@@ -1,5 +1,6 @@
 package me.tewpingz.core.profile;
 
+import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -183,17 +184,20 @@ public class Profile implements RediGoObject<UUID, Profile.ProfileSnapshot> {
     public static class ProfileSnapshot implements Snapshot {
         private final UUID playerId;
         private final long joinTime, lastSeen, requestCooldown, reportCooldown, syncCooldown;
-        private final String lastIp, lastSeenName, displayRankId, discordId, syncCode;
+        private final String lastIp, lastSeenName, discordId, syncCode;
 
-        private final List<Grant> sortedActiveGrants;
-        private final List<Grant.ExpiredGrant> sortedExpiredGrants;
+        private final List<Grant> activeGrants;
+        private final List<Grant.ExpiredGrant> expiredGrants;
 
-        private final List<Punishment> sortedActivePunishments;
-        private final List<Punishment.ExpiredPunishment> sortedExpiredPunishments;
+        private final List<Punishment> activePunishments;
+        private final List<Punishment.ExpiredPunishment> expiredPunishments;
 
         private final Punishment ban;
         private final Punishment mute;
         private final Punishment blacklist;
+
+        @Getter(AccessLevel.NONE)
+        private final String displayRankId;
 
         public ProfileSnapshot(Profile profile) {
             this.playerId = profile.getPlayerId();
@@ -207,10 +211,10 @@ public class Profile implements RediGoObject<UUID, Profile.ProfileSnapshot> {
             this.discordId = profile.getDiscordId();
             this.lastSeenName = profile.getLastSeenName();
             this.displayRankId = profile.getDisplayRank().getRankId();
-            this.sortedActiveGrants = List.copyOf(profile.getSortedActiveGrants());
-            this.sortedExpiredGrants = List.copyOf(profile.getSortedExpiredGrants());
-            this.sortedActivePunishments = List.copyOf(profile.getSortedActivePunishments());
-            this.sortedExpiredPunishments = List.copyOf(profile.getSortedExpiredPunishments());
+            this.activeGrants = List.copyOf(profile.getSortedActiveGrants());
+            this.expiredGrants = List.copyOf(profile.getSortedExpiredGrants());
+            this.activePunishments = List.copyOf(profile.getSortedActivePunishments());
+            this.expiredPunishments = List.copyOf(profile.getSortedExpiredPunishments());
             this.ban = profile.getBan().orElse(null);
             this.mute = profile.getMute().orElse(null);
             this.blacklist = profile.getBlacklist().orElse(null);

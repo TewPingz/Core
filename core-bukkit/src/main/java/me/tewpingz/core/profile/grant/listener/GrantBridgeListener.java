@@ -19,8 +19,7 @@ public class GrantBridgeListener {
                 instance.getGrantScheduleManager().schedule(event.getPlayerUuid(), event.getGrant());
                 MessageBuilderDefaults.success()
                         .primary("You have been given").space()
-                        .append(event.getGrant().getRankNameComponent()).space()
-                        .tertiary(".")
+                        .append(event.getGrant().getRankNameComponent()).tertiary(".")
                         .build(player::sendMessage);
 
                 Profile.ProfileSnapshot profile = Core.getInstance().getProfileManager().getRealValue(player.getUniqueId());

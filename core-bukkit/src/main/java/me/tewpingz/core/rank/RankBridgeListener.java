@@ -38,7 +38,7 @@ public class RankBridgeListener {
             Core.getInstance().getProfileManager().forEachCachedValue(profile -> {
                 Player player = Bukkit.getPlayer(profile.getPlayerId());
                 if (player != null) {
-                    boolean hasRank = profile.getSortedActiveGrants().stream().anyMatch(grant -> grant.getRankId().equalsIgnoreCase(event.getRank().getRankId()));
+                    boolean hasRank = profile.getActiveGrants().stream().anyMatch(grant -> grant.getRankId().equalsIgnoreCase(event.getRank().getRankId()));
                     if (hasRank) {
                         CorePlugin.getInstance().getGrantAttachmentManager().createAttachment(player, profile);
                     }

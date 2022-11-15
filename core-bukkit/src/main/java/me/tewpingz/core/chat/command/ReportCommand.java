@@ -1,10 +1,7 @@
 package me.tewpingz.core.chat.command;
 
 import co.aikar.commands.BaseCommand;
-import co.aikar.commands.annotation.CommandAlias;
-import co.aikar.commands.annotation.CommandPermission;
-import co.aikar.commands.annotation.Default;
-import co.aikar.commands.annotation.Syntax;
+import co.aikar.commands.annotation.*;
 import me.tewpingz.core.Core;
 import me.tewpingz.core.CorePlugin;
 import me.tewpingz.core.chat.PlayerReportEvent;
@@ -17,6 +14,7 @@ import org.bukkit.entity.Player;
 @CommandPermission("core.report")
 public class ReportCommand extends BaseCommand {
     @Default
+    @CommandCompletion("@players @empty")
     @Syntax("<target> <reason>")
     public void onCommand(Player player, AsyncUuid target, String reason) {
         target.fetchUuid(player, uuid -> {

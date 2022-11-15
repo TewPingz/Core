@@ -31,7 +31,7 @@ public class GrantCommand extends BaseCommand {
     @Subcommand("add")
     @CommandPermission("core.grant.add")
     @Syntax("<target> <rank> <duration> <reason>")
-    @CommandCompletion("@players @ranks @duration Staff|Donor")
+    @CommandCompletion("@players @ranks @duration @empty")
     public void addGrant(CommandSender sender, AsyncUuid asyncUuid, Rank.RankSnapshot rankSnapshot, Duration duration, String reason) {
         asyncUuid.fetchUuid(sender, uuid -> {
             Core.getInstance().getProfileManager().updateRealValueAsync(uuid, profile -> {

@@ -19,19 +19,7 @@ public class GrantAttachmentManager {
     }
 
     public void createAttachment(Player player, Profile.ProfileSnapshot profile) {
-        Set<String> permissions = new HashSet<>();
-        Set<String> inherits = new HashSet<>();
-
-        profile.getSortedActiveGrants().forEach(grant -> {
-            permissions.addAll(grant.getRankSnapshot().getPermissions());
-            inherits.addAll(grant.getRankSnapshot().getInherits());
-        });
-
-        inherits.forEach(rankId -> {
-            Rank.RankSnapshot rank = Core.getInstance().getRankManager().getRank(rankId);
-            permissions.addAll(rank.getPermissions());
-        });
-
+        Set<String> permissions = profile.getDisplayRank().getEffectivePermissions();
         Bukkit.getScheduler().runTask(CorePlugin.getInstance(), () -> {
             PermissionAttachment attachment = player.addAttachment(CorePlugin.getInstance());
             permissions.forEach(permission -> attachment.setPermission(permission, true));

@@ -12,7 +12,7 @@ import org.bukkit.command.CommandSender;
 public class UnmuteCommand extends BaseCommand {
     @Default
     @Syntax("<target> <reason>")
-    @CommandCompletion("@players Unmuted")
+    @CommandCompletion("@players @empty")
     public void onCommand(CommandSender commandSender, AsyncUuid asyncUuid, String reason) {
         asyncUuid.fetchUuid(commandSender, uuid -> {
             Core.getInstance().getProfileManager().updateRealValue(uuid, profile -> {

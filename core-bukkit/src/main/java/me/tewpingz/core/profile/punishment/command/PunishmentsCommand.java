@@ -49,7 +49,7 @@ public class PunishmentsCommand extends BaseCommand {
         public PunishmentsInventory(Profile.ProfileSnapshot profile) {
             super("Punishments for " + profile.getLastSeenName());
 
-            for (Punishment punishment : profile.getSortedActivePunishments()) {
+            for (Punishment punishment : profile.getActivePunishments()) {
                 String addedAt = new Date(punishment.getStartTimestamp()).toString();
 
                 String duration = punishment.isInfinite() ? "Permanent" :
@@ -86,7 +86,7 @@ public class PunishmentsCommand extends BaseCommand {
                 });
             }
 
-            for (Punishment.ExpiredPunishment expiredPunishment : profile.getSortedExpiredPunishments()) {
+            for (Punishment.ExpiredPunishment expiredPunishment : profile.getExpiredPunishments()) {
                 String addedAt = new Date(expiredPunishment.getPunishment().getStartTimestamp()).toString();
 
                 String duration = expiredPunishment.getPunishment().isInfinite() ? "Permanent" :
