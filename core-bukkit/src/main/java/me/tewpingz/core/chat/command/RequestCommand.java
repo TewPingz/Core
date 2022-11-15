@@ -1,10 +1,7 @@
 package me.tewpingz.core.chat.command;
 
 import co.aikar.commands.BaseCommand;
-import co.aikar.commands.annotation.CommandAlias;
-import co.aikar.commands.annotation.CommandPermission;
-import co.aikar.commands.annotation.Default;
-import co.aikar.commands.annotation.Syntax;
+import co.aikar.commands.annotation.*;
 import me.tewpingz.core.Core;
 import me.tewpingz.core.CorePlugin;
 import me.tewpingz.core.chat.PlayerRequestEvent;
@@ -17,6 +14,7 @@ import org.bukkit.entity.Player;
 public class RequestCommand extends BaseCommand {
     @Default
     @Syntax("<message>")
+    @CommandCompletion("@empty")
     public void onCommand(Player player, String message) {
         Core.getInstance().getProfileManager().updateRealValueAsync(player.getUniqueId(), profile -> {
             if (!(profile.getRequestCooldown() == -1 || (profile.getRequestCooldown() - System.currentTimeMillis()) < 0)) {

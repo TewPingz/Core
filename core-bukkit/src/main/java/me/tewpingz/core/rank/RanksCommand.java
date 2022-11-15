@@ -10,10 +10,9 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
 
 @CommandAlias("ranks")
+@CommandPermission("core.ranks")
 public class RanksCommand extends BaseCommand {
-
     @Default
-    @CommandPermission("core.rank.list")
     public void onCommand(CommandSender commandSender) {
         CorePlugin.getInstance().getCore().getRankManager().getSortedRanksAsync().thenAccept(ranks -> {
             int amount = ranks.size();

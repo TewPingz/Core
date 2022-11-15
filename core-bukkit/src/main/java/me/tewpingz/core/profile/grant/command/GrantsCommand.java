@@ -32,7 +32,6 @@ import java.util.Date;
 @CommandAlias("grants")
 @CommandPermission("core.grants")
 public class GrantsCommand extends BaseCommand {
-
     @Default
     @Syntax("<player>")
     @CommandCompletion("@players")

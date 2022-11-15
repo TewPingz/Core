@@ -16,7 +16,6 @@ import java.time.Duration;
 @CommandAlias("grant")
 @CommandPermission("core.grant")
 public class GrantCommand extends BaseCommand {
-
     @Default
     @Syntax("<target>")
     @CommandCompletion("@players")

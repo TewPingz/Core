@@ -19,6 +19,7 @@ public class RankCommand extends BaseCommand {
     @Default
     @HelpCommand
     @Syntax("[page]")
+    @CommandCompletion("@empty")
     public static void onHelp(CommandSender sender, CommandHelp help) {
         help.showHelp();
     }
@@ -26,6 +27,7 @@ public class RankCommand extends BaseCommand {
     @Subcommand("create")
     @Description("Create a rank")
     @CommandPermission("core.rank.create")
+    @CommandCompletion("@empty")
     @Syntax("<name>")
     public static void onCreate(CommandSender commandSender, String rankName) {
         RankManager rankManager = Core.getInstance().getRankManager();
@@ -55,7 +57,7 @@ public class RankCommand extends BaseCommand {
     @Description("Set a ranks priority")
     @CommandPermission("core.rank.setpriority")
     @Syntax("<rank> <priority>")
-    @CommandCompletion("@ranks")
+    @CommandCompletion("@ranks @empty")
     public void onSetPriority(CommandSender sender, Rank.RankSnapshot rankSnapshot, int priority) {
         RankManager rankManager = Core.getInstance().getRankManager();
         rankManager.updateRealValueAsync(rankSnapshot.getRankId(), realRank -> {
@@ -76,7 +78,7 @@ public class RankCommand extends BaseCommand {
     @Description("Set a ranks prefix")
     @CommandPermission("core.rank.setprefix")
     @Syntax("<rank> <prefix>")
-    @CommandCompletion("@ranks")
+    @CommandCompletion("@ranks @empty")
     public void onSetPrefix(CommandSender sender, Rank.RankSnapshot rankSnapshot, String prefix) {
         RankManager rankManager = Core.getInstance().getRankManager();
         String translatedPrefix = ChatColor.translateAlternateColorCodes('&', prefix);
@@ -98,7 +100,7 @@ public class RankCommand extends BaseCommand {
     @Description("Set a ranks suffix")
     @CommandPermission("core.rank.setsuffix")
     @Syntax("<rank> <suffix>")
-    @CommandCompletion("@ranks")
+    @CommandCompletion("@ranks @empty")
     public void onSetSuffix(CommandSender sender, Rank.RankSnapshot rankSnapshot, String suffix) {
         RankManager rankManager = Core.getInstance().getRankManager();
         String translatedSuffix = ChatColor.translateAlternateColorCodes('&', suffix);
@@ -119,7 +121,7 @@ public class RankCommand extends BaseCommand {
     @Description("Set a ranks display name")
     @CommandPermission("core.rank.setdisplayname")
     @Syntax("<rank> <displayName>")
-    @CommandCompletion("@ranks")
+    @CommandCompletion("@ranks @empty")
     public void onSetDisplayName(CommandSender sender, Rank.RankSnapshot rankSnapshot, String displayName) {
         RankManager rankManager = Core.getInstance().getRankManager();
         rankManager.updateRealValueAsync(rankSnapshot.getRankId(), realRank -> {
@@ -181,7 +183,7 @@ public class RankCommand extends BaseCommand {
     @Description("Set a ranks color")
     @CommandPermission("core.rank.setcolor")
     @Syntax("<rank> <red> <green> <blue>")
-    @CommandCompletion("@ranks")
+    @CommandCompletion("@ranks @empty")
     public void onSetColor(CommandSender sender, Rank.RankSnapshot rankSnapshot, int red, int green, int blue) {
         RankManager rankManager = Core.getInstance().getRankManager();
         rankManager.updateRealValueAsync(rankSnapshot.getRankId(), realRank -> {
@@ -199,9 +201,17 @@ public class RankCommand extends BaseCommand {
     @Subcommand("setcolorhex|setcolourhex|colorhex|colourhex")
     @Description("Set a ranks color")
     @CommandPermission("core.rank.setcolor")
-    @Syntax("<rank> <red> <green> <blue>")
-    @CommandCompletion("@ranks")
+    @Syntax("<rank> <hex>")
+    @CommandCompletion("@ranks @empty")
     public void onSetColor(CommandSender sender, Rank.RankSnapshot rankSnapshot, String hex) {
+
+        if (!hex.startsWith("#")) {
+            MessageBuilderDefaults.error().secondary(hex).space()
+                    .primary("is not a valid hex code").tertiary("!")
+                    .build(sender::sendMessage);
+            return;
+        }
+
         RankManager rankManager = Core.getInstance().getRankManager();
         rankManager.updateRealValueAsync(rankSnapshot.getRankId(), realRank -> {
             realRank.getColor().updateColor(hex);
@@ -220,7 +230,7 @@ public class RankCommand extends BaseCommand {
     @Description("Add/Remove a ranks permission")
     @CommandPermission("core.rank.permission")
     @Syntax("<rank> <permission>")
-    @CommandCompletion("@ranks")
+    @CommandCompletion("@ranks @empty")
     public void onPermission(CommandSender sender, Rank.RankSnapshot rankSnapshot, @Single String permission) {
         RankManager rankManager = Core.getInstance().getRankManager();
         rankManager.updateRealValueAsync(rankSnapshot.getRankId(), realRank -> {
@@ -248,8 +258,15 @@ public class RankCommand extends BaseCommand {
     @Description("Add/Remove a ranks inherit")
     @CommandPermission("core.rank.inherit")
     @Syntax("<rank> <inheritRank>")
-    @CommandCompletion("@ranks")
+    @CommandCompletion("@ranks @ranks")
     public void onInherit(CommandSender sender, Rank.RankSnapshot rankSnapshot, Rank.RankSnapshot inherit) {
+        if (inherit.getRankId().equalsIgnoreCase(rankSnapshot.getRankId())) {
+            MessageBuilderDefaults.error()
+                    .primary("You cannot make the rank inherit itself")
+                    .build(sender::sendMessage);
+            return;
+        }
+
         RankManager rankManager = Core.getInstance().getRankManager();
         rankManager.updateRealValueAsync(rankSnapshot.getRankId(), realRank -> {
             if (realRank.getInherits().contains(inherit.getRankId())) {
