@@ -8,6 +8,7 @@ import com.velocitypowered.api.event.connection.DisconnectEvent;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.event.proxy.ProxyShutdownEvent;
 import com.velocitypowered.api.plugin.Plugin;
+import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import me.tewpingz.core.queue.Queue;
@@ -15,6 +16,7 @@ import me.tewpingz.core.queue.event.QueuePollEvent;
 import me.tewpingz.message.MessageBuilderDefaults;
 import org.slf4j.Logger;
 
+import java.nio.file.Path;
 import java.util.Optional;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledFuture;
@@ -35,15 +37,19 @@ public class CoreVelocity {
     @Inject
     private Logger logger;
 
+    @Inject
+    @DataDirectory
+    private Path dataDirectory;
+
+
     private Core core;
-    private Gson gson;
 
     private ScheduledFuture<?> thread;
 
     @Subscribe
     public void onProxyInitialization(ProxyInitializeEvent event) {
-        this.gson = new GsonBuilder().disableHtmlEscaping().enableComplexMapKeySerialization().create();
-        this.core = new Core(this.gson);
+        Gson gson = new GsonBuilder().disableHtmlEscaping().enableComplexMapKeySerialization().create();
+        this.core = new Core(gson, this.dataDirectory.toFile());
         this.registerQueueTask();
         this.registerQueueListener();
     }

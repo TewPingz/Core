@@ -8,7 +8,7 @@ import java.io.File;
 public class Main {
     public static void main(String[] args) throws InterruptedException {
         Gson gson = new GsonBuilder().disableHtmlEscaping().enableComplexMapKeySerialization().create();
-        Core core = new Core(gson);
+        Core core = new Core(gson, new File("."));
 
         DiscordConfig discordConfig = DiscordConfig.getConfig(new File("."));
 

@@ -14,6 +14,9 @@ import me.tewpingz.core.util.uuid.UuidManager;
 import me.tewpingz.redigo.RediGo;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
+import org.redisson.config.Config;
+
+import java.io.File;
 
 @Getter
 public class Core {
@@ -36,13 +39,17 @@ public class Core {
     private final ServerManager serverManager;
     private final QueueManager queueManager;
 
-    public Core(Gson gson) {
+    public Core(Gson gson, File directory) {
         instance = this;
-
-        this.redissonClient = Redisson.create();
-        this.mongoClient = MongoClients.create();
         this.gson = gson.newBuilder().setPrettyPrinting().create();
-        this.rediGo = new RediGo("core", this.mongoClient, this.redissonClient, this.gson);
+
+        CoreRedisConfig redisConfig = CoreRedisConfig.getConfig(directory);
+        this.redissonClient = Redisson.create(redisConfig.transform());
+
+        CoreMongoConfig mongoConfig = CoreMongoConfig.getConfig(directory);
+        this.mongoClient = MongoClients.create(mongoConfig.transform());
+
+        this.rediGo = new RediGo(mongoConfig.getDatabase(), this.mongoClient, this.redissonClient, this.gson);
         this.bridge = new Bridge(this);
 
         this.uuidManager = new UuidManager();

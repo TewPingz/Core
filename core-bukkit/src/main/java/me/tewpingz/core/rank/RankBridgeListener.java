@@ -2,6 +2,7 @@ package me.tewpingz.core.rank;
 
 import me.tewpingz.core.Core;
 import me.tewpingz.core.CorePlugin;
+import me.tewpingz.core.profile.Profile;
 import me.tewpingz.core.rank.event.RankCreateEvent;
 import me.tewpingz.core.rank.event.RankUpdateEvent;
 import me.tewpingz.core.rank.event.RankUpdatePermissionEvent;
@@ -40,7 +41,8 @@ public class RankBridgeListener {
                 if (player != null) {
                     boolean hasRank = profile.getActiveGrants().stream().anyMatch(grant -> grant.getRankId().equalsIgnoreCase(event.getRank().getRankId()));
                     if (hasRank) {
-                        CorePlugin.getInstance().getGrantAttachmentManager().createAttachment(player, profile);
+                        Profile.ProfileSnapshot realValue = Core.getInstance().getProfileManager().getRealValue(player.getUniqueId());
+                        CorePlugin.getInstance().getGrantAttachmentManager().updateAttachment(player, realValue);
                     }
                 }
             });

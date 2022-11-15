@@ -63,7 +63,7 @@ public class CorePlugin extends JavaPlugin {
 
         FastInvManager.register(this);
         this.gson = new GsonBuilder().disableHtmlEscaping().enableComplexMapKeySerialization().create();
-        this.core = new Core(this.gson);
+        this.core = new Core(this.gson, this.getDataFolder());
 
         this.serverInitializer = new ServerInitializer(this);
         this.grantScheduleManager = new GrantScheduleManager();

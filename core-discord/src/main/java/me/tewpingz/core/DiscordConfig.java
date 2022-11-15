@@ -13,16 +13,19 @@ import java.nio.file.Path;
 @NoArgsConstructor
 public class DiscordConfig {
 
-    private String apiKey, grantLogChannelId, punishmentLogChannelId, otherChannelId;
+    private String apiKey = "", grantLogChannelId = "", punishmentLogChannelId = "", otherChannelId = "";
 
     public static DiscordConfig getConfig(File directory) {
+        //noinspection ResultOfMethodCallIgnored
+        directory.mkdirs();
+
         Path path = new File(directory, "discord.json").toPath();
 
         try {
             if (Files.exists(path)) {
                 return Core.getInstance().getGson().fromJson(Files.newBufferedReader(path), DiscordConfig.class);
             } else {
-                DiscordConfig config = new DiscordConfig("", "", "", "");
+                DiscordConfig config = new DiscordConfig();
                 Files.createFile(path);
                 Files.writeString(path, Core.getInstance().getGson().toJson(config));
                 return config;
@@ -31,6 +34,6 @@ public class DiscordConfig {
             e.printStackTrace();
         }
 
-        return new DiscordConfig("", "", "", "");
+        return new DiscordConfig();
     }
 }

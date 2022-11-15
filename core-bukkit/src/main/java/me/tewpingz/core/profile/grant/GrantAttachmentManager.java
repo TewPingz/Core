@@ -1,9 +1,7 @@
 package me.tewpingz.core.profile.grant;
 
-import me.tewpingz.core.Core;
 import me.tewpingz.core.CorePlugin;
 import me.tewpingz.core.profile.Profile;
-import me.tewpingz.core.rank.Rank;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachment;
@@ -18,7 +16,7 @@ public class GrantAttachmentManager {
         this.attachmentMap = new HashMap<>();
     }
 
-    public void createAttachment(Player player, Profile.ProfileSnapshot profile) {
+    public void updateAttachment(Player player, Profile.ProfileSnapshot profile) {
         Set<String> permissions = profile.getDisplayRank().getEffectivePermissions();
         Bukkit.getScheduler().runTask(CorePlugin.getInstance(), () -> {
             PermissionAttachment attachment = player.addAttachment(CorePlugin.getInstance());

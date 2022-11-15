@@ -23,7 +23,7 @@ public class GrantBridgeListener {
                         .build(player::sendMessage);
 
                 Profile.ProfileSnapshot profile = Core.getInstance().getProfileManager().getRealValue(player.getUniqueId());
-                CorePlugin.getInstance().getGrantAttachmentManager().createAttachment(player, profile);
+                CorePlugin.getInstance().getGrantAttachmentManager().updateAttachment(player, profile);
             }
 
             MessageBuilderDefaults.normal()
@@ -51,7 +51,7 @@ public class GrantBridgeListener {
                         .build(player::sendMessage);
 
                 Profile.ProfileSnapshot profile = Core.getInstance().getProfileManager().getRealValue(player.getUniqueId());
-                CorePlugin.getInstance().getGrantAttachmentManager().createAttachment(player, profile);
+                CorePlugin.getInstance().getGrantAttachmentManager().updateAttachment(player, profile);
             }
 
             if (!event.getExpiredGrant().getRemovedFor().equals("Expired")) {
