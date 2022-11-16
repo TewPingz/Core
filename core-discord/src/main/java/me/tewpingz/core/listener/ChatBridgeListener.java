@@ -61,6 +61,7 @@ public class ChatBridgeListener extends ListenerAdapter {
         DiscordBotConfig.SynchronizedChannelEntry entry = this.serverIdToEntry.get(event.getServerId().toLowerCase());
 
         if (entry == null) {
+            this.logMessage(event);
             return;
         }
 
@@ -68,6 +69,18 @@ public class ChatBridgeListener extends ListenerAdapter {
         WebhookMessage webhookMessage = new WebhookMessageBuilder()
                 .setAvatarUrl("https://crafatar.com/avatars/%s".formatted(event.getPlayerId().toString()))
                 .setUsername(event.getUsername())
+                .setContent(event.getMessage())
+                .setAllowedMentions(AllowedMentions.none())
+                .build();
+        client.send(webhookMessage);
+        client.close();
+    }
+
+    private void logMessage(ServerChatEvent event) {
+        WebhookClient client = WebhookClient.withUrl(this.instance.getConfig().getChatLogWebhookUrl());
+        WebhookMessage webhookMessage = new WebhookMessageBuilder()
+                .setAvatarUrl("https://crafatar.com/avatars/%s".formatted(event.getPlayerId().toString()))
+                .setUsername("%s - %s".formatted(event.getUsername(), event.getServerId()))
                 .setContent(event.getMessage())
                 .setAllowedMentions(AllowedMentions.none())
                 .build();

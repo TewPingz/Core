@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 public class DiscordBotConfig {
 
-    private String apiKey = "", grantLogChannelId = "", punishmentLogChannelId = "", chatLogChannelId = "";
+    private String apiKey = "", grantLogChannelId = "", punishmentLogChannelId = "", chatLogWebhookUrl = "";
     private List<SynchronizedChannelEntry> synchronizedChannels = new ArrayList<>();
 
     @Data
