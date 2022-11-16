@@ -56,9 +56,7 @@ public class GrantListener implements Listener {
             TextComponent prefix = Component.text(profile.getDisplayRank().getPrefix());
             TextComponent suffix = Component.text(profile.getDisplayRank().getSuffix());
             TextComponent separator = Component.text(":").color(NamedTextColor.GRAY);
-            return prefix
-                    .append(suffix)
-                    .append(profile.getDisplayRank().getColor().apply(displayName))
+            return prefix.append(profile.getDisplayRank().getColor().apply(displayName))
                     .append(suffix)
                     .append(separator)
                     .append(Component.space())
