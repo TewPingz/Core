@@ -148,10 +148,15 @@ public class GrantProcedure {
     private static class RankPrompt extends PaginatedInv {
         public RankPrompt(GrantProcedure procedure) {
             super(ChatColor.GOLD + "Select a rank");
-            Core.getInstance().getRankManager().getCachedSortedRanks().forEach(rankSnapshot -> {
-                Component displayName = rankSnapshot.getDisplayNameWithColor();
+
+            for (Rank.RankSnapshot rank : Core.getInstance().getRankManager().getCachedSortedRanks()) {
+                if (rank.getRankId().equalsIgnoreCase("default")) {
+                    continue;
+                }
+
+                Component displayName = rank.getDisplayNameWithColor();
                 ItemStack itemStack = new ItemBuilder(Material.LEATHER_CHESTPLATE)
-                        .color(rankSnapshot.getColor().toTextColor())
+                        .color(rank.getColor().toTextColor())
                         .name(displayName)
                         .lore(Component.text("Click to begin granting").color(NamedTextColor.YELLOW).append(Component.space()).append(displayName))
                         .flags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DYE, ItemFlag.HIDE_ENCHANTS)
@@ -159,11 +164,11 @@ public class GrantProcedure {
                         .build();
 
                 this.addItem(itemStack, event -> {
-                    procedure.setSelectedRank(rankSnapshot);
+                    procedure.setSelectedRank(rank);
                     event.getInventory().close();
                     procedure.promptForDuration((Player) event.getWhoClicked());
                 });
-            });
+            }
         }
     }
 }

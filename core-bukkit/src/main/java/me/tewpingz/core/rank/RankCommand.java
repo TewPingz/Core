@@ -59,6 +59,13 @@ public class RankCommand extends BaseCommand {
     @CommandCompletion("@ranks")
     @Syntax("<rank>")
     public static void onDelete(CommandSender commandSender, Rank.RankSnapshot rank) {
+        if (rank.getRankId().equalsIgnoreCase("default")) {
+            MessageBuilderDefaults.error().primary("You cannot delete the").space()
+                    .append(rank.getDisplayNameWithColor()).tertiary("!")
+                    .build(commandSender::sendMessage);
+            return;
+        }
+
         RankManager rankManager = Core.getInstance().getRankManager();
         rankManager.evictRankAsync(rank.getRankId()).thenRun(() -> {
             Core.getInstance().getBridge().callEvent(new RankDeleteEvent(commandSender.getName(), rank));

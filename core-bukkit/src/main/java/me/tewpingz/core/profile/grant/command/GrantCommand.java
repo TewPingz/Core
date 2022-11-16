@@ -7,6 +7,7 @@ import me.tewpingz.core.CorePlugin;
 import me.tewpingz.core.profile.grant.GrantProcedure;
 import me.tewpingz.core.rank.Rank;
 import me.tewpingz.core.util.uuid.AsyncUuid;
+import me.tewpingz.message.MessageBuilderDefaults;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -32,6 +33,13 @@ public class GrantCommand extends BaseCommand {
     @Syntax("<target> <rank> <duration> <reason>")
     @CommandCompletion("@players @ranks @duration @empty")
     public void addGrant(CommandSender sender, AsyncUuid asyncUuid, Rank.RankSnapshot rankSnapshot, Duration duration, String reason) {
+        if (rankSnapshot.getRankId().equalsIgnoreCase("default")) {
+            MessageBuilderDefaults.error().primary("You cannot grant the").space()
+                    .append(rankSnapshot.getDisplayNameWithColor()).space().primary("rank").tertiary("!")
+                    .build(sender::sendMessage);
+            return;
+        }
+
         asyncUuid.fetchUuid(sender, uuid -> {
             Core.getInstance().getProfileManager().updateRealProfileAsync(uuid, profile -> {
                 profile.addGrant(rankSnapshot.getRankId(), sender.getName(), reason, duration.toMillis());
