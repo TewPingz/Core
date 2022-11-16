@@ -1,12 +1,11 @@
 package me.tewpingz.core.command;
 
-import me.tewpingz.core.DiscordCore;
+import me.tewpingz.core.DiscordBot;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
 import net.dv8tion.jda.internal.interactions.CommandDataImpl;
-import org.redisson.client.protocol.CommandData;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,9 +15,9 @@ public class CommandManager extends ListenerAdapter {
     private final JDA jda;
     private final Map<String, Command> registeredCommands;
 
-    public CommandManager(DiscordCore discordCore) {
+    public CommandManager(DiscordBot discordBot) {
         this.registeredCommands = new HashMap<>();
-        this.jda = discordCore.getJda();
+        this.jda = discordBot.getJda();
         this.jda.addEventListener(this);
     }
 

@@ -2,10 +2,8 @@ package me.tewpingz.core;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.redisson.config.Config;
-import org.redisson.config.SingleServerConfig;
 import org.redisson.config.TransportMode;
 
 import java.io.File;

@@ -8,6 +8,7 @@ import me.tewpingz.core.util.HashUtil;
 import me.tewpingz.core.util.uuid.UuidManager;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -48,6 +49,11 @@ public class ProfileListener implements Listener {
                 profile.removePunishment(punishment, "CONSOLE", "Expired");
             });
         });
+
+        if (fetchedProfile == null) {
+            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, Component.text("Your profile has failed to load.").color(NamedTextColor.RED));
+            return;
+        }
 
         if (fetchedProfile.getBlacklist() != null) {
             event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, Component.text("You are currently blacklisted").color(NamedTextColor.RED));

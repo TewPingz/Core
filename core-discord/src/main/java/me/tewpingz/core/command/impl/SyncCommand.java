@@ -15,7 +15,7 @@ import java.util.UUID;
 public class SyncCommand extends Command {
     public SyncCommand() {
         super("sync", "A command that lets you sync with the minecraft server", true);
-        this.addOption(OptionType.STRING, "name", "The accounts username");
+        this.addOption(OptionType.STRING, "username", "The accounts username");
         this.addOption(OptionType.STRING, "code", "The code provided by the server");
     }
 

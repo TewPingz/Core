@@ -10,12 +10,12 @@ public class Main {
         Gson gson = new GsonBuilder().disableHtmlEscaping().enableComplexMapKeySerialization().create();
         Core core = new Core(gson, new File("."));
 
-        DiscordConfig discordConfig = DiscordConfig.getConfig(new File("."));
+        DiscordBotConfig discordBotConfig = DiscordBotConfig.getConfig(new File("."));
 
-        if (discordConfig.getApiKey().isEmpty()) {
+        if (discordBotConfig.getApiKey().isEmpty()) {
             throw new IllegalArgumentException("API Key is not set!");
         }
 
-        new DiscordCore(discordConfig);
+        new DiscordBot(discordBotConfig);
     }
 }

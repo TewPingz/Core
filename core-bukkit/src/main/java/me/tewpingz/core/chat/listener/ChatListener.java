@@ -2,9 +2,13 @@ package me.tewpingz.core.chat.listener;
 
 import io.papermc.paper.event.player.AsyncChatEvent;
 import lombok.RequiredArgsConstructor;
+import me.tewpingz.core.Core;
 import me.tewpingz.core.CorePlugin;
 import me.tewpingz.core.chat.ChatManager;
+import me.tewpingz.core.chat.ServerChatEvent;
 import me.tewpingz.message.MessageBuilderDefaults;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -15,8 +19,19 @@ import org.bukkit.metadata.FixedMetadataValue;
 public class ChatListener implements Listener {
 
     private final ChatManager chatManager;
+    private final PlainTextComponentSerializer plainTextComponentSerializer = PlainTextComponentSerializer.plainText();
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onAsyncChatMonitor(AsyncChatEvent event) {
+        Bukkit.getScheduler().runTaskAsynchronously(CorePlugin.getInstance(), () -> {
+            String serverId = CorePlugin.getInstance().getServerInitializer().getConfig().getServerId();
+            String name = event.getPlayer().getName();
+            String message = plainTextComponentSerializer.serialize(event.message());
+            Core.getInstance().getBridge().callEvent(new ServerChatEvent(event.getPlayer().getUniqueId(), serverId, name, message));
+        });
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onAsyncChat(AsyncChatEvent event) {
         Player player = event.getPlayer();
 
