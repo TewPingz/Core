@@ -44,7 +44,16 @@ public class ChatBridgeListener extends ListenerAdapter {
             return;
         }
 
+        if (event.getAuthor().isBot() || event.getAuthor().isSystem()) {
+            return;
+        }
+
         DiscordBotConfig.SynchronizedChannelEntry entry = this.channelIdToEntry.get(event.getGuildChannel().getId());
+
+        if (entry == null) {
+            return;
+        }
+
         Core.getInstance().getBridge().callEvent(new DiscordChatEvent(entry.getServerId(), event.getAuthor().getAsTag(), event.getMessage().getContentRaw()));
     }
 
