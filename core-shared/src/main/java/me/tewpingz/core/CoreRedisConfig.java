@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.redisson.config.Config;
 import org.redisson.config.SingleServerConfig;
+import org.redisson.config.TransportMode;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -27,6 +28,7 @@ public class CoreRedisConfig {
                 .setAddress("redis://%s:%s".formatted(this.host, this.port))
                 .setUsername(this.username.isEmpty() ? null : this.username)
                 .setPassword(this.password.isEmpty() ? null : this.password);
+        config.setTransportMode(TransportMode.NIO);
         return config;
     }
 

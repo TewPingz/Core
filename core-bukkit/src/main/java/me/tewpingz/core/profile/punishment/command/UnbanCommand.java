@@ -17,7 +17,7 @@ public class UnbanCommand extends BaseCommand {
     @CommandCompletion("@players @empty")
     public void onCommand(CommandSender commandSender, AsyncUuid asyncUuid, String reason) {
         asyncUuid.fetchUuid(commandSender, uuid -> {
-            Core.getInstance().getProfileManager().updateRealValue(uuid, profile -> {
+            Core.getInstance().getProfileManager().updateRealProfile(uuid, profile -> {
                 boolean success = false;
 
                 for (Punishment punishment : profile.getActivePunishments().stream().filter(punishment -> punishment.getPunishmentType() == PunishmentType.BAN).toList()) {

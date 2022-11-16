@@ -21,7 +21,7 @@ import java.util.List;
 public class ListCommand extends BaseCommand {
     @Default
     public void onCommand(CommandSender sender) {
-        Core.getInstance().getRankManager().getSortedRanksAsync().thenApply(ranks -> {
+        Core.getInstance().getRankManager().getCachedSortedRanksAsync().thenApply(ranks -> {
             MessageBuilder builder = MessageBuilderDefaults.normal();
             ranks.forEach(rank -> {
                 if (!builder.isEmpty()) {
@@ -33,7 +33,7 @@ public class ListCommand extends BaseCommand {
         }).thenAccept(rankList -> {
             MessageBuilder builder = MessageBuilderDefaults.normal();
 
-            List<Profile.ProfileSnapshot> profiles = Core.getInstance().getProfileManager().getCachedValues().stream()
+            List<Profile.ProfileSnapshot> profiles = Core.getInstance().getProfileManager().getCachedProfiles().stream()
                     .sorted(Comparator.comparingInt(o -> -o.getDisplayRank().getPriority())).toList();
 
             profiles.forEach(profile -> {

@@ -70,7 +70,7 @@ public class CoreVelocity {
 
     private void registerQueueTask() {
         this.thread = Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> {
-            for (Queue.QueueSnapshot queue : this.core.getQueueManager().getQueues()) {
+            for (Queue.QueueSnapshot queue : this.core.getQueueManager().getCachedQueues()) {
                 for (Queue.QueuePlayer queuePlayer : queue.getQueuePlayers()) {
                     Optional<Player> optional = this.proxyServer.getPlayer(queuePlayer.getUuid());
 

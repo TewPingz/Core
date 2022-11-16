@@ -9,7 +9,7 @@ public class RankContextResolver implements ContextResolver<Rank.RankSnapshot, B
     @Override
     public Rank.RankSnapshot getContext(BukkitCommandExecutionContext context) throws InvalidCommandArgument {
         String rankName = context.popFirstArg();
-        Rank.RankSnapshot rank = CorePlugin.getInstance().getCore().getRankManager().getRank(rankName);
+        Rank.RankSnapshot rank = CorePlugin.getInstance().getCore().getRankManager().getCachedRank(rankName);
 
         if (rank == null) {
             throw new InvalidCommandArgument("That rank does not exist");

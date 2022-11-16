@@ -30,14 +30,14 @@ public class ProfileListener implements Listener {
         String hashedIp = HashUtil.hash(event.getAddress().getHostAddress());
         AltEntry.AltProfileSnapshot altEntry = Core.getInstance().getAltManager().addUuid(hashedIp, uuid);
         for (UUID relatedId : altEntry.getRelatedIds()) {
-            Profile.ProfileSnapshot relatedProfile = this.profileManager.getRealValue(relatedId);
+            Profile.ProfileSnapshot relatedProfile = this.profileManager.getRealProfile(relatedId);
             if (relatedProfile.getBlacklist() != null) {
                 event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, Component.text("Your account is linked to account that is blacklisted").color(NamedTextColor.RED));
                 return;
             }
         }
 
-        Profile.ProfileSnapshot fetchedProfile = this.profileManager.updateRealValue(uuid, profile -> {
+        Profile.ProfileSnapshot fetchedProfile = this.profileManager.updateRealProfile(uuid, profile -> {
             if (profile.getJoinTime() == -1) {
                 profile.setJoinTime(System.currentTimeMillis());
             }
@@ -60,14 +60,14 @@ public class ProfileListener implements Listener {
         }
 
         this.uuidManager.beginCachingLocally(event.getUniqueId(), event.getName());
-        this.profileManager.beginCachingLocally(uuid);
+        this.profileManager.beginCachingOrUpdateProfile(uuid);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onAsyncPlayerPreLoginMonitor(AsyncPlayerPreLoginEvent event) {
         if (event.getLoginResult() != AsyncPlayerPreLoginEvent.Result.ALLOWED) {
             // Make sure to unload the profile from cache if the login is cancelled.
-            this.profileManager.stopCachingLocally(event.getUniqueId());
+            this.profileManager.stopCachingProfile(event.getUniqueId());
             this.uuidManager.stopCachingLocally(event.getUniqueId(), event.getName());
         }
     }
@@ -76,8 +76,8 @@ public class ProfileListener implements Listener {
     public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         UUID uuid = player.getUniqueId();
-        this.profileManager.stopCachingLocally(uuid);
+        this.profileManager.stopCachingProfile(uuid);
         this.uuidManager.stopCachingLocally(uuid, player.getName());
-        this.profileManager.updateRealValueAsync(uuid, profile -> profile.setLastSeen(System.currentTimeMillis()));
+        this.profileManager.updateRealProfileAsync(uuid, profile -> profile.setLastSeen(System.currentTimeMillis()));
     }
 }

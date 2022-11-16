@@ -13,7 +13,7 @@ public class ServerCommandComplete implements CommandCompletions.AsyncCommandCom
     @Override
     public Collection<String> getCompletions(BukkitCommandCompletionContext context) throws InvalidCommandArgument {
         List<String> serverIds = new ArrayList<>();
-        Core.getInstance().getServerManager().getCachedValues().forEach(server -> serverIds.add(server.getServerId()));
+        Core.getInstance().getServerManager().getCachedServers().forEach(server -> serverIds.add(server.getServerId()));
         return serverIds;
     }
 }

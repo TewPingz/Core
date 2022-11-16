@@ -16,7 +16,7 @@ public class RequestCommand extends BaseCommand {
     @Syntax("<message>")
     @CommandCompletion("@empty")
     public void onCommand(Player player, String message) {
-        Core.getInstance().getProfileManager().updateRealValueAsync(player.getUniqueId(), profile -> {
+        Core.getInstance().getProfileManager().updateRealProfileAsync(player.getUniqueId(), profile -> {
             if (!(profile.getRequestCooldown() == -1 || (profile.getRequestCooldown() - System.currentTimeMillis()) < 0)) {
                 MessageBuilderDefaults.error()
                         .primary("You are currently on request cooldown for").space()

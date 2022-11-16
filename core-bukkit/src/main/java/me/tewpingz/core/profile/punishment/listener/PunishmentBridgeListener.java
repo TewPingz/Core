@@ -41,7 +41,7 @@ public class PunishmentBridgeListener {
             }
 
             if (punishmentType == PunishmentType.BLACKLIST) {
-                Profile.ProfileSnapshot profile = Core.getInstance().getProfileManager().getRealValue(event.getPlayerUuid());
+                Profile.ProfileSnapshot profile = Core.getInstance().getProfileManager().getRealProfile(event.getPlayerUuid());
                 if (profile.getLastIp() != null) {
                     AltEntry.AltProfileSnapshot entry = Core.getInstance().getAltManager().getAlts(profile.getLastIp());
                     entry.getRelatedIds().forEach(uuid -> {

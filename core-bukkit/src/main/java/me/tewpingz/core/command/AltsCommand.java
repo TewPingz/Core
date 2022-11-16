@@ -21,7 +21,7 @@ public class AltsCommand extends BaseCommand {
     @Syntax("<target>")
     public void onCommand(CommandSender sender, AsyncUuid asyncUuid) {
         asyncUuid.fetchUuid(sender, uuid -> {
-            Profile.ProfileSnapshot profile = Core.getInstance().getProfileManager().getRealValue(uuid);
+            Profile.ProfileSnapshot profile = Core.getInstance().getProfileManager().getRealProfile(uuid);
             String lastIp = profile.getLastIp();
 
             if (lastIp == null) {

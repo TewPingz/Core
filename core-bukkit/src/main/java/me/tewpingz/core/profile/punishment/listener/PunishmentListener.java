@@ -23,7 +23,7 @@ public class PunishmentListener implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        Core.getInstance().getProfileManager().getRealValueAsync(event.getPlayer().getUniqueId()).thenAccept(profile -> {
+        Core.getInstance().getProfileManager().getRealProfileAsync(event.getPlayer().getUniqueId()).thenAccept(profile -> {
             profile.getActivePunishments().forEach(punishment -> this.punishmentScheduleManager.schedule(event.getPlayer().getUniqueId(), punishment));;
         });
     }
@@ -35,7 +35,7 @@ public class PunishmentListener implements Listener {
 
     @EventHandler
     public void onAsyncChat(AsyncChatEvent event) {
-        Profile.ProfileSnapshot profile = Core.getInstance().getProfileManager().getCachedValue(event.getPlayer().getUniqueId());
+        Profile.ProfileSnapshot profile = Core.getInstance().getProfileManager().getCachedProfile(event.getPlayer().getUniqueId());
         Punishment mute = profile.getMute();
 
         if (mute == null) {

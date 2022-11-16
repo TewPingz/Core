@@ -14,7 +14,7 @@ public class ServerInitializer {
 
     public ServerInitializer(CorePlugin instance) {
         this.config = ServerConfig.getServerConfig(instance.getDataFolder());
-        Core.getInstance().getServerManager().updateRealValueAsync(this.config.getServerId(), server -> {
+        Core.getInstance().getServerManager().updateRealRankAsync(this.config.getServerId(), server -> {
             server.setDisplayName(this.config.getServerName());
             server.setWhitelisted(Bukkit.hasWhitelist());
             server.setMaxPlayers(Bukkit.getMaxPlayers());
@@ -23,7 +23,7 @@ public class ServerInitializer {
     }
 
     public void shutdown() {
-        Server.ServerSnapshot snapshot = Core.getInstance().getServerManager().updateRealValue(this.config.getServerId(), server -> {
+        Server.ServerSnapshot snapshot = Core.getInstance().getServerManager().updateRealRank(this.config.getServerId(), server -> {
             server.getPlayers().clear();
             server.setOnline(false);
         });

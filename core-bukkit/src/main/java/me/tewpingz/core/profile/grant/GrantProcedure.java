@@ -50,7 +50,7 @@ public class GrantProcedure {
 
     private void apply(Player player) {
         Core.getInstance().getProfileManager()
-                .updateRealValueAsync(this.target, profile -> profile.addGrant(this.selectedRank.getRankId(), player.getName(), this.reason, this.duration));
+                .updateRealProfileAsync(this.target, profile -> profile.addGrant(this.selectedRank.getRankId(), player.getName(), this.reason, this.duration));
     }
 
     @AllArgsConstructor
@@ -148,7 +148,7 @@ public class GrantProcedure {
     private static class RankPrompt extends PaginatedInv {
         public RankPrompt(GrantProcedure procedure) {
             super(ChatColor.GOLD + "Select a rank");
-            Core.getInstance().getRankManager().getSortedRanks().forEach(rankSnapshot -> {
+            Core.getInstance().getRankManager().getCachedSortedRanks().forEach(rankSnapshot -> {
                 Component displayName = rankSnapshot.getColor().apply(Component.text(rankSnapshot.getDisplayName()));
                 ItemStack itemStack = new ItemBuilder(Material.LEATHER_CHESTPLATE)
                         .color(rankSnapshot.getColor().toTextColor())

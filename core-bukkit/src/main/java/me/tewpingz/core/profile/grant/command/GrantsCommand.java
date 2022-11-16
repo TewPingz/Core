@@ -37,7 +37,7 @@ public class GrantsCommand extends BaseCommand {
     @CommandCompletion("@players")
     public void onCommand(Player player, AsyncUuid asyncUuid) {
         asyncUuid.fetchUuid(player, uuid -> {
-            Profile.ProfileSnapshot profile = Core.getInstance().getProfileManager().getRealValue(uuid);
+            Profile.ProfileSnapshot profile = Core.getInstance().getProfileManager().getRealProfile(uuid);
             Bukkit.getScheduler().runTask(CorePlugin.getInstance(), () ->
                     new GrantsInventory(profile).open(player));
         });
@@ -134,7 +134,7 @@ public class GrantsCommand extends BaseCommand {
 
         @Override
         public @Nullable Prompt acceptInput(@NotNull ConversationContext context, @Nullable String input) {
-            Core.getInstance().getProfileManager().updateRealValueAsync(profile.getPlayerId(), profile -> {
+            Core.getInstance().getProfileManager().updateRealProfileAsync(profile.getPlayerId(), profile -> {
                 profile.removeGrant(grant, ((Player)context.getForWhom()).getName(), input);
             });
             return null;

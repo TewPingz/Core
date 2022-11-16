@@ -19,7 +19,7 @@ public class WhoIsCommand extends BaseCommand {
     @CommandCompletion("@players")
     public void onCommand(CommandSender sender, AsyncUuid asyncUuid) {
         asyncUuid.fetchUuid(sender, uuid -> {
-            Profile.ProfileSnapshot profile = Core.getInstance().getProfileManager().getRealValue(uuid);
+            Profile.ProfileSnapshot profile = Core.getInstance().getProfileManager().getRealProfile(uuid);
 
             MessageBuilderDefaults.normal()
                     .primary("This is the profile information for").space()

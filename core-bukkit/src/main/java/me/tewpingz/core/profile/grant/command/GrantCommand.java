@@ -33,7 +33,7 @@ public class GrantCommand extends BaseCommand {
     @CommandCompletion("@players @ranks @duration @empty")
     public void addGrant(CommandSender sender, AsyncUuid asyncUuid, Rank.RankSnapshot rankSnapshot, Duration duration, String reason) {
         asyncUuid.fetchUuid(sender, uuid -> {
-            Core.getInstance().getProfileManager().updateRealValueAsync(uuid, profile -> {
+            Core.getInstance().getProfileManager().updateRealProfileAsync(uuid, profile -> {
                 profile.addGrant(rankSnapshot.getRankId(), sender.getName(), reason, duration.toMillis());
             });
         });

@@ -20,7 +20,7 @@ public class AsyncUuidCommandCompletion implements CommandCompletions.AsyncComma
             completion.add(player.getName());
         }
 
-        Core.getInstance().getServerManager().getCachedValues().forEach(server -> {
+        Core.getInstance().getServerManager().getCachedServers().forEach(server -> {
             server.getPlayers().forEach(player -> completion.add(player.getUsername()));
         });
 

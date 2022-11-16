@@ -14,7 +14,6 @@ import me.tewpingz.core.util.uuid.UuidManager;
 import me.tewpingz.redigo.RediGo;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
-import org.redisson.config.Config;
 
 import java.io.File;
 

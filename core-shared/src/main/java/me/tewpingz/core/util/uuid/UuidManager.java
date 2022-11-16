@@ -32,8 +32,8 @@ public class UuidManager {
     }
 
     public void beginCachingLocally(UUID playerId, String playerName) {
-        this.uuidToNameCollection.beginCachingLocally(playerId);
-        this.nameToUuidCollection.beginCachingLocally(playerName.toLowerCase());
+        this.uuidToNameCollection.beginCachingOrUpdateLocally(playerId);
+        this.nameToUuidCollection.beginCachingOrUpdateLocally(playerName.toLowerCase());
     }
 
     public void stopCachingLocally(UUID playerId, String playerName) {

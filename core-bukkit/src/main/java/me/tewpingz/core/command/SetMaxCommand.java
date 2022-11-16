@@ -18,7 +18,7 @@ public class SetMaxCommand extends BaseCommand {
         Bukkit.setMaxPlayers(max);
 
         String serverId = CorePlugin.getInstance().getServerInitializer().getConfig().getServerId();
-        Core.getInstance().getServerManager().updateRealValueAsync(serverId, server -> {
+        Core.getInstance().getServerManager().updateRealRankAsync(serverId, server -> {
             server.setMaxPlayers(max);
         }).thenRun(() -> {
             MessageBuilderDefaults.success().primary("You have successfully set the max player count of this server to").space()

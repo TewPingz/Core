@@ -42,7 +42,7 @@ public class Grant {
     }
 
     public Rank.RankSnapshot getRankSnapshot() {
-        return Core.getInstance().getRankManager().getRank(this.rankId);
+        return Core.getInstance().getRankManager().getCachedRank(this.rankId);
     }
 
     @Getter

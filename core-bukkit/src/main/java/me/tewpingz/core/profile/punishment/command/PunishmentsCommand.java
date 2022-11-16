@@ -39,7 +39,7 @@ public class PunishmentsCommand extends BaseCommand {
     @CommandCompletion("@players")
     public void onCommand(Player player, AsyncUuid asyncUuid) {
         asyncUuid.fetchUuid(player, uuid -> {
-            Profile.ProfileSnapshot profile = Core.getInstance().getProfileManager().getRealValue(uuid);
+            Profile.ProfileSnapshot profile = Core.getInstance().getProfileManager().getRealProfile(uuid);
             Bukkit.getScheduler().runTask(CorePlugin.getInstance(), () ->
                     new PunishmentsInventory(profile).open(player));
         });
@@ -130,7 +130,7 @@ public class PunishmentsCommand extends BaseCommand {
 
         @Override
         public @Nullable Prompt acceptInput(@NotNull ConversationContext context, @Nullable String input) {
-            Core.getInstance().getProfileManager().updateRealValueAsync(profile.getPlayerId(), profile -> {
+            Core.getInstance().getProfileManager().updateRealProfileAsync(profile.getPlayerId(), profile -> {
                 profile.removePunishment(punishment, ((Player)context.getForWhom()).getName(), input);
             });
             return null;

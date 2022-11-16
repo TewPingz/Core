@@ -33,7 +33,7 @@ public class PunishmentProcedure {
 
     private void apply(Player player) {
         Core.getInstance().getProfileManager()
-                .updateRealValueAsync(this.targetId, profile -> profile.addPunishment(this.punishmentType, player.getName(), this.reason, this.duration));
+                .updateRealProfileAsync(this.targetId, profile -> profile.addPunishment(this.punishmentType, player.getName(), this.reason, this.duration));
     }
 
     @RequiredArgsConstructor

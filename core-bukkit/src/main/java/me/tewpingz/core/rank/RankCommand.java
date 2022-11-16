@@ -5,6 +5,7 @@ import co.aikar.commands.CommandHelp;
 import co.aikar.commands.annotation.*;
 import me.tewpingz.core.Core;
 import me.tewpingz.core.rank.event.RankCreateEvent;
+import me.tewpingz.core.rank.event.RankDeleteEvent;
 import me.tewpingz.core.rank.event.RankUpdateEvent;
 import me.tewpingz.core.rank.event.RankUpdatePermissionEvent;
 import me.tewpingz.message.MessageBuilderDefaults;
@@ -32,7 +33,7 @@ public class RankCommand extends BaseCommand {
     public static void onCreate(CommandSender commandSender, String rankName) {
         RankManager rankManager = Core.getInstance().getRankManager();
 
-        if (rankManager.getRank(rankName) != null) {
+        if (rankManager.getCachedRank(rankName) != null) {
             MessageBuilderDefaults.error()
                     .primary("There is already a rank that is named").space()
                     .secondary(rankName).space()
@@ -41,7 +42,7 @@ public class RankCommand extends BaseCommand {
             return;
         }
 
-        rankManager.updateRealValueAsync(rankName.toLowerCase(), rank -> {
+        rankManager.updateRealRankAsync(rankName.toLowerCase(), rank -> {
             rank.setDisplayName(rankName);
         }).thenAccept(rank -> {
             MessageBuilderDefaults.success()
@@ -53,6 +54,23 @@ public class RankCommand extends BaseCommand {
         });
     }
 
+    @Subcommand("delete")
+    @Description("Delete a rank")
+    @CommandPermission("core.rank.delete")
+    @CommandCompletion("@ranks")
+    @Syntax("<rank>")
+    public static void onDelete(CommandSender commandSender, Rank.RankSnapshot rank) {
+        RankManager rankManager = Core.getInstance().getRankManager();
+        rankManager.evictRankAsync(rank.getRankId()).thenRun(() -> {
+            Core.getInstance().getBridge().callEvent(new RankDeleteEvent(commandSender.getName(), rank));
+            MessageBuilderDefaults.success()
+                    .primary("You have successfully delete the").space()
+                    .append(rank.getColor().apply(Component.text(rank.getDisplayName()))).space()
+                    .primary("rank").tertiary("!")
+                    .build(commandSender::sendMessage);
+        });
+    }
+
     @Subcommand("setpriority|priority")
     @Description("Set a ranks priority")
     @CommandPermission("core.rank.setpriority")
@@ -60,7 +78,7 @@ public class RankCommand extends BaseCommand {
     @CommandCompletion("@ranks @empty")
     public void onSetPriority(CommandSender sender, Rank.RankSnapshot rankSnapshot, int priority) {
         RankManager rankManager = Core.getInstance().getRankManager();
-        rankManager.updateRealValueAsync(rankSnapshot.getRankId(), realRank -> {
+        rankManager.updateRealRankAsync(rankSnapshot.getRankId(), realRank -> {
             realRank.setPriority(priority);
         }).thenAccept(rank -> {
             MessageBuilderDefaults.success()
@@ -82,7 +100,7 @@ public class RankCommand extends BaseCommand {
     public void onSetPrefix(CommandSender sender, Rank.RankSnapshot rankSnapshot, String prefix) {
         RankManager rankManager = Core.getInstance().getRankManager();
         String translatedPrefix = ChatColor.translateAlternateColorCodes('&', prefix);
-        rankManager.updateRealValueAsync(rankSnapshot.getRankId(), realRank -> {
+        rankManager.updateRealRankAsync(rankSnapshot.getRankId(), realRank -> {
             realRank.setPrefix(translatedPrefix);
         }).thenAccept(rank -> {
             MessageBuilderDefaults.success()
@@ -104,7 +122,7 @@ public class RankCommand extends BaseCommand {
     public void onSetSuffix(CommandSender sender, Rank.RankSnapshot rankSnapshot, String suffix) {
         RankManager rankManager = Core.getInstance().getRankManager();
         String translatedSuffix = ChatColor.translateAlternateColorCodes('&', suffix);
-        rankManager.updateRealValueAsync(rankSnapshot.getRankId(), realRank -> {
+        rankManager.updateRealRankAsync(rankSnapshot.getRankId(), realRank -> {
             realRank.setSuffix(translatedSuffix);
         }).thenAccept(rank -> {
             MessageBuilderDefaults.success()
@@ -124,7 +142,7 @@ public class RankCommand extends BaseCommand {
     @CommandCompletion("@ranks @empty")
     public void onSetDisplayName(CommandSender sender, Rank.RankSnapshot rankSnapshot, String displayName) {
         RankManager rankManager = Core.getInstance().getRankManager();
-        rankManager.updateRealValueAsync(rankSnapshot.getRankId(), realRank -> {
+        rankManager.updateRealRankAsync(rankSnapshot.getRankId(), realRank -> {
             realRank.setDisplayName(displayName);
         }).thenAccept(rank -> {
             MessageBuilderDefaults.success()
@@ -144,7 +162,7 @@ public class RankCommand extends BaseCommand {
     @CommandCompletion("@ranks true|false")
     public void onSetBold(CommandSender sender, Rank.RankSnapshot rankSnapshot, boolean state) {
         RankManager rankManager = Core.getInstance().getRankManager();
-        rankManager.updateRealValueAsync(rankSnapshot.getRankId(), realRank -> {
+        rankManager.updateRealRankAsync(rankSnapshot.getRankId(), realRank -> {
             realRank.getColor().setBold(state);
         }).thenAccept(rank -> {
             MessageBuilderDefaults.success()
@@ -165,7 +183,7 @@ public class RankCommand extends BaseCommand {
     @CommandCompletion("@ranks true|false")
     public void onSetItalic(CommandSender sender, Rank.RankSnapshot rankSnapshot, boolean state) {
         RankManager rankManager = Core.getInstance().getRankManager();
-        rankManager.updateRealValueAsync(rankSnapshot.getRankId(), realRank -> {
+        rankManager.updateRealRankAsync(rankSnapshot.getRankId(), realRank -> {
             realRank.getColor().setItalic(state);
         }).thenAccept(rank -> {
             MessageBuilderDefaults.success()
@@ -186,7 +204,7 @@ public class RankCommand extends BaseCommand {
     @CommandCompletion("@ranks @empty")
     public void onSetColor(CommandSender sender, Rank.RankSnapshot rankSnapshot, int red, int green, int blue) {
         RankManager rankManager = Core.getInstance().getRankManager();
-        rankManager.updateRealValueAsync(rankSnapshot.getRankId(), realRank -> {
+        rankManager.updateRealRankAsync(rankSnapshot.getRankId(), realRank -> {
             realRank.getColor().updateColor(red, green, blue);
         }).thenAccept(rank -> {
             MessageBuilderDefaults.success()
@@ -213,7 +231,7 @@ public class RankCommand extends BaseCommand {
         }
 
         RankManager rankManager = Core.getInstance().getRankManager();
-        rankManager.updateRealValueAsync(rankSnapshot.getRankId(), realRank -> {
+        rankManager.updateRealRankAsync(rankSnapshot.getRankId(), realRank -> {
             realRank.getColor().updateColor(hex);
         }).thenAccept(rank -> {
             MessageBuilderDefaults.success()
@@ -233,7 +251,7 @@ public class RankCommand extends BaseCommand {
     @CommandCompletion("@ranks @empty")
     public void onPermission(CommandSender sender, Rank.RankSnapshot rankSnapshot, @Single String permission) {
         RankManager rankManager = Core.getInstance().getRankManager();
-        rankManager.updateRealValueAsync(rankSnapshot.getRankId(), realRank -> {
+        rankManager.updateRealRankAsync(rankSnapshot.getRankId(), realRank -> {
             if (realRank.getPermissions().contains(permission)) {
                 realRank.getPermissions().remove(permission);
             } else {
@@ -268,7 +286,7 @@ public class RankCommand extends BaseCommand {
         }
 
         RankManager rankManager = Core.getInstance().getRankManager();
-        rankManager.updateRealValueAsync(rankSnapshot.getRankId(), realRank -> {
+        rankManager.updateRealRankAsync(rankSnapshot.getRankId(), realRank -> {
             if (realRank.getInherits().contains(inherit.getRankId())) {
                 realRank.getInherits().remove(inherit.getRankId());
             } else {
@@ -296,7 +314,7 @@ public class RankCommand extends BaseCommand {
     @CommandCompletion("@ranks")
     public void onInfo(CommandSender sender, Rank.RankSnapshot rankSnapshot) {
         RankManager rankManager = Core.getInstance().getRankManager();
-        rankManager.getRealValueAsync(rankSnapshot.getRankId()).thenAccept(rank -> {
+        rankManager.getRealRank(rankSnapshot.getRankId()).thenAccept(rank -> {
             sender.sendMessage(" ");
 
             MessageBuilderDefaults.normal()

@@ -27,7 +27,7 @@ public class PunishCommand extends BaseCommand {
     @Syntax("<player> <duration> [reason...]")
     public void onBan(CommandSender sender, AsyncUuid asyncUuid, Duration duration, String reason) {
         asyncUuid.fetchUuid(sender, uuid -> {
-            Core.getInstance().getProfileManager().updateRealValue(uuid, profile -> {
+            Core.getInstance().getProfileManager().updateRealProfile(uuid, profile -> {
                 profile.addPunishment(PunishmentType.BAN, sender.getName(), reason, duration.toMillis());
             });
         });
@@ -39,7 +39,7 @@ public class PunishCommand extends BaseCommand {
     @Syntax("<player> <duration> [reason...]")
     public void onMute(CommandSender sender, AsyncUuid asyncUuid, Duration duration, String reason) {
         asyncUuid.fetchUuid(sender, uuid -> {
-            Core.getInstance().getProfileManager().updateRealValue(uuid, profile -> {
+            Core.getInstance().getProfileManager().updateRealProfile(uuid, profile -> {
                 profile.addPunishment(PunishmentType.MUTE, sender.getName(), reason, duration.toMillis());
             });
         });
@@ -51,7 +51,7 @@ public class PunishCommand extends BaseCommand {
     @CommandCompletion("@players @duration @empty")
     public void onBlacklist(CommandSender sender, AsyncUuid asyncUuid, Duration duration, String reason) {
         asyncUuid.fetchUuid(sender, uuid -> {
-            Core.getInstance().getProfileManager().updateRealValue(uuid, profile -> {
+            Core.getInstance().getProfileManager().updateRealProfile(uuid, profile -> {
                 profile.addPunishment(PunishmentType.BLACKLIST, sender.getName(), reason, duration.toMillis());
             });
         });

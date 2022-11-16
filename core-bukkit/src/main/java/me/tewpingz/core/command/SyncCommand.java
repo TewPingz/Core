@@ -16,7 +16,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class SyncCommand extends BaseCommand {
     @Default
     public void onCommand(Player player) {
-        Core.getInstance().getProfileManager().updateRealValueAsync(player.getUniqueId(), profile -> {
+        Core.getInstance().getProfileManager().updateRealProfileAsync(player.getUniqueId(), profile -> {
             if (!(profile.getSyncCooldown() == -1 || (profile.getSyncCooldown() - System.currentTimeMillis()) < 0)) {
                 MessageBuilderDefaults.error()
                         .primary("You are currently on sync cooldown for").space()

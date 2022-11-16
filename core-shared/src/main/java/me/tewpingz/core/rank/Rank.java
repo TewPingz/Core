@@ -87,7 +87,7 @@ public class Rank implements RediGoObject<String, Rank.RankSnapshot>, Comparable
                 // It will create an infinite loop so with this we can create a recursive function that
                 // allows us to track the already done inherited ranks and ignore them if they were to come up again
                 if (!inherits.contains(rankId)) {
-                    RankSnapshot rank = Core.getInstance().getRankManager().getRank(rankId);
+                    RankSnapshot rank = Core.getInstance().getRankManager().getCachedRank(rankId);
                     if (rank != null) {
                         rank.appendEffectivePermissions(permissions, inherits);
                     }

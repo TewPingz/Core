@@ -28,7 +28,7 @@ public class JoinQueueCommand extends BaseCommand {
             return;
         }
 
-        Profile.ProfileSnapshot profile = CorePlugin.getInstance().getCore().getProfileManager().getCachedValue(player.getUniqueId());
+        Profile.ProfileSnapshot profile = CorePlugin.getInstance().getCore().getProfileManager().getCachedProfile(player.getUniqueId());
         CorePlugin.getInstance().getCore().getQueueManager().updateQueueAsync(server.getServerId(), queue -> queue.addPlayer(profile)).thenAccept(queue -> {
             int position = queue.getPosition(player.getUniqueId());
             MessageBuilderDefaults.normal().primary("You have joined the queue for").space()

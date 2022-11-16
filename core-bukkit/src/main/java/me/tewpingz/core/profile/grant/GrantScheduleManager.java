@@ -23,7 +23,7 @@ public class GrantScheduleManager {
 
         this.lock.lock();
         int ticks = (int) (grant.getTimeLeft() / 1000 * 20);
-        Runnable runnable = () -> Core.getInstance().getProfileManager().updateRealValueAsync(playerId, profile -> profile.removeGrant(grant, "CONSOLE", "Expired"));
+        Runnable runnable = () -> Core.getInstance().getProfileManager().updateRealProfileAsync(playerId, profile -> profile.removeGrant(grant, "CONSOLE", "Expired"));
         BukkitTask task = Bukkit.getScheduler().runTaskLaterAsynchronously(CorePlugin.getInstance(), runnable, ticks);
         this.tasks.put(playerId, grant, task);
         this.lock.unlock();

@@ -19,23 +19,19 @@ public class ServerManager {
         }, Server::new);
     }
 
-    public Server.ServerSnapshot getCachedValue(String serverId) {
+    public Server.ServerSnapshot getCachedServer(String serverId) {
         return this.collection.getCachedValued(serverId.toLowerCase());
     }
 
-    public Collection<Server.ServerSnapshot> getCachedValues() {
+    public Collection<Server.ServerSnapshot> getCachedServers() {
         return this.collection.getCachedValues();
     }
 
-    public CompletableFuture<Server.ServerSnapshot> getRealValueAsync(String serverId) {
-        return this.collection.getOrCreateRealValueAsync(serverId.toLowerCase());
-    }
-
-    public Server.ServerSnapshot updateRealValue(String serverId, Consumer<Server> consumer) {
+    public Server.ServerSnapshot updateRealRank(String serverId, Consumer<Server> consumer) {
         return this.collection.updateRealValue(serverId.toLowerCase(), consumer);
     }
 
-    public CompletableFuture<Server.ServerSnapshot> updateRealValueAsync(String serverId, Consumer<Server> consumer) {
+    public CompletableFuture<Server.ServerSnapshot> updateRealRankAsync(String serverId, Consumer<Server> consumer) {
         return this.collection.updateRealValueAsync(serverId.toLowerCase(), consumer);
     }
 }

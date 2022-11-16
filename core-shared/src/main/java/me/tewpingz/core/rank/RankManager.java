@@ -20,32 +20,36 @@ public class RankManager {
                 rank.setDisplayName("Default");
             }
         });
-        this.collection.beginCachingLocally("default"); // Basically create default if it doesn't exist
+        this.collection.beginCachingOrUpdateLocally("default"); // Basically create default if it doesn't exist
     }
 
-    public Rank.RankSnapshot getRank(String rankId) {
+    public Rank.RankSnapshot getCachedRank(String rankId) {
         return this.collection.getCachedValued(rankId.toLowerCase());
     }
 
-    public Collection<Rank.RankSnapshot> getRanks() {
+    public Collection<Rank.RankSnapshot> getCachedRanks() {
         return this.collection.getCachedValues();
     }
 
-    public Collection<Rank.RankSnapshot> getSortedRanks() {
-        List<Rank.RankSnapshot> rankList = new ArrayList<>(this.getRanks());
+    public Collection<Rank.RankSnapshot> getCachedSortedRanks() {
+        List<Rank.RankSnapshot> rankList = new ArrayList<>(this.getCachedRanks());
         rankList.sort(Rank.RankSnapshot::compareTo);
         return rankList;
     }
 
-    public CompletableFuture<Collection<Rank.RankSnapshot>> getSortedRanksAsync() {
-        return CompletableFuture.supplyAsync(this::getSortedRanks);
+    public CompletableFuture<Collection<Rank.RankSnapshot>> getCachedSortedRanksAsync() {
+        return CompletableFuture.supplyAsync(this::getCachedSortedRanks);
     }
 
-    public CompletableFuture<Rank.RankSnapshot> getRealValueAsync(String rankId) {
+    public CompletableFuture<Rank.RankSnapshot> getRealRank(String rankId) {
         return this.collection.getOrCreateRealValueAsync(rankId.toLowerCase());
     }
 
-    public CompletableFuture<Rank.RankSnapshot> updateRealValueAsync(String rankId, Consumer<Rank> consumer) {
+    public CompletableFuture<Rank.RankSnapshot> updateRealRankAsync(String rankId, Consumer<Rank> consumer) {
         return this.collection.updateRealValueAsync(rankId.toLowerCase(), consumer);
+    }
+
+    public CompletableFuture<Void> evictRankAsync(String rankId) {
+        return this.collection.evictRealValueAsync(rankId.toLowerCase());
     }
 }

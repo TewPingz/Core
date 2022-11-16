@@ -30,7 +30,7 @@ public class ServersCommand extends BaseCommand {
         public ServersInventory() {
             super(ChatColor.GOLD + "Servers");
 
-            for (Server.ServerSnapshot server : Core.getInstance().getServerManager().getCachedValues()) {
+            for (Server.ServerSnapshot server : Core.getInstance().getServerManager().getCachedServers()) {
                 if (!server.isOnline()) {
                     continue;
                 }

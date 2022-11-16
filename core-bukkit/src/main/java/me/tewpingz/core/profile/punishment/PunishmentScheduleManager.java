@@ -23,7 +23,7 @@ public class PunishmentScheduleManager {
 
         this.lock.lock();
         int ticks = (int) (punishment.getTimeLeft() / 1000 * 20);
-        Runnable runnable = () -> Core.getInstance().getProfileManager().updateRealValueAsync(playerId, profile -> profile.removePunishment(punishment, "CONSOLE", "Expired"));
+        Runnable runnable = () -> Core.getInstance().getProfileManager().updateRealProfileAsync(playerId, profile -> profile.removePunishment(punishment, "CONSOLE", "Expired"));
         BukkitTask task = Bukkit.getScheduler().runTaskLaterAsynchronously(CorePlugin.getInstance(), runnable, ticks);
         this.tasks.put(playerId, punishment, task);
         this.lock.unlock();

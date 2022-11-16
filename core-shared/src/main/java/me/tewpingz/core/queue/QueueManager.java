@@ -26,7 +26,7 @@ public class QueueManager {
         return this.collection.updateRealValueAsync(serverId.toLowerCase(), consumer);
     }
 
-    public Collection<Queue.QueueSnapshot> getQueues() {
+    public Collection<Queue.QueueSnapshot> getCachedQueues() {
         return this.collection.getCachedValues();
     }
 

@@ -14,7 +14,7 @@ import org.bukkit.command.CommandSender;
 public class RanksCommand extends BaseCommand {
     @Default
     public void onCommand(CommandSender commandSender) {
-        CorePlugin.getInstance().getCore().getRankManager().getSortedRanksAsync().thenAccept(ranks -> {
+        CorePlugin.getInstance().getCore().getRankManager().getCachedSortedRanksAsync().thenAccept(ranks -> {
             int amount = ranks.size();
 
             if (amount == 0) {

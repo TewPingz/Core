@@ -10,7 +10,7 @@ public class ServerContextResolver implements ContextResolver<Server.ServerSnaps
     @Override
     public Server.ServerSnapshot getContext(BukkitCommandExecutionContext context) throws InvalidCommandArgument {
         String serverId = context.popFirstArg();
-        Server.ServerSnapshot snapshot = Core.getInstance().getServerManager().getCachedValue(serverId);
+        Server.ServerSnapshot snapshot = Core.getInstance().getServerManager().getCachedServer(serverId);
 
         if (snapshot == null) {
             throw new InvalidCommandArgument("The server you have provided is invalid.");

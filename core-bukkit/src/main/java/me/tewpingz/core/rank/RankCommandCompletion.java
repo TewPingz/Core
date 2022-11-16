@@ -13,7 +13,7 @@ public class RankCommandCompletion implements CommandCompletions.AsyncCommandCom
     @Override
     public Collection<String> getCompletions(BukkitCommandCompletionContext context) throws InvalidCommandArgument {
         List<String> completion = new ArrayList<>();
-        CorePlugin.getInstance().getCore().getRankManager().getRanks().forEach(rank -> completion.add(rank.getRankId()));
+        CorePlugin.getInstance().getCore().getRankManager().getCachedRanks().forEach(rank -> completion.add(rank.getRankId()));
         return completion;
     }
 }

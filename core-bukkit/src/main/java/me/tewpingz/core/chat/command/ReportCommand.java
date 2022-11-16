@@ -25,7 +25,7 @@ public class ReportCommand extends BaseCommand {
                 return;
             }
 
-            Core.getInstance().getProfileManager().updateRealValue(player.getUniqueId(), profile -> {
+            Core.getInstance().getProfileManager().updateRealProfile(player.getUniqueId(), profile -> {
                 if (!(profile.getReportCooldown() == -1 || (profile.getReportCooldown() - System.currentTimeMillis()) < 0)) {
                     MessageBuilderDefaults.error()
                             .primary("You are currently on report cooldown for").space()

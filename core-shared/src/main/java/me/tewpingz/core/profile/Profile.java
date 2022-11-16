@@ -164,7 +164,7 @@ public class Profile implements RediGoObject<UUID, Profile.ProfileSnapshot> {
         Grant grant = this.getDisplayGrant();
 
         if (grant == null) {
-            return Core.getInstance().getRankManager().getRank("default");
+            return Core.getInstance().getRankManager().getCachedRank("default");
         }
 
         return grant.getRankSnapshot();
@@ -221,10 +221,10 @@ public class Profile implements RediGoObject<UUID, Profile.ProfileSnapshot> {
         }
 
         public Rank.RankSnapshot getDisplayRank() {
-            Rank.RankSnapshot displayRank = Core.getInstance().getRankManager().getRank(this.displayRankId);
+            Rank.RankSnapshot displayRank = Core.getInstance().getRankManager().getCachedRank(this.displayRankId);
 
             if (displayRank == null) {
-                return Core.getInstance().getRankManager().getRank("default");
+                return Core.getInstance().getRankManager().getCachedRank("default");
             }
 
             return displayRank;

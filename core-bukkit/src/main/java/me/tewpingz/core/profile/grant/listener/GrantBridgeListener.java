@@ -22,7 +22,7 @@ public class GrantBridgeListener {
                         .append(event.getGrant().getRankNameComponent()).tertiary(".")
                         .build(player::sendMessage);
 
-                Profile.ProfileSnapshot profile = Core.getInstance().getProfileManager().getRealValue(player.getUniqueId());
+                Profile.ProfileSnapshot profile = Core.getInstance().getProfileManager().getRealProfile(player.getUniqueId());
                 CorePlugin.getInstance().getGrantAttachmentManager().updateAttachment(player, profile);
             }
 
@@ -50,7 +50,7 @@ public class GrantBridgeListener {
                         .tertiary("!")
                         .build(player::sendMessage);
 
-                Profile.ProfileSnapshot profile = Core.getInstance().getProfileManager().getRealValue(player.getUniqueId());
+                Profile.ProfileSnapshot profile = Core.getInstance().getProfileManager().getRealProfile(player.getUniqueId());
                 CorePlugin.getInstance().getGrantAttachmentManager().updateAttachment(player, profile);
             }
 

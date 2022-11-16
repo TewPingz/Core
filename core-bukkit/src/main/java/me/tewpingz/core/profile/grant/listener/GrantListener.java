@@ -27,7 +27,7 @@ public class GrantListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerJoin(PlayerJoinEvent event) {
-        Core.getInstance().getProfileManager().updateRealValueAsync(event.getPlayer().getUniqueId(), profile -> {
+        Core.getInstance().getProfileManager().updateRealProfileAsync(event.getPlayer().getUniqueId(), profile -> {
             profile.getActiveGrants().stream().filter(grant -> grant.getRankSnapshot() == null).toList().forEach(grant -> {
                 profile.removeGrant(grant, "CONSOLE", "Rank no-longer exists");
             });
@@ -52,7 +52,7 @@ public class GrantListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onAsyncPlayerChatEvent(final AsyncChatEvent event) {
         event.renderer(ChatRenderer.viewerUnaware((source, displayName, message) -> {
-            Profile.ProfileSnapshot profile = Core.getInstance().getProfileManager().getCachedValue(source.getUniqueId());
+            Profile.ProfileSnapshot profile = Core.getInstance().getProfileManager().getCachedProfile(source.getUniqueId());
             TextComponent prefix = Component.text(profile.getDisplayRank().getPrefix());
             TextComponent suffix = Component.text(profile.getDisplayRank().getSuffix());
             TextComponent separator = Component.text(":").color(NamedTextColor.GRAY);

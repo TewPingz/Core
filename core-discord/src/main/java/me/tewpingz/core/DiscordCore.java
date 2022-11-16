@@ -1,9 +1,10 @@
 package me.tewpingz.core;
 
 import lombok.Getter;
+import me.tewpingz.core.command.CommandManager;
+import me.tewpingz.core.command.impl.SyncCommand;
 import me.tewpingz.core.listener.GrantBridgeListener;
 import me.tewpingz.core.listener.PunishmentBridgeListener;
-import me.tewpingz.core.listener.SyncCommandListener;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 
@@ -11,6 +12,7 @@ import net.dv8tion.jda.api.JDABuilder;
 public class DiscordCore {
 
     private final JDA jda;
+    private final CommandManager commandManager;
 
     public DiscordCore(DiscordConfig config) throws InterruptedException {
         this.jda = JDABuilder.createDefault(config.getApiKey()).build();
@@ -18,6 +20,9 @@ public class DiscordCore {
 
         new PunishmentBridgeListener(this.jda.getTextChannelById(config.getPunishmentLogChannelId()));
         new GrantBridgeListener(this.jda.getTextChannelById(config.getGrantLogChannelId()));
-        new SyncCommandListener(this.jda);
+
+        this.commandManager = new CommandManager(this);
+        this.commandManager.registerCommand(new SyncCommand());
+        this.commandManager.upsertCommands();
     }
 }

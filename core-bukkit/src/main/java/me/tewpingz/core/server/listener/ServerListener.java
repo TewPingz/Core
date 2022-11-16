@@ -19,7 +19,7 @@ public class ServerListener implements Listener {
     @EventHandler
     public void onWhitelistToggle(WhitelistToggleEvent event) {
         String serverId = CorePlugin.getInstance().getServerInitializer().getConfig().getServerId();
-        Core.getInstance().getServerManager().updateRealValueAsync(serverId, server -> {
+        Core.getInstance().getServerManager().updateRealRankAsync(serverId, server -> {
             server.setWhitelisted(event.isEnabled());
         }).thenAccept(server -> Core.getInstance().getBridge().callEvent(new ServerWhitelistEvent(server)));
     }
@@ -27,7 +27,7 @@ public class ServerListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         String serverId = CorePlugin.getInstance().getServerInitializer().getConfig().getServerId();
-        Core.getInstance().getServerManager().updateRealValueAsync(serverId, server -> {
+        Core.getInstance().getServerManager().updateRealRankAsync(serverId, server -> {
             server.addPlayer(event.getPlayer().getUniqueId(), event.getPlayer().getName());
         });
     }
@@ -35,7 +35,7 @@ public class ServerListener implements Listener {
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
         String serverId = CorePlugin.getInstance().getServerInitializer().getConfig().getServerId();
-        Core.getInstance().getServerManager().updateRealValueAsync(serverId, server -> {
+        Core.getInstance().getServerManager().updateRealRankAsync(serverId, server -> {
             server.removePlayer(event.getPlayer().getUniqueId());
         });
     }

@@ -21,40 +21,43 @@ public class ProfileManager {
         }, Profile::new);
     }
 
-    public Profile.ProfileSnapshot beginCachingLocally(UUID playerId) {
-        this.collection.beginCachingLocally(playerId);
-        return this.getCachedValue(playerId);
+    public Profile.ProfileSnapshot beginCachingOrUpdateProfile(UUID playerId) {
+        return this.collection.beginCachingOrUpdateLocally(playerId);
     }
 
-    public Profile.ProfileSnapshot getCachedValue(UUID playerId) {
+    public CompletableFuture<Profile.ProfileSnapshot> beginCachingOrUpdateLocallyAsync(UUID playerId) {
+        return this.collection.beginCachingOrUpdateLocallyAsync(playerId);
+    }
+
+    public Profile.ProfileSnapshot getCachedProfile(UUID playerId) {
         return this.collection.getCachedValued(playerId);
     }
 
-    public Collection<Profile.ProfileSnapshot> getCachedValues() {
+    public Collection<Profile.ProfileSnapshot> getCachedProfiles() {
         return this.collection.getCachedValues();
     }
 
-    public void forEachCachedValue(Consumer<Profile.ProfileSnapshot> consumer) {
+    public void forEachCachedProfile(Consumer<Profile.ProfileSnapshot> consumer) {
         this.collection.forEachCachedValue(consumer);
     }
 
-    public void stopCachingLocally(UUID playerId) {
+    public void stopCachingProfile(UUID playerId) {
         this.collection.stopCachingLocally(playerId);
     }
 
-    public Profile.ProfileSnapshot getRealValue(UUID playerId) {
+    public Profile.ProfileSnapshot getRealProfile(UUID playerId) {
         return this.collection.getOrCreateRealValue(playerId);
     }
 
-    public CompletableFuture<Profile.ProfileSnapshot> getRealValueAsync(UUID playerId) {
+    public CompletableFuture<Profile.ProfileSnapshot> getRealProfileAsync(UUID playerId) {
         return this.collection.getOrCreateRealValueAsync(playerId);
     }
 
-    public Profile.ProfileSnapshot updateRealValue(UUID playerId, Consumer<Profile> consumer) {
+    public Profile.ProfileSnapshot updateRealProfile(UUID playerId, Consumer<Profile> consumer) {
         return this.collection.updateRealValue(playerId, consumer);
     }
 
-    public CompletableFuture<Profile.ProfileSnapshot> updateRealValueAsync(UUID playerId, Consumer<Profile> consumer) {
+    public CompletableFuture<Profile.ProfileSnapshot> updateRealProfileAsync(UUID playerId, Consumer<Profile> consumer) {
         return this.collection.updateRealValueAsync(playerId, consumer);
     }
 }

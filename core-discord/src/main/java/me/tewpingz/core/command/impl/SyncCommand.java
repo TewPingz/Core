@@ -1,32 +1,26 @@
-package me.tewpingz.core.listener;
+package me.tewpingz.core.command.impl;
 
 import me.tewpingz.core.Core;
+import me.tewpingz.core.command.Command;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 
 import java.awt.*;
 import java.util.UUID;
 
-public class SyncCommandListener extends ListenerAdapter {
-
-    public SyncCommandListener(JDA jda) {
-        jda.upsertCommand("sync", "A command that lets you sync with the minecraft server")
-                .addOption(OptionType.STRING, "username", "The username of your account", true)
-                .addOption(OptionType.STRING, "code", "The code that the server gave you", true)
-                .queue();
-        jda.addEventListener(this);
+public class SyncCommand extends Command {
+    public SyncCommand() {
+        super("sync", "A command that lets you sync with the minecraft server", true);
+        this.addOption(OptionType.STRING, "name", "The accounts username");
+        this.addOption(OptionType.STRING, "code", "The code provided by the server");
     }
 
     @Override
-    public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
-        if (!event.getName().equalsIgnoreCase("sync")) {
-            return;
-        }
-
+    public void onCommand(User user, Guild guild, SlashCommandInteractionEvent event) {
         event.deferReply(true).queue();
 
         String username = event.getOption("username").getAsString();
@@ -38,7 +32,7 @@ public class SyncCommandListener extends ListenerAdapter {
         }
 
         String code = event.getOption("code").getAsString();
-        Core.getInstance().getProfileManager().updateRealValueAsync(uuid, profile -> {
+        Core.getInstance().getProfileManager().updateRealProfileAsync(uuid, profile -> {
             if (profile.getDiscordId() != null && event.getUser().getId().equalsIgnoreCase(profile.getDiscordId())) {
                 event.getHook().sendMessageEmbeds(this.getAlreadySynced()).setEphemeral(true).queue();
                 return;
