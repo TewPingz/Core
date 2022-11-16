@@ -9,7 +9,6 @@ import me.tewpingz.core.rank.event.RankDeleteEvent;
 import me.tewpingz.core.rank.event.RankUpdateEvent;
 import me.tewpingz.core.rank.event.RankUpdatePermissionEvent;
 import me.tewpingz.message.MessageBuilderDefaults;
-import net.kyori.adventure.text.Component;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
@@ -47,7 +46,7 @@ public class RankCommand extends BaseCommand {
         }).thenAccept(rank -> {
             MessageBuilderDefaults.success()
                     .primary("You have successfully created a rank named").space()
-                    .append(rank.getColor().apply(Component.text(rank.getDisplayName())))
+                    .append(rank.getDisplayNameWithColor())
                     .tertiary(".")
                     .build(commandSender::sendMessage);
             Core.getInstance().getBridge().callEvent(new RankCreateEvent(commandSender.getName(), rank));
@@ -64,8 +63,8 @@ public class RankCommand extends BaseCommand {
         rankManager.evictRankAsync(rank.getRankId()).thenRun(() -> {
             Core.getInstance().getBridge().callEvent(new RankDeleteEvent(commandSender.getName(), rank));
             MessageBuilderDefaults.success()
-                    .primary("You have successfully delete the").space()
-                    .append(rank.getColor().apply(Component.text(rank.getDisplayName()))).space()
+                    .primary("You have successfully deleted the").space()
+                    .append(rank.getDisplayNameWithColor()).space()
                     .primary("rank").tertiary("!")
                     .build(commandSender::sendMessage);
         });
@@ -83,7 +82,7 @@ public class RankCommand extends BaseCommand {
         }).thenAccept(rank -> {
             MessageBuilderDefaults.success()
                     .primary("You have successfully updated the priority of").space()
-                    .append(rank.getColor().apply(Component.text(rank.getDisplayName()))).space()
+                    .append(rank.getDisplayNameWithColor()).space()
                     .primary("to").space()
                     .secondary(String.valueOf(priority))
                     .tertiary(".")
@@ -105,7 +104,7 @@ public class RankCommand extends BaseCommand {
         }).thenAccept(rank -> {
             MessageBuilderDefaults.success()
                     .primary("You have successfully updated the prefix of").space()
-                    .append(rank.getColor().apply(Component.text(rank.getDisplayName()))).space()
+                    .append(rank.getDisplayNameWithColor()).space()
                     .primary("to").space()
                     .secondary(translatedPrefix)
                     .tertiary(".")
@@ -127,7 +126,7 @@ public class RankCommand extends BaseCommand {
         }).thenAccept(rank -> {
             MessageBuilderDefaults.success()
                     .primary("You have successfully updated the suffix of").space()
-                    .append(rank.getColor().apply(Component.text(rank.getDisplayName()))).space()
+                    .append(rank.getDisplayNameWithColor()).space()
                     .secondary(translatedSuffix)
                     .tertiary(".")
                     .build(sender::sendMessage);
@@ -147,7 +146,7 @@ public class RankCommand extends BaseCommand {
         }).thenAccept(rank -> {
             MessageBuilderDefaults.success()
                     .primary("You have successfully updated the suffix of").space()
-                    .append(rank.getColor().apply(Component.text(rank.getDisplayName()))).space()
+                    .append(rank.getDisplayNameWithColor()).space()
                     .secondary(displayName)
                     .tertiary(".")
                     .build(sender::sendMessage);
@@ -169,7 +168,7 @@ public class RankCommand extends BaseCommand {
                     .primary("You have").space()
                     .primary(state ? "bolded" : "unbloded").space()
                     .primary("the display name of").space()
-                    .append(rank.getColor().apply(Component.text(rank.getDisplayName()))).space()
+                    .append(rank.getDisplayNameWithColor()).space()
                     .tertiary(".")
                     .build(sender::sendMessage);
             Core.getInstance().getBridge().callEvent(new RankUpdateEvent(sender.getName(), rank));
@@ -190,7 +189,7 @@ public class RankCommand extends BaseCommand {
                     .primary("You have").space()
                     .primary(state ? "italicized" : "unitalicized").space()
                     .primary("the display name of").space()
-                    .append(rank.getColor().apply(Component.text(rank.getDisplayName()))).space()
+                    .append(rank.getDisplayNameWithColor()).space()
                     .tertiary(".")
                     .build(sender::sendMessage);
             Core.getInstance().getBridge().callEvent(new RankUpdateEvent(sender.getName(), rank));
@@ -209,7 +208,7 @@ public class RankCommand extends BaseCommand {
         }).thenAccept(rank -> {
             MessageBuilderDefaults.success()
                     .primary("You have successfully updated the color of").space()
-                    .append(rank.getColor().apply(Component.text(rank.getDisplayName()))).space()
+                    .append(rank.getDisplayNameWithColor()).space()
                     .tertiary(".")
                     .build(sender::sendMessage);
             Core.getInstance().getBridge().callEvent(new RankUpdateEvent(sender.getName(), rank));
@@ -236,7 +235,7 @@ public class RankCommand extends BaseCommand {
         }).thenAccept(rank -> {
             MessageBuilderDefaults.success()
                     .primary("You have successfully updated the color of").space()
-                    .append(rank.getColor().apply(Component.text(rank.getDisplayName()))).space()
+                    .append(rank.getDisplayNameWithColor()).space()
                     .tertiary(".")
                     .build(sender::sendMessage);
             Core.getInstance().getBridge().callEvent(new RankUpdateEvent(sender.getName(), rank));
@@ -264,7 +263,7 @@ public class RankCommand extends BaseCommand {
                     .secondary(added ? "added" : "removed").space()
                     .secondary(permission).space()
                     .primary("to").space()
-                    .append(rank.getColor().apply(Component.text(rank.getDisplayName())))
+                    .append(rank.getDisplayNameWithColor())
                     .tertiary(".")
                     .build());
             Core.getInstance().getBridge().callEvent(new RankUpdateEvent(sender.getName(), rank));
@@ -297,9 +296,9 @@ public class RankCommand extends BaseCommand {
             sender.sendMessage(MessageBuilderDefaults.success()
                     .primary("You have successfully").space()
                     .secondary(added ? "added" : "removed").space()
-                    .append(inherit.getColor().apply(Component.text(inherit.getDisplayName())))
+                    .append(inherit.getDisplayNameWithColor())
                     .primary("as an inherit to").space()
-                    .append(rank.getColor().apply(Component.text(rank.getDisplayName())))
+                    .append(rank.getDisplayNameWithColor())
                     .tertiary(".")
                     .build());
             Core.getInstance().getBridge().callEvent(new RankUpdateEvent(sender.getName(), rank));
@@ -319,7 +318,7 @@ public class RankCommand extends BaseCommand {
 
             MessageBuilderDefaults.normal()
                     .primary("This is the information for").space()
-                    .append(rank.getColor().apply(Component.text(rank.getDisplayName())))
+                    .append(rank.getDisplayNameWithColor())
                     .build(sender::sendMessage);
 
 

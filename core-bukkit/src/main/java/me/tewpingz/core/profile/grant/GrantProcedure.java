@@ -73,14 +73,14 @@ public class GrantProcedure {
             if (input) {
                 MessageBuilderDefaults.success()
                         .primary("You have successfully applied that").space()
-                        .append(this.procedure.getSelectedRank().getColor().apply(Component.text(this.procedure.getSelectedRank().getDisplayName()))).space()
+                        .append(this.procedure.selectedRank.getDisplayNameWithColor()).space()
                         .primary("grant").tertiary(".")
                         .build(message -> ((Player) context.getForWhom()).sendMessage(message));
                 this.procedure.apply((Player) context.getForWhom());
             } else {
                 MessageBuilderDefaults.success()
                         .primary("You have successfully cancelled that").space()
-                        .append(this.procedure.getSelectedRank().getColor().apply(Component.text(this.procedure.getSelectedRank().getDisplayName()))).space()
+                        .append(this.procedure.selectedRank.getDisplayNameWithColor()).space()
                         .primary("grant").tertiary(".")
                         .build(message -> ((Player) context.getForWhom()).sendMessage(message));
             }
@@ -97,7 +97,7 @@ public class GrantProcedure {
         public @NotNull String getPromptText(@NotNull ConversationContext context) {
             return MessageBuilderDefaults.normal()
                     .primary("Please select a reason for this").space()
-                    .append(this.procedure.getSelectedRank().getColor().apply(Component.text(this.procedure.getSelectedRank().getDisplayName()))).space()
+                    .append(this.procedure.selectedRank.getDisplayNameWithColor()).space()
                     .primary("grant")
                     .tertiary(".")
                     .toString();
@@ -119,7 +119,7 @@ public class GrantProcedure {
         public @NotNull String getPromptText(@NotNull ConversationContext context) {
             return MessageBuilderDefaults.normal()
                     .primary("Please select the duration for this").space()
-                    .append(this.procedure.getSelectedRank().getColor().apply(Component.text(this.procedure.getSelectedRank().getDisplayName()))).space()
+                    .append(this.procedure.selectedRank.getDisplayNameWithColor()).space()
                     .primary("grant")
                     .tertiary(".")
                     .toString();
@@ -149,7 +149,7 @@ public class GrantProcedure {
         public RankPrompt(GrantProcedure procedure) {
             super(ChatColor.GOLD + "Select a rank");
             Core.getInstance().getRankManager().getCachedSortedRanks().forEach(rankSnapshot -> {
-                Component displayName = rankSnapshot.getColor().apply(Component.text(rankSnapshot.getDisplayName()));
+                Component displayName = rankSnapshot.getDisplayNameWithColor();
                 ItemStack itemStack = new ItemBuilder(Material.LEATHER_CHESTPLATE)
                         .color(rankSnapshot.getColor().toTextColor())
                         .name(displayName)

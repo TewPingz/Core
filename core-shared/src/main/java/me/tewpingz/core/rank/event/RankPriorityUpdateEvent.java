@@ -9,9 +9,8 @@ import me.tewpingz.core.rank.Rank;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RankUpdateEvent implements BridgeEvent {
+public class RankPriorityUpdateEvent implements BridgeEvent {
 
-    private String executedBy;
     private Rank.RankSnapshot rank;
 
 }

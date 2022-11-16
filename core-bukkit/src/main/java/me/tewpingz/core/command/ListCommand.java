@@ -27,7 +27,7 @@ public class ListCommand extends BaseCommand {
                 if (!builder.isEmpty()) {
                     builder.tertiary(",").space();
                 }
-                builder.append(rank.getColor().apply(Component.text(rank.getDisplayName())));
+                builder.append(rank.getDisplayNameWithColor());
             });
             return builder.build();
         }).thenAccept(rankList -> {
@@ -40,7 +40,7 @@ public class ListCommand extends BaseCommand {
                 if (!builder.isEmpty()) {
                     builder.tertiary(",").space();
                 }
-                builder.append(profile.getDisplayRank().getColor().apply(Component.text(profile.getLastSeenName())));
+                builder.append(profile.getDisplayRank().getDisplayNameWithColor());
             });
 
             Component component = Component.text("(" + profiles.size() + "/" + Bukkit.getMaxPlayers() + "): ")

@@ -6,7 +6,6 @@ import me.tewpingz.core.Core;
 import me.tewpingz.core.profile.Profile;
 import me.tewpingz.core.util.uuid.AsyncUuid;
 import me.tewpingz.message.MessageBuilderDefaults;
-import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
 
 import java.util.Date;
@@ -61,7 +60,7 @@ public class WhoIsCommand extends BaseCommand {
             MessageBuilderDefaults.normal()
                     .space().tertiary("-").space()
                     .primary("Display Rank").tertiary(":").space()
-                    .append(profile.getDisplayRank().getColor().apply(Component.text(profile.getDisplayRank().getDisplayName())))
+                    .append(profile.getDisplayRank().getDisplayNameWithColor())
                     .build(sender::sendMessage);
 
             MessageBuilderDefaults.normal()

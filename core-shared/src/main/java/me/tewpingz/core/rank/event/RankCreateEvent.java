@@ -12,6 +12,6 @@ import me.tewpingz.core.rank.Rank;
 public class RankCreateEvent implements BridgeEvent {
 
     private String executedBy;
-    private Rank.RankSnapshot rankSnapshot;
+    private Rank.RankSnapshot rank;
 
 }

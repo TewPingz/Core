@@ -6,7 +6,6 @@ import co.aikar.commands.annotation.CommandPermission;
 import co.aikar.commands.annotation.Default;
 import me.tewpingz.core.CorePlugin;
 import me.tewpingz.message.MessageBuilderDefaults;
-import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
 
 @CommandAlias("ranks")
@@ -31,7 +30,7 @@ public class RanksCommand extends BaseCommand {
             ranks.forEach(rank -> {
                 MessageBuilderDefaults.normal().space()
                         .secondary("-").space()
-                        .append(rank.getColor().apply(Component.text(rank.getDisplayName()))).space()
+                        .append(rank.getDisplayNameWithColor()).space()
                         .tertiary("(Priority %s)".formatted(rank.getPriority()))
                         .build(commandSender::sendMessage);
             });

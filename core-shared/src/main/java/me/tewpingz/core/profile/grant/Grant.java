@@ -35,7 +35,7 @@ public class Grant {
     public Component getRankNameComponent() {
         Rank.RankSnapshot rankSnapshot = this.getRankSnapshot();
         if (rankSnapshot != null) {
-            return rankSnapshot.getColor().apply(Component.text(rankSnapshot.getDisplayName()));
+            return rankSnapshot.getDisplayNameWithColor();
         } else {
             return Component.text(this.rankId);
         }

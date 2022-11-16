@@ -5,6 +5,7 @@ import lombok.Getter;
 import me.tewpingz.core.Core;
 import me.tewpingz.redigo.data.RediGoObject;
 import me.tewpingz.redigo.data.RediGoValue;
+import net.kyori.adventure.text.Component;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -71,6 +72,10 @@ public class Rank implements RediGoObject<String, Rank.RankSnapshot>, Comparable
             this.suffix = rank.getSuffix();
             this.permissions = rank.getPermissions();
             this.inherits = rank.getInherits();
+        }
+
+        public Component getDisplayNameWithColor() {
+            return this.color.apply(Component.text(this.displayName));
         }
 
         public Set<String> getEffectivePermissions() {
