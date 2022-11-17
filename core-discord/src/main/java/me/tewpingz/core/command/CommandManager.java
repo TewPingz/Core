@@ -10,6 +10,9 @@ import net.dv8tion.jda.internal.interactions.CommandDataImpl;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author TewPingz
+ */
 public class CommandManager extends ListenerAdapter {
 
     private final JDA jda;

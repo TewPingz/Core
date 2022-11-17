@@ -42,7 +42,7 @@ public class GrantCommand extends BaseCommand {
 
         asyncUuid.fetchUuid(sender, uuid -> {
             Core.getInstance().getProfileManager().updateRealProfileAsync(uuid, profile -> {
-                profile.addGrant(rankSnapshot.getRankId(), sender.getName(), reason, duration.toMillis());
+                profile.addGrant(rankSnapshot, sender.getName(), reason, duration.toMillis());
             });
         });
     }

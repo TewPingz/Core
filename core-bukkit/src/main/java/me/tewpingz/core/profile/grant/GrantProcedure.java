@@ -50,7 +50,7 @@ public class GrantProcedure {
 
     private void apply(Player player) {
         Core.getInstance().getProfileManager()
-                .updateRealProfileAsync(this.target, profile -> profile.addGrant(this.selectedRank.getRankId(), player.getName(), this.reason, this.duration));
+                .updateRealProfileAsync(this.target, profile -> profile.addGrant(this.selectedRank, player.getName(), this.reason, this.duration));
     }
 
     @AllArgsConstructor

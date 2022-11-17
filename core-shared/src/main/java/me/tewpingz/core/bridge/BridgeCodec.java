@@ -13,6 +13,9 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * @author TewPingz
+ */
 public class BridgeCodec extends BaseCodec {
 
     private final Encoder encoder;

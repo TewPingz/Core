@@ -23,61 +23,41 @@ public class ChatBridgeListener extends ListenerAdapter {
 
     public ChatBridgeListener(DiscordBot instance) {
         this.instance = instance;
-
         this.serverIdToEntry = new HashMap<>();
         this.channelIdToEntry = new HashMap<>();
-
         this.instance.getConfig().getSynchronizedChannels().forEach(entry -> this.serverIdToEntry.put(entry.getServerId().toLowerCase(), entry));
         this.instance.getConfig().getSynchronizedChannels().forEach(entry -> this.channelIdToEntry.put(entry.getChannelId().toLowerCase(), entry));
         this.instance.getJda().addEventListener(this);
-
         Core.getInstance().getBridge().registerListener(ServerChatEvent.class, this::handleServerChat);
     }
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
-        if (event.isWebhookMessage()) {
+        // Check if the message is from a user
+        if (event.isWebhookMessage() || !event.isFromGuild() || event.getAuthor().isBot() || event.getAuthor().isSystem()) {
             return;
         }
 
-        if (!event.isFromGuild()) {
-            return;
-        }
-
-        if (event.getAuthor().isBot() || event.getAuthor().isSystem()) {
-            return;
-        }
-
+        // Check if an entry exists
         DiscordBotConfig.SynchronizedChannelEntry entry = this.channelIdToEntry.get(event.getGuildChannel().getId());
 
+        // If the entry doesn't exist then ignore it as it doesn't need to be synced
         if (entry == null) {
             return;
         }
 
+        // Call an event so Minecraft can listen to it and then broadcast it
         Core.getInstance().getBridge().callEvent(new DiscordChatEvent(entry.getServerId(), event.getAuthor().getAsTag(), event.getMessage().getContentRaw()));
     }
 
     private void handleServerChat(CharSequence channel, ServerChatEvent event) {
         DiscordBotConfig.SynchronizedChannelEntry entry = this.serverIdToEntry.get(event.getServerId().toLowerCase());
-
-        if (entry == null) {
-            this.logMessage(event);
-            return;
-        }
-
-        WebhookClient client = WebhookClient.withUrl(entry.getWebhookUrl());
-        WebhookMessage webhookMessage = new WebhookMessageBuilder()
-                .setAvatarUrl("https://crafatar.com/avatars/%s".formatted(event.getPlayerId().toString()))
-                .setUsername(event.getUsername())
-                .setContent(event.getMessage())
-                .setAllowedMentions(AllowedMentions.none())
-                .build();
-        client.send(webhookMessage);
-        client.close();
+        String webhookUrl = entry == null ? this.instance.getConfig().getChatLogWebhookUrl() : entry.getWebhookUrl();
+        this.logMessage(webhookUrl, event);
     }
 
-    private void logMessage(ServerChatEvent event) {
-        WebhookClient client = WebhookClient.withUrl(this.instance.getConfig().getChatLogWebhookUrl());
+    private void logMessage(String webhookUrl, ServerChatEvent event) {
+        WebhookClient client = WebhookClient.withUrl(webhookUrl);
         WebhookMessage webhookMessage = new WebhookMessageBuilder()
                 .setAvatarUrl("https://crafatar.com/avatars/%s".formatted(event.getPlayerId().toString()))
                 .setUsername("%s - %s".formatted(event.getUsername(), event.getServerId()))
