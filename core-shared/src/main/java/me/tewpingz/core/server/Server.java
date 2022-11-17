@@ -32,10 +32,19 @@ public class Server implements RediGoObject<String, Server.ServerSnapshot> {
     @RediGoValue(key = "maxPlayers")
     private int maxPlayers = 0;
 
+    /**
+     * A function to add a player to the server
+     * @param playerId the player id
+     * @param playerName the name of the player
+     */
     public void addPlayer(UUID playerId, String playerName) {
         this.players.put(playerId, new ServerPlayer(playerId, playerName));
     }
 
+    /**
+     * A function to remove a player from the server
+     * @param playerId the player id
+     */
     public void removePlayer(UUID playerId) {
         this.players.remove(playerId);
     }
@@ -53,16 +62,24 @@ public class Server implements RediGoObject<String, Server.ServerSnapshot> {
     @Getter
     @RequiredArgsConstructor
     public static class ServerSnapshot implements Snapshot {
-
         private final String serverId, displayName;
         private final Map<UUID, ServerPlayer> players;
         private final boolean whitelisted, online;
         private final int maxPlayers;
 
+        /**
+         * A function to get a player from the server
+         * @param uuid the uuid of the player
+         * @return a {@link ServerPlayer} instance
+         */
         public ServerPlayer getPlayer(UUID uuid) {
             return this.players.get(uuid);
         }
 
+        /**
+         * A function to get all the players from the server
+         * @return a collection of {@link ServerPlayer} online on that server
+         */
         public Collection<ServerPlayer> getPlayers() {
             return this.players.values();
         }

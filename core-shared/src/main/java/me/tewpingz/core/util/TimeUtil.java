@@ -5,7 +5,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TimeUtil {
-
     public static Long parseTime(String time) {
         if (time == null) {
             return null;
