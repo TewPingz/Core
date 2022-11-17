@@ -7,9 +7,7 @@ import co.aikar.commands.annotation.Default;
 import me.tewpingz.core.Core;
 import me.tewpingz.core.profile.Profile;
 import me.tewpingz.message.MessageBuilder;
-import me.tewpingz.message.MessageBuilderDefaults;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
@@ -22,7 +20,7 @@ public class ListCommand extends BaseCommand {
     @Default
     public void onCommand(CommandSender sender) {
         Core.getInstance().getRankManager().getCachedSortedRanksAsync().thenApply(ranks -> {
-            MessageBuilder builder = Core.getInstance().getConfig().getDefaultPallet().toBuilder(false);
+            MessageBuilder builder = Core.getInstance().getConfig().getDefaultPalette().toBuilder(false);
             ranks.forEach(rank -> {
                 if (!builder.isEmpty()) {
                     builder.tertiary(",").space();
@@ -31,7 +29,7 @@ public class ListCommand extends BaseCommand {
             });
             return builder.build();
         }).thenAccept(rankList -> {
-            MessageBuilder builder = Core.getInstance().getConfig().getDefaultPallet().toBuilder(false);
+            MessageBuilder builder = Core.getInstance().getConfig().getDefaultPalette().toBuilder(false);
 
             List<Profile.ProfileSnapshot> profiles = Core.getInstance().getProfileManager().getCachedProfiles().stream()
                     .sorted(Comparator.comparingInt(o -> -o.getDisplayRank().getPriority())).toList();
@@ -45,7 +43,7 @@ public class ListCommand extends BaseCommand {
 
             sender.sendMessage("");
             sender.sendMessage(rankList);
-            Core.getInstance().getConfig().getDefaultPallet().toBuilder(false)
+            Core.getInstance().getConfig().getDefaultPalette().toBuilder(false)
                     .tertiary("(%s/%s):".formatted(profiles.size(), Bukkit.getMaxPlayers())).space()
                     .append(builder.build())
                     .build(sender::sendMessage);

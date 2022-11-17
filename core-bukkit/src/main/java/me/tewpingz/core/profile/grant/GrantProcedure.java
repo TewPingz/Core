@@ -9,7 +9,6 @@ import me.tewpingz.core.rank.Rank;
 import me.tewpingz.core.util.ItemBuilder;
 import me.tewpingz.core.util.TimeUtil;
 import me.tewpingz.core.util.inventory.PaginatedInv;
-import me.tewpingz.message.MessageBuilderDefaults;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.ChatColor;
@@ -60,7 +59,7 @@ public class GrantProcedure {
 
         @Override
         public @NotNull String getPromptText(@NotNull ConversationContext context) {
-            return Core.getInstance().getConfig().getDefaultPallet().toBuilder()
+            return Core.getInstance().getConfig().getDefaultPalette().toBuilder()
                     .primary("Confirm this grant by typing").space()
                     .secondary("yes").space()
                     .primary("otherwise type").space()
@@ -71,14 +70,14 @@ public class GrantProcedure {
         @Override
         protected @Nullable Prompt acceptValidatedInput(@NotNull ConversationContext context, boolean input) {
             if (input) {
-                Core.getInstance().getConfig().getSuccessPallet().toBuilder()
+                Core.getInstance().getConfig().getSuccessPalette().toBuilder()
                         .primary("You have successfully applied that").space()
                         .append(this.procedure.selectedRank.getDisplayNameWithColor()).space()
                         .primary("grant").tertiary(".")
                         .build(message -> ((Player) context.getForWhom()).sendMessage(message));
                 this.procedure.apply((Player) context.getForWhom());
             } else {
-                Core.getInstance().getConfig().getSuccessPallet().toBuilder()
+                Core.getInstance().getConfig().getSuccessPalette().toBuilder()
                         .primary("You have successfully cancelled that").space()
                         .append(this.procedure.selectedRank.getDisplayNameWithColor()).space()
                         .primary("grant").tertiary(".")
@@ -95,7 +94,7 @@ public class GrantProcedure {
 
         @Override
         public @NotNull String getPromptText(@NotNull ConversationContext context) {
-            return Core.getInstance().getConfig().getDefaultPallet().toBuilder()
+            return Core.getInstance().getConfig().getDefaultPalette().toBuilder()
                     .primary("Please select a reason for this").space()
                     .append(this.procedure.selectedRank.getDisplayNameWithColor()).space()
                     .primary("grant")
@@ -117,7 +116,7 @@ public class GrantProcedure {
 
         @Override
         public @NotNull String getPromptText(@NotNull ConversationContext context) {
-            return Core.getInstance().getConfig().getDefaultPallet().toBuilder()
+            return Core.getInstance().getConfig().getDefaultPalette().toBuilder()
                     .primary("Please select the duration for this").space()
                     .append(this.procedure.selectedRank.getDisplayNameWithColor()).space()
                     .primary("grant")

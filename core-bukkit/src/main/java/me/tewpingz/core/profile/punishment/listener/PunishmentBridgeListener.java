@@ -8,7 +8,6 @@ import me.tewpingz.core.profile.punishment.PunishmentType;
 import me.tewpingz.core.profile.punishment.event.PunishmentAddEvent;
 import me.tewpingz.core.profile.punishment.event.PunishmentRemoveEvent;
 import me.tewpingz.core.util.Broadcast;
-import me.tewpingz.message.MessageBuilderDefaults;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -45,7 +44,7 @@ public class PunishmentBridgeListener {
                 }
             }
 
-            Core.getInstance().getConfig().getDefaultPallet().toBuilder(false)
+            Core.getInstance().getConfig().getDefaultPalette().toBuilder(false)
                     .tertiary("[Server Monitor]").space()
                     .secondary(event.getExecutorName()).space()
                     .primary("has").space()
@@ -61,7 +60,7 @@ public class PunishmentBridgeListener {
 
             if (player != null && punishmentType == PunishmentType.MUTE) {
                 instance.getPunishmentScheduleManager().unschedule(event.getPlayerUuid(), event.getExpiredPunishment());
-                Core.getInstance().getConfig().getSuccessPallet().toBuilder()
+                Core.getInstance().getConfig().getSuccessPalette().toBuilder()
                         .primary("Your mute").space()
                         .primary("has").space()
                         .secondary(event.getExpiredPunishment().getRemovedFor().equals("Expired") ? "expired" : "been removed")
@@ -70,7 +69,7 @@ public class PunishmentBridgeListener {
             }
 
             if (!event.getExpiredPunishment().getRemovedFor().equals("Expired")) {
-                Core.getInstance().getConfig().getDefaultPallet().toBuilder(false)
+                Core.getInstance().getConfig().getDefaultPalette().toBuilder(false)
                         .tertiary("[Server Monitor]").space()
                         .secondary(event.getExecutorName()).space()
                         .primary("has").space()

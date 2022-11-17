@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import me.tewpingz.core.Core;
 import me.tewpingz.core.CorePlugin;
 import me.tewpingz.core.util.TimeUtil;
-import me.tewpingz.message.MessageBuilderDefaults;
 import org.bukkit.conversations.*;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -43,7 +42,7 @@ public class PunishmentProcedure {
 
         @Override
         public @NotNull String getPromptText(@NotNull ConversationContext context) {
-            return Core.getInstance().getConfig().getDefaultPallet().toBuilder()
+            return Core.getInstance().getConfig().getDefaultPalette().toBuilder()
                     .primary("Please select the duration for this punishment")
                     .tertiary(".")
                     .toString();
@@ -76,7 +75,7 @@ public class PunishmentProcedure {
 
         @Override
         public @NotNull String getPromptText(@NotNull ConversationContext context) {
-            return Core.getInstance().getConfig().getDefaultPallet().toBuilder()
+            return Core.getInstance().getConfig().getDefaultPalette().toBuilder()
                     .primary("Please provide a reason for this punishment")
                     .tertiary(".")
                     .toString();

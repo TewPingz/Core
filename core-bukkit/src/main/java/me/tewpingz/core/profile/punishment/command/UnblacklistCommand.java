@@ -6,7 +6,6 @@ import me.tewpingz.core.Core;
 import me.tewpingz.core.profile.punishment.Punishment;
 import me.tewpingz.core.profile.punishment.PunishmentType;
 import me.tewpingz.core.util.uuid.AsyncUuid;
-import me.tewpingz.message.MessageBuilderDefaults;
 import org.bukkit.command.CommandSender;
 
 import java.util.Set;
@@ -30,12 +29,12 @@ public class UnblacklistCommand extends BaseCommand {
                         profile.removePunishment(punishment, commandSender.getName(), reason);
                     }
 
-                    Core.getInstance().getConfig().getSuccessPallet().toBuilder()
+                    Core.getInstance().getConfig().getSuccessPalette().toBuilder()
                             .secondary(profile.getLastSeenName()).space()
                             .primary("has been successfully unblacklisted").tertiary("!")
                             .build(commandSender::sendMessage);
                 } else {
-                    Core.getInstance().getConfig().getErrorPallet().toBuilder()
+                    Core.getInstance().getConfig().getErrorPalette().toBuilder()
                             .secondary(profile.getLastSeenName()).space()
                             .primary("was not even blacklisted").tertiary("!")
                             .build(commandSender::sendMessage);

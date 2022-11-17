@@ -4,7 +4,6 @@ import me.tewpingz.core.Core;
 import me.tewpingz.core.CorePlugin;
 import me.tewpingz.core.chat.*;
 import me.tewpingz.core.util.Broadcast;
-import me.tewpingz.message.MessageBuilderDefaults;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
@@ -13,7 +12,7 @@ public class ChatBridgeListener {
 
     public ChatBridgeListener(CorePlugin instance) {
         instance.getCore().getBridge().registerListener(StaffChatEvent.class, (charSequence, event) -> {
-            Core.getInstance().getConfig().getDefaultPallet().toBuilder(false)
+            Core.getInstance().getConfig().getDefaultPalette().toBuilder(false)
                     .tertiary("[SC]").space()
                     .tertiary("(%s)".formatted(event.getServer())).space()
                     .secondary(event.getSender()).tertiary(":").space()
@@ -22,7 +21,7 @@ public class ChatBridgeListener {
         });
 
         instance.getCore().getBridge().registerListener(AdminChatEvent.class, (charSequence, event) -> {
-            Core.getInstance().getConfig().getDefaultPallet().toBuilder(false)
+            Core.getInstance().getConfig().getDefaultPalette().toBuilder(false)
                     .tertiary("[AC]").space()
                     .tertiary("(%s)".formatted(event.getServer())).space()
                     .secondary(event.getSender()).tertiary(":").space()
@@ -31,7 +30,7 @@ public class ChatBridgeListener {
         });
 
         instance.getCore().getBridge().registerListener(PlayerReportEvent.class, (charSequence, event) -> {
-            Core.getInstance().getConfig().getDefaultPallet().toBuilder(false)
+            Core.getInstance().getConfig().getDefaultPalette().toBuilder(false)
                     .tertiary("[Report]").space()
                     .tertiary("(%s)".formatted(event.getServer())).space()
                     .secondary(event.getSender()).space()
@@ -43,7 +42,7 @@ public class ChatBridgeListener {
         });
 
         instance.getCore().getBridge().registerListener(PlayerRequestEvent.class, (charSequence, event) -> {
-            Core.getInstance().getConfig().getDefaultPallet().toBuilder(false)
+            Core.getInstance().getConfig().getDefaultPalette().toBuilder(false)
                     .tertiary("[Request]").space()
                     .tertiary("(%s)".formatted(event.getServer())).space()
                     .secondary(event.getSender()).space()
@@ -57,7 +56,7 @@ public class ChatBridgeListener {
                 return;
             }
 
-            Core.getInstance().getConfig().getDefaultPallet().toBuilder(false)
+            Core.getInstance().getConfig().getDefaultPalette().toBuilder(false)
                     .tertiary("[").append(Component.text("Discord").color(TextColor.fromHexString("#7289da"))).tertiary("]").space()
                     .secondary(event.getUsername()).tertiary(":").space()
                     .secondary(event.getMessage())

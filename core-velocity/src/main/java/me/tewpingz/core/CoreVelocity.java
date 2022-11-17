@@ -13,7 +13,6 @@ import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import me.tewpingz.core.queue.Queue;
 import me.tewpingz.core.queue.event.QueuePollEvent;
-import me.tewpingz.message.MessageBuilderDefaults;
 import org.slf4j.Logger;
 
 import java.nio.file.Path;
@@ -80,7 +79,7 @@ public class CoreVelocity {
 
                     Player player = optional.get();
                     int position = queue.getPosition(player.getUniqueId());
-                    Core.getInstance().getConfig().getDefaultPallet().toBuilder()
+                    Core.getInstance().getConfig().getDefaultPalette().toBuilder()
                             .primary("You are currently in queue for").space()
                             .secondary(queue.getServerId()).space()
                             .primary("in the position").space()
@@ -115,12 +114,12 @@ public class CoreVelocity {
                 this.proxyServer.getServer(event.getServerId().toLowerCase()).ifPresent(registeredServer -> {
                     player.createConnectionRequest(registeredServer).connect().thenAccept(result -> {
                         if (result.isSuccessful()) {
-                            Core.getInstance().getConfig().getSuccessPallet().toBuilder()
+                            Core.getInstance().getConfig().getSuccessPalette().toBuilder()
                                     .primary("You have been successfully sent to").space()
                                     .secondary(registeredServer.getServerInfo().getName()).tertiary(".")
                                     .build(player::sendMessage);
                         } else {
-                            Core.getInstance().getConfig().getErrorPallet().toBuilder()
+                            Core.getInstance().getConfig().getErrorPalette().toBuilder()
                                     .primary("The transfer to").space()
                                     .secondary(registeredServer.getServerInfo().getName()).space()
                                     .primary("was unsuccessful").tertiary(".")

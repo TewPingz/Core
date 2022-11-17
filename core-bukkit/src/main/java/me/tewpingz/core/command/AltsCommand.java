@@ -7,8 +7,6 @@ import me.tewpingz.core.profile.Profile;
 import me.tewpingz.core.profile.alt.AltEntry;
 import me.tewpingz.core.util.uuid.AsyncUuid;
 import me.tewpingz.message.MessageBuilder;
-import me.tewpingz.message.MessageBuilderDefaults;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import java.util.Collection;
@@ -26,7 +24,7 @@ public class AltsCommand extends BaseCommand {
             String lastIp = profile.getLastIp();
 
             if (lastIp == null) {
-                Core.getInstance().getConfig().getErrorPallet().toBuilder()
+                Core.getInstance().getConfig().getErrorPalette().toBuilder()
                         .secondary(asyncUuid.getName()).space()
                         .primary("does not have a previous ip on the server").space()
                         .tertiary("(Have they joined the server before?)")
@@ -35,7 +33,7 @@ public class AltsCommand extends BaseCommand {
             }
 
             AltEntry.AltProfileSnapshot altEntry = Core.getInstance().getAltManager().getAlts(lastIp);
-            MessageBuilder builder = Core.getInstance().getConfig().getDefaultPallet().toBuilder();
+            MessageBuilder builder = Core.getInstance().getConfig().getDefaultPalette().toBuilder();
             Collection<UUID> alts = altEntry.getRelatedIds().stream().filter(altId -> !altId.equals(uuid)).toList();
 
             if (alts.size() > 0) {
@@ -46,7 +44,7 @@ public class AltsCommand extends BaseCommand {
                     builder.primary(Core.getInstance().getUuidManager().getName(relatedId).getName());
                 }
 
-                Core.getInstance().getConfig().getDefaultPallet().toBuilder()
+                Core.getInstance().getConfig().getDefaultPalette().toBuilder()
                         .primary("There are").space()
                         .secondary(alts.size()).space()
                         .primary("Alts for").space()
@@ -54,7 +52,7 @@ public class AltsCommand extends BaseCommand {
                         .append(builder.build())
                         .build(sender::sendMessage);
             } else {
-                Core.getInstance().getConfig().getErrorPallet().toBuilder()
+                Core.getInstance().getConfig().getErrorPalette().toBuilder()
                         .secondary(profile.getLastSeenName()).space()
                         .primary("has not alts")
                         .build(sender::sendMessage);

@@ -11,7 +11,6 @@ import me.tewpingz.core.util.ItemBuilder;
 import me.tewpingz.core.util.TimeUtil;
 import me.tewpingz.core.util.inventory.PaginatedInv;
 import me.tewpingz.core.util.uuid.AsyncUuid;
-import me.tewpingz.message.MessageBuilderDefaults;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -122,7 +121,7 @@ public class PunishmentsCommand extends BaseCommand {
 
         @Override
         public @NotNull String getPromptText(@NotNull ConversationContext context) {
-            return Core.getInstance().getConfig().getDefaultPallet().toBuilder()
+            return Core.getInstance().getConfig().getDefaultPalette().toBuilder()
                     .primary("Please type a reason for removing this grant")
                     .tertiary(".")
                     .toString();

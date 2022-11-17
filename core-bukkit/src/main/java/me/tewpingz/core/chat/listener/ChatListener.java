@@ -6,7 +6,6 @@ import me.tewpingz.core.Core;
 import me.tewpingz.core.CorePlugin;
 import me.tewpingz.core.chat.ChatManager;
 import me.tewpingz.core.chat.ServerChatEvent;
-import me.tewpingz.message.MessageBuilderDefaults;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -37,7 +36,7 @@ public class ChatListener implements Listener {
 
         if (!player.hasPermission("core.mutechat.bypass") && !this.chatManager.isChatEnabled()) {
             event.setCancelled(true);
-            Core.getInstance().getConfig().getErrorPallet().toBuilder()
+            Core.getInstance().getConfig().getErrorPalette().toBuilder()
                     .primary("Chat is currently disabled").tertiary("!")
                     .build(player::sendMessage);
             return;
@@ -56,7 +55,7 @@ public class ChatListener implements Listener {
 
         if (System.currentTimeMillis() - lastMessageTime < this.chatManager.getChatSlow()) {
             event.setCancelled(true);
-            Core.getInstance().getConfig().getErrorPallet().toBuilder()
+            Core.getInstance().getConfig().getErrorPalette().toBuilder()
                     .primary("You are talking too quickly.").space()
                     .tertiary("(Chat is currently slowed!)")
                     .build(player::sendMessage);

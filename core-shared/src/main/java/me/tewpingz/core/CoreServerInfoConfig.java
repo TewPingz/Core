@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import me.tewpingz.message.MessageBuilder;
 import me.tewpingz.message.MessageBuilderColor;
-import me.tewpingz.message.MessageBuilderColorPallet;
+import me.tewpingz.message.MessageBuilderColorPalette;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -19,14 +19,14 @@ public class CoreServerInfoConfig {
     private String appealUrl = "https://www.tewpingz.me";
     private String chatPrefix = "";
 
-    private ColorPallet defaultPallet = new ColorPallet("#FFAA00", "#FFFFFF", "#AAAAAA");
-    private ColorPallet successPallet = new ColorPallet("#55FF55", "#FFFFFF", "#AAAAAA");
-    private ColorPallet errorPallet = new ColorPallet("#FF5555", "#AA0000", "#AAAAAA");
+    private ColorPalette defaultPalette = new ColorPalette("#FFAA00", "#FFFFFF", "#AAAAAA");
+    private ColorPalette successPalette = new ColorPalette("#55FF55", "#FFFFFF", "#AAAAAA");
+    private ColorPalette errorPalette = new ColorPalette("#FF5555", "#AA0000", "#AAAAAA");
 
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class ColorPallet {
+    public static class ColorPalette {
         private String primaryHex;
         private String secondaryHex;
         private String tertiaryHex;
@@ -39,8 +39,8 @@ public class CoreServerInfoConfig {
             MessageBuilderColor primary = new MessageBuilderColor(this.primaryHex);
             MessageBuilderColor secondary = new MessageBuilderColor(this.secondaryHex);
             MessageBuilderColor tertiary = new MessageBuilderColor(this.tertiaryHex);
-            MessageBuilderColorPallet pallet = new MessageBuilderColorPallet(primary, secondary, tertiary);
-            MessageBuilder messageBuilder = new MessageBuilder(pallet);
+            MessageBuilderColorPalette palette = new MessageBuilderColorPalette(primary, secondary, tertiary);
+            MessageBuilder messageBuilder = new MessageBuilder(palette);
             if (prefix) {
                 messageBuilder.primary(Core.getInstance().getConfig().getChatPrefix().replace('&', '§'));
             }

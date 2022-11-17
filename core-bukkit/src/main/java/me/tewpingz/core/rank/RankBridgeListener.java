@@ -5,7 +5,6 @@ import me.tewpingz.core.CorePlugin;
 import me.tewpingz.core.profile.Profile;
 import me.tewpingz.core.rank.event.*;
 import me.tewpingz.core.util.Broadcast;
-import me.tewpingz.message.MessageBuilderDefaults;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -13,7 +12,7 @@ public class RankBridgeListener {
 
     public RankBridgeListener(CorePlugin instance) {
         instance.getCore().getBridge().registerListener(RankCreateEvent.class, (charSequence, event) -> {
-            Core.getInstance().getConfig().getDefaultPallet().toBuilder(false)
+            Core.getInstance().getConfig().getDefaultPalette().toBuilder(false)
                     .tertiary("[Server Monitor]").space()
                     .secondary(event.getExecutedBy()).space()
                     .primary("has created a rank named").space()
@@ -23,7 +22,7 @@ public class RankBridgeListener {
         });
 
         instance.getCore().getBridge().registerListener(RankUpdateEvent.class, (charSequence, event) -> {
-            Core.getInstance().getConfig().getDefaultPallet().toBuilder(false)
+            Core.getInstance().getConfig().getDefaultPalette().toBuilder(false)
                     .tertiary("[Server Monitor]").space()
                     .secondary(event.getExecutedBy()).space()
                     .primary("has updated the rank named").space()

@@ -7,7 +7,6 @@ import me.tewpingz.core.CorePlugin;
 import me.tewpingz.core.profile.Profile;
 import me.tewpingz.core.queue.Queue;
 import me.tewpingz.core.server.Server;
-import me.tewpingz.message.MessageBuilderDefaults;
 import org.bukkit.entity.Player;
 
 import java.util.Optional;
@@ -22,7 +21,7 @@ public class JoinQueueCommand extends BaseCommand {
         Optional<Queue.QueueSnapshot> optional = CorePlugin.getInstance().getCore().getQueueManager().getQueueByPlayer(player.getUniqueId());
 
         if (optional.isPresent()) {
-            Core.getInstance().getConfig().getErrorPallet().toBuilder()
+            Core.getInstance().getConfig().getErrorPalette().toBuilder()
                     .primary("You cannot join a queue as you are currently in a queue for").space()
                     .secondary(optional.get().getServerId()).tertiary(".")
                     .build(player::sendMessage);
@@ -32,7 +31,7 @@ public class JoinQueueCommand extends BaseCommand {
         Profile.ProfileSnapshot profile = CorePlugin.getInstance().getCore().getProfileManager().getCachedProfile(player.getUniqueId());
         CorePlugin.getInstance().getCore().getQueueManager().updateQueueAsync(server.getServerId(), queue -> queue.addPlayer(profile)).thenAccept(queue -> {
             int position = queue.getPosition(player.getUniqueId());
-            Core.getInstance().getConfig().getDefaultPallet().toBuilder()
+            Core.getInstance().getConfig().getDefaultPalette().toBuilder()
                     .primary("You have joined the queue for").space()
                     .secondary(server.getServerId()).space()
                     .primary("in position").space()

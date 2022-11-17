@@ -5,10 +5,8 @@ import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.CommandPermission;
 import co.aikar.commands.annotation.Default;
 import me.tewpingz.core.Core;
-import me.tewpingz.message.MessageBuilderDefaults;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -27,7 +25,7 @@ public class ClearChatCommand extends BaseCommand {
             players.forEach(player -> player.sendMessage(Component.empty()));
         }
 
-        Core.getInstance().getConfig().getDefaultPallet().toBuilder()
+        Core.getInstance().getConfig().getDefaultPalette().toBuilder()
                 .secondary(sender.getName()).space()
                 .primary("has cleared the chat").tertiary(".")
                 .build(Bukkit::broadcast);

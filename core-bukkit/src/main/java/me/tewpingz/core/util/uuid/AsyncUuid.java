@@ -3,7 +3,6 @@ package me.tewpingz.core.util.uuid;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import me.tewpingz.core.Core;
-import me.tewpingz.message.MessageBuilderDefaults;
 import org.bukkit.command.CommandSender;
 
 import java.util.UUID;
@@ -32,7 +31,7 @@ public class AsyncUuid {
     }
 
     private void promptPlayerDoesNotExist(CommandSender executor) {
-        Core.getInstance().getConfig().getErrorPallet().toBuilder()
+        Core.getInstance().getConfig().getErrorPalette().toBuilder()
                 .secondary(this.name).space()
                 .primary("does not exist as a player")
                 .tertiary("!")

@@ -6,7 +6,6 @@ import co.aikar.commands.annotation.CommandPermission;
 import co.aikar.commands.annotation.Default;
 import me.tewpingz.core.Core;
 import me.tewpingz.core.queue.Queue;
-import me.tewpingz.message.MessageBuilderDefaults;
 import org.bukkit.entity.Player;
 
 import java.util.Optional;
@@ -19,7 +18,7 @@ public class LeaveQueueCommand extends BaseCommand {
         Optional<Queue.QueueSnapshot> optional = Core.getInstance().getQueueManager().getQueueByPlayer(player.getUniqueId());
 
         if (optional.isEmpty()) {
-            Core.getInstance().getConfig().getErrorPallet().toBuilder()
+            Core.getInstance().getConfig().getErrorPalette().toBuilder()
                     .primary("You are currently not queued for anything")
                     .tertiary(".")
                     .build(player::sendMessage);
@@ -28,7 +27,7 @@ public class LeaveQueueCommand extends BaseCommand {
 
         Queue.QueueSnapshot snapshot = optional.get();
         Core.getInstance().getQueueManager().updateQueueAsync(snapshot.getServerId(), queue -> queue.removePlayer(player.getUniqueId())).thenAccept(serverQueue -> {
-            Core.getInstance().getConfig().getSuccessPallet().toBuilder()
+            Core.getInstance().getConfig().getSuccessPalette().toBuilder()
                     .primary("You have successfully left the queue for").space()
                     .secondary(serverQueue.getServerId()).tertiary(".")
                     .build(player::sendMessage);

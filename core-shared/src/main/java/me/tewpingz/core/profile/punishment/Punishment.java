@@ -5,7 +5,7 @@ import me.tewpingz.core.Core;
 import me.tewpingz.core.util.TimeUtil;
 import me.tewpingz.message.MessageBuilder;
 import me.tewpingz.message.MessageBuilderColor;
-import me.tewpingz.message.MessageBuilderColorPallet;
+import me.tewpingz.message.MessageBuilderColorPalette;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -38,7 +38,7 @@ public class Punishment {
     }
 
     public Component formatKickMessage(boolean initial) {
-        MessageBuilderColorPallet pallet = new MessageBuilderColorPallet(MessageBuilderColor.RED, MessageBuilderColor.WHITE, MessageBuilderColor.GRAY);
+        MessageBuilderColorPalette pallet = new MessageBuilderColorPalette(MessageBuilderColor.RED, MessageBuilderColor.WHITE, MessageBuilderColor.GRAY);
         MessageBuilder builder = new MessageBuilder(pallet);
         boolean permanently = this.isInfinite();
 
@@ -80,7 +80,7 @@ public class Punishment {
     }
 
     public Component formatKickRelatedMessage(boolean initial) {
-        MessageBuilderColorPallet pallet = new MessageBuilderColorPallet(MessageBuilderColor.RED, MessageBuilderColor.WHITE, MessageBuilderColor.GRAY);
+        MessageBuilderColorPalette pallet = new MessageBuilderColorPalette(MessageBuilderColor.RED, MessageBuilderColor.WHITE, MessageBuilderColor.GRAY);
         MessageBuilder builder = new MessageBuilder(pallet)
                 .primary(initial ? "Your account is related to an account that has just been" : "Your account is related to account that is").space()
                 .primary(this.isInfinite() ? "permanently" : "temporarily").space();
