@@ -6,6 +6,7 @@ import me.tewpingz.core.Core;
 import me.tewpingz.core.CorePlugin;
 import me.tewpingz.message.MessageBuilderDefaults;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 @CommandAlias("setmax|setmaxplayers")
@@ -21,7 +22,8 @@ public class SetMaxCommand extends BaseCommand {
         Core.getInstance().getServerManager().updateRealRankAsync(serverId, server -> {
             server.setMaxPlayers(max);
         }).thenRun(() -> {
-            MessageBuilderDefaults.success().primary("You have successfully set the max player count of this server to").space()
+            Core.getInstance().getConfig().getSuccessPallet().toBuilder()
+                    .primary("You have successfully set the max player count of this server to").space()
                     .secondary(max).tertiary("!")
                     .build(sender::sendMessage);
         });

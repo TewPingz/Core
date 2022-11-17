@@ -9,6 +9,10 @@ import me.tewpingz.core.util.uuid.AsyncUuid;
 import me.tewpingz.message.MessageBuilderDefaults;
 import org.bukkit.command.CommandSender;
 
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 @CommandAlias("unban")
 @CommandPermission("core.unban")
 public class UnbanCommand extends BaseCommand {
@@ -18,19 +22,22 @@ public class UnbanCommand extends BaseCommand {
     public void onCommand(CommandSender commandSender, AsyncUuid asyncUuid, String reason) {
         asyncUuid.fetchUuid(commandSender, uuid -> {
             Core.getInstance().getProfileManager().updateRealProfile(uuid, profile -> {
-                boolean success = false;
+                Set<Punishment> punishments = profile.getActivePunishments().stream()
+                        .filter(punishment -> (punishment.getPunishmentType() == PunishmentType.BAN || punishment.getPunishmentType() == PunishmentType.IP_BAN))
+                        .collect(Collectors.toSet());
 
-                for (Punishment punishment : profile.getActivePunishments().stream().filter(punishment -> punishment.getPunishmentType() == PunishmentType.BAN).toList()) {
-                    profile.removePunishment(punishment, commandSender.getName(), reason);
-                    success = true;
-                }
+                if (!punishments.isEmpty()) {
+                    for (Punishment punishment : punishments) {
+                        profile.removePunishment(punishment, commandSender.getName(), reason);
+                    }
 
-                if (success) {
-                    MessageBuilderDefaults.success().secondary(profile.getLastSeenName()).space()
+                    Core.getInstance().getConfig().getSuccessPallet().toBuilder()
+                            .secondary(profile.getLastSeenName()).space()
                             .primary("has been successfully unbanned").tertiary("!")
                             .build(commandSender::sendMessage);
                 } else {
-                    MessageBuilderDefaults.error().secondary(profile.getLastSeenName()).space()
+                    Core.getInstance().getConfig().getErrorPallet().toBuilder()
+                            .secondary(profile.getLastSeenName()).space()
                             .primary("was not even banned").tertiary("!")
                             .build(commandSender::sendMessage);
                 }

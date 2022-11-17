@@ -22,7 +22,7 @@ public class ListCommand extends BaseCommand {
     @Default
     public void onCommand(CommandSender sender) {
         Core.getInstance().getRankManager().getCachedSortedRanksAsync().thenApply(ranks -> {
-            MessageBuilder builder = MessageBuilderDefaults.normal();
+            MessageBuilder builder = Core.getInstance().getConfig().getDefaultPallet().toBuilder(false);
             ranks.forEach(rank -> {
                 if (!builder.isEmpty()) {
                     builder.tertiary(",").space();
@@ -31,7 +31,7 @@ public class ListCommand extends BaseCommand {
             });
             return builder.build();
         }).thenAccept(rankList -> {
-            MessageBuilder builder = MessageBuilderDefaults.normal();
+            MessageBuilder builder = Core.getInstance().getConfig().getDefaultPallet().toBuilder(false);
 
             List<Profile.ProfileSnapshot> profiles = Core.getInstance().getProfileManager().getCachedProfiles().stream()
                     .sorted(Comparator.comparingInt(o -> -o.getDisplayRank().getPriority())).toList();
@@ -40,16 +40,15 @@ public class ListCommand extends BaseCommand {
                 if (!builder.isEmpty()) {
                     builder.tertiary(",").space();
                 }
-                builder.append(profile.getDisplayRank().getDisplayNameWithColor());
+                builder.append(profile.getDisplayRank().getColor().apply(Component.text(profile.getLastSeenName())));
             });
-
-            Component component = Component.text("(" + profiles.size() + "/" + Bukkit.getMaxPlayers() + "): ")
-                    .color(NamedTextColor.GRAY)
-                    .append(builder.build());
 
             sender.sendMessage("");
             sender.sendMessage(rankList);
-            sender.sendMessage(component);
+            Core.getInstance().getConfig().getDefaultPallet().toBuilder(false)
+                    .tertiary("(%s/%s):".formatted(profiles.size(), Bukkit.getMaxPlayers())).space()
+                    .append(builder.build())
+                    .build(sender::sendMessage);
             sender.sendMessage("");
         });
     }

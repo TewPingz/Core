@@ -13,7 +13,7 @@ public class ChatBridgeListener {
 
     public ChatBridgeListener(CorePlugin instance) {
         instance.getCore().getBridge().registerListener(StaffChatEvent.class, (charSequence, event) -> {
-            MessageBuilderDefaults.normal()
+            Core.getInstance().getConfig().getDefaultPallet().toBuilder(false)
                     .tertiary("[SC]").space()
                     .tertiary("(%s)".formatted(event.getServer())).space()
                     .secondary(event.getSender()).tertiary(":").space()
@@ -22,7 +22,7 @@ public class ChatBridgeListener {
         });
 
         instance.getCore().getBridge().registerListener(AdminChatEvent.class, (charSequence, event) -> {
-            MessageBuilderDefaults.normal()
+            Core.getInstance().getConfig().getDefaultPallet().toBuilder(false)
                     .tertiary("[AC]").space()
                     .tertiary("(%s)".formatted(event.getServer())).space()
                     .secondary(event.getSender()).tertiary(":").space()
@@ -31,7 +31,7 @@ public class ChatBridgeListener {
         });
 
         instance.getCore().getBridge().registerListener(PlayerReportEvent.class, (charSequence, event) -> {
-            MessageBuilderDefaults.normal()
+            Core.getInstance().getConfig().getDefaultPallet().toBuilder(false)
                     .tertiary("[Report]").space()
                     .tertiary("(%s)".formatted(event.getServer())).space()
                     .secondary(event.getSender()).space()
@@ -43,7 +43,7 @@ public class ChatBridgeListener {
         });
 
         instance.getCore().getBridge().registerListener(PlayerRequestEvent.class, (charSequence, event) -> {
-            MessageBuilderDefaults.normal()
+            Core.getInstance().getConfig().getDefaultPallet().toBuilder(false)
                     .tertiary("[Request]").space()
                     .tertiary("(%s)".formatted(event.getServer())).space()
                     .secondary(event.getSender()).space()
@@ -57,7 +57,7 @@ public class ChatBridgeListener {
                 return;
             }
 
-            MessageBuilderDefaults.normal()
+            Core.getInstance().getConfig().getDefaultPallet().toBuilder(false)
                     .tertiary("[").append(Component.text("Discord").color(TextColor.fromHexString("#7289da"))).tertiary("]").space()
                     .secondary(event.getUsername()).tertiary(":").space()
                     .secondary(event.getMessage())

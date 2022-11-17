@@ -37,7 +37,7 @@ public class ChatListener implements Listener {
 
         if (!player.hasPermission("core.mutechat.bypass") && !this.chatManager.isChatEnabled()) {
             event.setCancelled(true);
-            MessageBuilderDefaults.error()
+            Core.getInstance().getConfig().getErrorPallet().toBuilder()
                     .primary("Chat is currently disabled").tertiary("!")
                     .build(player::sendMessage);
             return;
@@ -56,7 +56,7 @@ public class ChatListener implements Listener {
 
         if (System.currentTimeMillis() - lastMessageTime < this.chatManager.getChatSlow()) {
             event.setCancelled(true);
-            MessageBuilderDefaults.error()
+            Core.getInstance().getConfig().getErrorPallet().toBuilder()
                     .primary("You are talking too quickly.").space()
                     .tertiary("(Chat is currently slowed!)")
                     .build(player::sendMessage);

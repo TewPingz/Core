@@ -80,7 +80,8 @@ public class CoreVelocity {
 
                     Player player = optional.get();
                     int position = queue.getPosition(player.getUniqueId());
-                    MessageBuilderDefaults.normal().primary("You are currently in queue for").space()
+                    Core.getInstance().getConfig().getDefaultPallet().toBuilder()
+                            .primary("You are currently in queue for").space()
                             .secondary(queue.getServerId()).space()
                             .primary("in the position").space()
                             .tertiary("#").secondary(position + 1).tertiary(".")
@@ -114,12 +115,12 @@ public class CoreVelocity {
                 this.proxyServer.getServer(event.getServerId().toLowerCase()).ifPresent(registeredServer -> {
                     player.createConnectionRequest(registeredServer).connect().thenAccept(result -> {
                         if (result.isSuccessful()) {
-                            MessageBuilderDefaults.success()
+                            Core.getInstance().getConfig().getSuccessPallet().toBuilder()
                                     .primary("You have been successfully sent to").space()
                                     .secondary(registeredServer.getServerInfo().getName()).tertiary(".")
                                     .build(player::sendMessage);
                         } else {
-                            MessageBuilderDefaults.error()
+                            Core.getInstance().getConfig().getErrorPallet().toBuilder()
                                     .primary("The transfer to").space()
                                     .secondary(registeredServer.getServerInfo().getName()).space()
                                     .primary("was unsuccessful").tertiary(".")

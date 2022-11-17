@@ -30,6 +30,9 @@ public class Core {
     private final RediGo rediGo;
     private final Bridge bridge;
 
+    // Server config
+    private final CoreServerInfoConfig config;
+
     // Managers
     private final UuidManager uuidManager;
     private final RankManager rankManager;
@@ -47,6 +50,8 @@ public class Core {
 
         CoreMongoConfig mongoConfig = CoreMongoConfig.getConfig(directory);
         this.mongoClient = MongoClients.create(mongoConfig.transform());
+
+        this.config = CoreServerInfoConfig.getConfig(directory);
 
         this.rediGo = new RediGo(mongoConfig.getDatabase(), this.mongoClient, this.redissonClient, this.gson);
         this.bridge = new Bridge(this);

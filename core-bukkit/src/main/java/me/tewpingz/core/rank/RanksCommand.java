@@ -4,6 +4,7 @@ import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.CommandPermission;
 import co.aikar.commands.annotation.Default;
+import me.tewpingz.core.Core;
 import me.tewpingz.core.CorePlugin;
 import me.tewpingz.message.MessageBuilderDefaults;
 import org.bukkit.command.CommandSender;
@@ -17,18 +18,21 @@ public class RanksCommand extends BaseCommand {
             int amount = ranks.size();
 
             if (amount == 0) {
-                commandSender.sendMessage(MessageBuilderDefaults.error().primary("There are no ranks").build());
+                Core.getInstance().getConfig().getErrorPallet().toBuilder()
+                        .primary("There are no ranks")
+                        .build(commandSender::sendMessage);
                 return;
             }
 
             commandSender.sendMessage(" ");
-            MessageBuilderDefaults.normal()
+            Core.getInstance().getConfig().getDefaultPallet().toBuilder()
                     .primary("Here are the registered ranks").space()
                     .tertiary("(There %s %s)".formatted(amount == 1 ? "is" : "are", amount))
                     .build(commandSender::sendMessage);
 
             ranks.forEach(rank -> {
-                MessageBuilderDefaults.normal().space()
+                Core.getInstance().getConfig().getDefaultPallet().toBuilder()
+                        .space()
                         .secondary("-").space()
                         .append(rank.getDisplayNameWithColor()).space()
                         .tertiary("(Priority %s)".formatted(rank.getPriority()))

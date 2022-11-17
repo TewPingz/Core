@@ -33,7 +33,7 @@ public class RankCommand extends BaseCommand {
         RankManager rankManager = Core.getInstance().getRankManager();
 
         if (rankManager.getCachedRank(rankName) != null) {
-            MessageBuilderDefaults.error()
+            Core.getInstance().getConfig().getErrorPallet().toBuilder()
                     .primary("There is already a rank that is named").space()
                     .secondary(rankName).space()
                     .tertiary("(You can check the existing ranks using /ranks)")
@@ -44,7 +44,7 @@ public class RankCommand extends BaseCommand {
         rankManager.updateRealRankAsync(rankName.toLowerCase(), rank -> {
             rank.setDisplayName(rankName);
         }).thenAccept(rank -> {
-            MessageBuilderDefaults.success()
+            Core.getInstance().getConfig().getSuccessPallet().toBuilder()
                     .primary("You have successfully created a rank named").space()
                     .append(rank.getDisplayNameWithColor())
                     .tertiary(".")
@@ -60,7 +60,8 @@ public class RankCommand extends BaseCommand {
     @Syntax("<rank>")
     public static void onDelete(CommandSender commandSender, Rank.RankSnapshot rank) {
         if (rank.getRankId().equalsIgnoreCase("default")) {
-            MessageBuilderDefaults.error().primary("You cannot delete the").space()
+            Core.getInstance().getConfig().getErrorPallet().toBuilder()
+                    .primary("You cannot delete the").space()
                     .append(rank.getDisplayNameWithColor()).tertiary("!")
                     .build(commandSender::sendMessage);
             return;
@@ -69,7 +70,7 @@ public class RankCommand extends BaseCommand {
         RankManager rankManager = Core.getInstance().getRankManager();
         rankManager.evictRankAsync(rank.getRankId()).thenRun(() -> {
             Core.getInstance().getBridge().callEvent(new RankDeleteEvent(commandSender.getName(), rank));
-            MessageBuilderDefaults.success()
+            Core.getInstance().getConfig().getSuccessPallet().toBuilder()
                     .primary("You have successfully deleted the").space()
                     .append(rank.getDisplayNameWithColor()).space()
                     .primary("rank").tertiary("!")
@@ -87,7 +88,7 @@ public class RankCommand extends BaseCommand {
         rankManager.updateRealRankAsync(rankSnapshot.getRankId(), realRank -> {
             realRank.setPriority(priority);
         }).thenAccept(rank -> {
-            MessageBuilderDefaults.success()
+            Core.getInstance().getConfig().getSuccessPallet().toBuilder()
                     .primary("You have successfully updated the priority of").space()
                     .append(rank.getDisplayNameWithColor()).space()
                     .primary("to").space()
@@ -109,7 +110,7 @@ public class RankCommand extends BaseCommand {
         rankManager.updateRealRankAsync(rankSnapshot.getRankId(), realRank -> {
             realRank.setPrefix(translatedPrefix);
         }).thenAccept(rank -> {
-            MessageBuilderDefaults.success()
+            Core.getInstance().getConfig().getSuccessPallet().toBuilder()
                     .primary("You have successfully updated the prefix of").space()
                     .append(rank.getDisplayNameWithColor()).space()
                     .primary("to").space()
@@ -131,7 +132,7 @@ public class RankCommand extends BaseCommand {
         rankManager.updateRealRankAsync(rankSnapshot.getRankId(), realRank -> {
             realRank.setSuffix(translatedSuffix);
         }).thenAccept(rank -> {
-            MessageBuilderDefaults.success()
+            Core.getInstance().getConfig().getSuccessPallet().toBuilder()
                     .primary("You have successfully updated the suffix of").space()
                     .append(rank.getDisplayNameWithColor()).space()
                     .secondary(translatedSuffix)
@@ -151,7 +152,7 @@ public class RankCommand extends BaseCommand {
         rankManager.updateRealRankAsync(rankSnapshot.getRankId(), realRank -> {
             realRank.setDisplayName(displayName);
         }).thenAccept(rank -> {
-            MessageBuilderDefaults.success()
+            Core.getInstance().getConfig().getSuccessPallet().toBuilder()
                     .primary("You have successfully updated the suffix of").space()
                     .append(rank.getDisplayNameWithColor()).space()
                     .secondary(displayName)
@@ -171,7 +172,7 @@ public class RankCommand extends BaseCommand {
         rankManager.updateRealRankAsync(rankSnapshot.getRankId(), realRank -> {
             realRank.getColor().setBold(state);
         }).thenAccept(rank -> {
-            MessageBuilderDefaults.success()
+            Core.getInstance().getConfig().getSuccessPallet().toBuilder()
                     .primary("You have").space()
                     .primary(state ? "bolded" : "unbloded").space()
                     .primary("the display name of").space()
@@ -192,7 +193,7 @@ public class RankCommand extends BaseCommand {
         rankManager.updateRealRankAsync(rankSnapshot.getRankId(), realRank -> {
             realRank.getColor().setItalic(state);
         }).thenAccept(rank -> {
-            MessageBuilderDefaults.success()
+            Core.getInstance().getConfig().getSuccessPallet().toBuilder()
                     .primary("You have").space()
                     .primary(state ? "italicized" : "unitalicized").space()
                     .primary("the display name of").space()
@@ -213,7 +214,7 @@ public class RankCommand extends BaseCommand {
         rankManager.updateRealRankAsync(rankSnapshot.getRankId(), realRank -> {
             realRank.getColor().updateColor(red, green, blue);
         }).thenAccept(rank -> {
-            MessageBuilderDefaults.success()
+            Core.getInstance().getConfig().getSuccessPallet().toBuilder()
                     .primary("You have successfully updated the color of").space()
                     .append(rank.getDisplayNameWithColor()).space()
                     .tertiary(".")
@@ -230,7 +231,8 @@ public class RankCommand extends BaseCommand {
     public void onSetColor(CommandSender sender, Rank.RankSnapshot rankSnapshot, String hex) {
 
         if (!hex.startsWith("#")) {
-            MessageBuilderDefaults.error().secondary(hex).space()
+            Core.getInstance().getConfig().getErrorPallet().toBuilder()
+                    .secondary(hex).space()
                     .primary("is not a valid hex code").tertiary("!")
                     .build(sender::sendMessage);
             return;
@@ -240,7 +242,7 @@ public class RankCommand extends BaseCommand {
         rankManager.updateRealRankAsync(rankSnapshot.getRankId(), realRank -> {
             realRank.getColor().updateColor(hex);
         }).thenAccept(rank -> {
-            MessageBuilderDefaults.success()
+            Core.getInstance().getConfig().getSuccessPallet().toBuilder()
                     .primary("You have successfully updated the color of").space()
                     .append(rank.getDisplayNameWithColor()).space()
                     .tertiary(".")
@@ -265,14 +267,14 @@ public class RankCommand extends BaseCommand {
             }
         }).thenAccept(rank -> {
             boolean added = rank.getPermissions().contains(permission);
-            sender.sendMessage(MessageBuilderDefaults.success()
+            Core.getInstance().getConfig().getSuccessPallet().toBuilder()
                     .primary("You have successfully").space()
                     .secondary(added ? "added" : "removed").space()
                     .secondary(permission).space()
                     .primary("to").space()
                     .append(rank.getDisplayNameWithColor())
                     .tertiary(".")
-                    .build());
+                    .build(sender::sendMessage);
             Core.getInstance().getBridge().callEvent(new RankUpdateEvent(sender.getName(), rank));
             Core.getInstance().getBridge().callEvent(new RankUpdatePermissionEvent(rank));
         });
@@ -285,7 +287,7 @@ public class RankCommand extends BaseCommand {
     @CommandCompletion("@ranks @ranks")
     public void onInherit(CommandSender sender, Rank.RankSnapshot rankSnapshot, Rank.RankSnapshot inherit) {
         if (inherit.getRankId().equalsIgnoreCase(rankSnapshot.getRankId())) {
-            MessageBuilderDefaults.error()
+            Core.getInstance().getConfig().getErrorPallet().toBuilder()
                     .primary("You cannot make the rank inherit itself")
                     .build(sender::sendMessage);
             return;
@@ -300,14 +302,14 @@ public class RankCommand extends BaseCommand {
             }
         }).thenAccept(rank -> {
             boolean added = rank.getInherits().contains(inherit.getRankId());
-            sender.sendMessage(MessageBuilderDefaults.success()
+            Core.getInstance().getConfig().getSuccessPallet().toBuilder()
                     .primary("You have successfully").space()
                     .secondary(added ? "added" : "removed").space()
                     .append(inherit.getDisplayNameWithColor())
                     .primary("as an inherit to").space()
                     .append(rank.getDisplayNameWithColor())
                     .tertiary(".")
-                    .build());
+                    .build(sender::sendMessage);
             Core.getInstance().getBridge().callEvent(new RankUpdateEvent(sender.getName(), rank));
             Core.getInstance().getBridge().callEvent(new RankUpdatePermissionEvent(rank));
         });
@@ -323,44 +325,50 @@ public class RankCommand extends BaseCommand {
         rankManager.getRealRank(rankSnapshot.getRankId()).thenAccept(rank -> {
             sender.sendMessage(" ");
 
-            MessageBuilderDefaults.normal()
+            Core.getInstance().getConfig().getDefaultPallet().toBuilder()
                     .primary("This is the information for").space()
                     .append(rank.getDisplayNameWithColor())
                     .build(sender::sendMessage);
 
 
-            MessageBuilderDefaults.normal().space()
+            Core.getInstance().getConfig().getDefaultPallet().toBuilder()
+                    .space()
                     .tertiary("-").space()
                     .primary("Priority:").space()
                     .secondary(rank.getPriority())
                     .build(sender::sendMessage);
 
-            MessageBuilderDefaults.normal().space()
+            Core.getInstance().getConfig().getDefaultPallet().toBuilder()
+                    .space()
                     .tertiary("-").space()
                     .primary("Prefix:").space()
                     .secondary(rank.getPrefix().isEmpty() ? "N/A" : rank.getPrefix())
                     .build(sender::sendMessage);
 
-            MessageBuilderDefaults.normal().space()
+            Core.getInstance().getConfig().getDefaultPallet().toBuilder()
+                    .space()
                     .tertiary("-").space()
                     .primary("Suffix:").space()
                     .secondary(rank.getSuffix().isEmpty() ? "N/A" : rank.getSuffix())
                     .build(sender::sendMessage);
 
             if (rank.getPermissions().isEmpty()) {
-                MessageBuilderDefaults.normal().space()
+                Core.getInstance().getConfig().getDefaultPallet().toBuilder()
+                        .space()
                         .tertiary("-").space()
                         .primary("Permissions:").space()
                         .secondary("None")
                         .build(sender::sendMessage);
             } else {
-                MessageBuilderDefaults.normal().space()
+                Core.getInstance().getConfig().getDefaultPallet().toBuilder()
+                        .space()
                         .tertiary("-").space()
                         .primary("Permissions:").space()
                         .build(sender::sendMessage);
 
                 rank.getPermissions().forEach(permission -> {
-                    MessageBuilderDefaults.normal().space(2)
+                    Core.getInstance().getConfig().getDefaultPallet().toBuilder()
+                            .space(2)
                             .tertiary("-").space()
                             .primary(permission)
                             .build(sender::sendMessage);
@@ -368,18 +376,21 @@ public class RankCommand extends BaseCommand {
             }
 
             if (rank.getInherits().isEmpty()) {
-                MessageBuilderDefaults.normal().space()
+                Core.getInstance().getConfig().getDefaultPallet().toBuilder()
+                        .space()
                         .tertiary("-").space()
                         .primary("Inherits:").space()
                         .secondary("None")
                         .build(sender::sendMessage);
             } else {
-                MessageBuilderDefaults.normal().space()
+                Core.getInstance().getConfig().getDefaultPallet().toBuilder()
+                        .space()
                         .tertiary("-").space()
                         .primary("Inherits:")
                         .build(sender::sendMessage);
                 rank.getInherits().forEach(inherit -> {
-                    MessageBuilderDefaults.normal().space(2)
+                    Core.getInstance().getConfig().getDefaultPallet().toBuilder()
+                            .space(2)
                             .tertiary("-").space()
                             .secondary(inherit)
                             .build(sender::sendMessage);

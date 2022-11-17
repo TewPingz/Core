@@ -20,50 +20,50 @@ public class WhoIsCommand extends BaseCommand {
         asyncUuid.fetchUuid(sender, uuid -> {
             Profile.ProfileSnapshot profile = Core.getInstance().getProfileManager().getRealProfile(uuid);
 
-            MessageBuilderDefaults.normal()
+            Core.getInstance().getConfig().getDefaultPallet().toBuilder()
                     .primary("This is the profile information for").space()
                     .secondary(profile.getLastSeenName()).tertiary("!")
                     .build(sender::sendMessage);
 
-            MessageBuilderDefaults.normal()
+            Core.getInstance().getConfig().getDefaultPallet().toBuilder()
                     .space().tertiary("-").space()
                     .primary("First seen").tertiary(":").space()
                     .secondary(profile.getJoinTime() == -1 ? "Never" : new Date(profile.getJoinTime()).toString())
                     .build(sender::sendMessage);
 
             if (profile.getJoinTime() != -1) {
-                MessageBuilderDefaults.normal()
+                Core.getInstance().getConfig().getDefaultPallet().toBuilder()
                         .space().tertiary("-").space()
                         .primary("Last seen").tertiary(":").space()
                         .secondary(profile.getLastSeen() == -1 ? "Online" : new Date(profile.getLastSeen()).toString())
                         .build(sender::sendMessage);
             }
 
-            MessageBuilderDefaults.normal()
+            Core.getInstance().getConfig().getDefaultPallet().toBuilder()
                     .space().tertiary("-").space()
                     .primary("Banned").tertiary(":").space()
                     .secondary(profile.getBan() == null ? "No" : "Yes")
                     .build(sender::sendMessage);
 
-            MessageBuilderDefaults.normal()
+            Core.getInstance().getConfig().getDefaultPallet().toBuilder()
                     .space().tertiary("-").space()
                     .primary("Muted").tertiary(":").space()
                     .secondary(profile.getMute() == null ? "No" : "Yes")
                     .build(sender::sendMessage);
 
-            MessageBuilderDefaults.normal()
+            Core.getInstance().getConfig().getDefaultPallet().toBuilder()
                     .space().tertiary("-").space()
                     .primary("Blacklisted").tertiary(":").space()
                     .secondary(profile.getBlacklist() == null ? "No" : "Yes")
                     .build(sender::sendMessage);
 
-            MessageBuilderDefaults.normal()
+            Core.getInstance().getConfig().getDefaultPallet().toBuilder()
                     .space().tertiary("-").space()
                     .primary("Display Rank").tertiary(":").space()
                     .append(profile.getDisplayRank().getDisplayNameWithColor())
                     .build(sender::sendMessage);
 
-            MessageBuilderDefaults.normal()
+            Core.getInstance().getConfig().getDefaultPallet().toBuilder()
                     .space().tertiary("-").space()
                     .primary("Discord ID").tertiary(":").space()
                     .secondary(profile.getDiscordId() == null ? "N/A" : profile.getDiscordId())

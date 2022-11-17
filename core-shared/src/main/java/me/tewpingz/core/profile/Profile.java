@@ -157,6 +157,15 @@ public class Profile implements RediGoObject<UUID, Profile.ProfileSnapshot> {
     }
 
     /**
+     * A function to get the ip ban on the account
+     * @return an optional of the punishment instance
+     */
+    public Optional<Punishment> getIpBan() {
+        return this.activePunishments.stream().filter(punishment -> !punishment.hasExpired())
+                .filter(punishment -> punishment.getPunishmentType() == PunishmentType.IP_BAN).findFirst();
+    }
+
+    /**
      * A function to get the blacklist on the account
      * @return an optional of the punishment instance
      */
@@ -260,9 +269,8 @@ public class Profile implements RediGoObject<UUID, Profile.ProfileSnapshot> {
         private final List<Punishment> activePunishments;
         private final List<Punishment.ExpiredPunishment> expiredPunishments;
 
-        private final Punishment ban;
-        private final Punishment mute;
-        private final Punishment blacklist;
+        private final Punishment ban, ipBan, mute, blacklist;
+
 
         @Getter(AccessLevel.NONE)
         private final String displayRankId;
@@ -284,18 +292,14 @@ public class Profile implements RediGoObject<UUID, Profile.ProfileSnapshot> {
             this.activePunishments = List.copyOf(profile.getSortedActivePunishments());
             this.expiredPunishments = List.copyOf(profile.getSortedExpiredPunishments());
             this.ban = profile.getBan().orElse(null);
+            this.ipBan = profile.getIpBan().orElse(null);
             this.mute = profile.getMute().orElse(null);
             this.blacklist = profile.getBlacklist().orElse(null);
         }
 
         public Rank.RankSnapshot getDisplayRank() {
             Rank.RankSnapshot displayRank = Core.getInstance().getRankManager().getCachedRank(this.displayRankId);
-
-            if (displayRank == null) {
-                return Core.getInstance().getRankManager().getCachedRank("default");
-            }
-
-            return displayRank;
+            return displayRank == null ? Core.getInstance().getRankManager().getCachedRank("default") : displayRank;
         }
     }
 }

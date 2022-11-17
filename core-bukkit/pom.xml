@@ -103,13 +103,6 @@
         </dependency>
 
         <dependency>
-            <groupId>me.tewpingz.message</groupId>
-            <artifactId>MessageBuilder</artifactId>
-            <version>1.0</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <dependency>
             <groupId>fr.mrmicky</groupId>
             <artifactId>FastInv</artifactId>
             <version>3.0.3</version>

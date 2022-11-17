@@ -29,7 +29,7 @@ public class GrantListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Core.getInstance().getProfileManager().updateRealProfileAsync(event.getPlayer().getUniqueId(), profile -> {
             profile.getActiveGrants().stream().filter(grant -> grant.getRankSnapshot() == null).toList().forEach(grant -> {
-                profile.removeGrant(grant, "CONSOLE", "Rank no-longer exists");
+                profile.removeGrant(grant, "CONSOLE", "Expired");
             });
 
             profile.getActiveGrants().stream().filter(Grant::hasExpired).toList().forEach(grant -> {

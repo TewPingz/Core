@@ -19,7 +19,7 @@ public class LeaveQueueCommand extends BaseCommand {
         Optional<Queue.QueueSnapshot> optional = Core.getInstance().getQueueManager().getQueueByPlayer(player.getUniqueId());
 
         if (optional.isEmpty()) {
-            MessageBuilderDefaults.error()
+            Core.getInstance().getConfig().getErrorPallet().toBuilder()
                     .primary("You are currently not queued for anything")
                     .tertiary(".")
                     .build(player::sendMessage);
@@ -28,7 +28,7 @@ public class LeaveQueueCommand extends BaseCommand {
 
         Queue.QueueSnapshot snapshot = optional.get();
         Core.getInstance().getQueueManager().updateQueueAsync(snapshot.getServerId(), queue -> queue.removePlayer(player.getUniqueId())).thenAccept(serverQueue -> {
-            MessageBuilderDefaults.success()
+            Core.getInstance().getConfig().getSuccessPallet().toBuilder()
                     .primary("You have successfully left the queue for").space()
                     .secondary(serverQueue.getServerId()).tertiary(".")
                     .build(player::sendMessage);

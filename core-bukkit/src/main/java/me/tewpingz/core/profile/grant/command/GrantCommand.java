@@ -34,7 +34,8 @@ public class GrantCommand extends BaseCommand {
     @CommandCompletion("@players @ranks @duration @empty")
     public void addGrant(CommandSender sender, AsyncUuid asyncUuid, Rank.RankSnapshot rankSnapshot, Duration duration, String reason) {
         if (rankSnapshot.getRankId().equalsIgnoreCase("default")) {
-            MessageBuilderDefaults.error().primary("You cannot grant the").space()
+            Core.getInstance().getConfig().getErrorPallet().toBuilder()
+                    .primary("You cannot grant the").space()
                     .append(rankSnapshot.getDisplayNameWithColor()).space().primary("rank").tertiary("!")
                     .build(sender::sendMessage);
             return;

@@ -43,11 +43,6 @@ public class PunishmentListener implements Listener {
         }
 
         event.setCancelled(true);
-        MessageBuilderDefaults.error()
-                .primary("You cannot talk in chat as you are currently muted.").space()
-                .append(Component.newline())
-                .primary("Duration:").space()
-                .secondary(mute.isInfinite() ? "Permanently" : TimeUtil.formatLongIntoDetailedString(mute.getTimeLeft()))
-                .build(event.getPlayer()::sendMessage);
+        event.getPlayer().sendMessage(mute.formatKickMessage(false));
     }
 }

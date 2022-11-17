@@ -13,7 +13,7 @@ public class RankBridgeListener {
 
     public RankBridgeListener(CorePlugin instance) {
         instance.getCore().getBridge().registerListener(RankCreateEvent.class, (charSequence, event) -> {
-            MessageBuilderDefaults.normal()
+            Core.getInstance().getConfig().getDefaultPallet().toBuilder(false)
                     .tertiary("[Server Monitor]").space()
                     .secondary(event.getExecutedBy()).space()
                     .primary("has created a rank named").space()
@@ -23,7 +23,7 @@ public class RankBridgeListener {
         });
 
         instance.getCore().getBridge().registerListener(RankUpdateEvent.class, (charSequence, event) -> {
-            MessageBuilderDefaults.normal()
+            Core.getInstance().getConfig().getDefaultPallet().toBuilder(false)
                     .tertiary("[Server Monitor]").space()
                     .secondary(event.getExecutedBy()).space()
                     .primary("has updated the rank named").space()
@@ -53,7 +53,7 @@ public class RankBridgeListener {
                     if (hasRank) {
                         Core.getInstance().getProfileManager().updateRealProfileAsync(player.getUniqueId(), realValue -> {
                             realValue.getActiveGrants().stream().filter(grant -> grant.getRankSnapshot() == null).toList().forEach(grant -> {
-                                realValue.removeGrant(grant, "CONSOLE", "Rank no-longer exists");
+                                realValue.removeGrant(grant, "CONSOLE", "Expired");
                             });
                         }).thenAccept(realValue -> CorePlugin.getInstance().getGrantAttachmentManager().updateAttachment(player, realValue));
                     }

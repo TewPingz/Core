@@ -33,6 +33,18 @@ public class PunishCommand extends BaseCommand {
         });
     }
 
+    @Subcommand("ipban")
+    @CommandPermission("core.punish.ipban")
+    @Syntax("<player> <duration> [reason...]")
+    @CommandCompletion("@players @duration @empty")
+    public void onIpBan(CommandSender sender, AsyncUuid asyncUuid, Duration duration, String reason) {
+        asyncUuid.fetchUuid(sender, uuid -> {
+            Core.getInstance().getProfileManager().updateRealProfile(uuid, profile -> {
+                profile.addPunishment(PunishmentType.IP_BAN, sender.getName(), reason, duration.toMillis());
+            });
+        });
+    }
+
     @Subcommand("mute")
     @CommandPermission("core.punish.mute")
     @CommandCompletion("@players @duration @empty")

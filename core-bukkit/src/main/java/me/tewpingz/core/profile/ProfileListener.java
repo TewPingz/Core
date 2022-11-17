@@ -33,7 +33,12 @@ public class ProfileListener implements Listener {
         for (UUID relatedId : altEntry.getRelatedIds()) {
             Profile.ProfileSnapshot relatedProfile = this.profileManager.getRealProfile(relatedId);
             if (relatedProfile.getBlacklist() != null) {
-                event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, Component.text("Your account is linked to account that is blacklisted").color(NamedTextColor.RED));
+                event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, relatedProfile.getBlacklist().formatKickRelatedMessage(false));
+                return;
+            }
+
+            if (relatedProfile.getIpBan() != null) {
+                event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, relatedProfile.getIpBan().formatKickRelatedMessage(false));
                 return;
             }
         }
@@ -56,12 +61,17 @@ public class ProfileListener implements Listener {
         }
 
         if (fetchedProfile.getBlacklist() != null) {
-            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, Component.text("You are currently blacklisted").color(NamedTextColor.RED));
+            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, fetchedProfile.getBlacklist().formatKickMessage(false));
+            return;
+        }
+
+        if (fetchedProfile.getIpBan() != null) {
+            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, fetchedProfile.getIpBan().formatKickMessage(false));
             return;
         }
 
         if (fetchedProfile.getBan() != null) {
-            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, Component.text("You are currently banned").color(NamedTextColor.RED));
+            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, fetchedProfile.getBan().formatKickMessage(false));
             return;
         }
 

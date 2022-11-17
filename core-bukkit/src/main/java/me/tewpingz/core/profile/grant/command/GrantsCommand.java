@@ -126,7 +126,7 @@ public class GrantsCommand extends BaseCommand {
 
         @Override
         public @NotNull String getPromptText(@NotNull ConversationContext context) {
-            return MessageBuilderDefaults.normal()
+            return Core.getInstance().getConfig().getDefaultPallet().toBuilder()
                     .primary("Please type a reason for removing this grant")
                     .tertiary(".")
                     .toString();

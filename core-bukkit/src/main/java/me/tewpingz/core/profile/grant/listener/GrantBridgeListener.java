@@ -17,7 +17,7 @@ public class GrantBridgeListener {
 
             if (player != null) {
                 instance.getGrantScheduleManager().schedule(event.getPlayerUuid(), event.getGrant());
-                MessageBuilderDefaults.success()
+                Core.getInstance().getConfig().getSuccessPallet().toBuilder()
                         .primary("You have been given").space()
                         .append(event.getGrant().getRankNameComponent()).tertiary(".")
                         .build(player::sendMessage);
@@ -26,7 +26,7 @@ public class GrantBridgeListener {
                 CorePlugin.getInstance().getGrantAttachmentManager().updateAttachment(player, profile);
             }
 
-            MessageBuilderDefaults.normal()
+            Core.getInstance().getConfig().getDefaultPallet().toBuilder(false)
                     .tertiary("[Server Monitor]").space()
                     .secondary(event.getExecutorName()).space()
                     .primary("has given").space()
@@ -43,7 +43,8 @@ public class GrantBridgeListener {
             if (player != null) {
                 instance.getGrantScheduleManager().unschedule(event.getPlayerUuid(), event.getExpiredGrant());
 
-                MessageBuilderDefaults.error().primary("Your").space()
+                Core.getInstance().getConfig().getErrorPallet().toBuilder()
+                        .primary("Your").space()
                         .append(event.getExpiredGrant().getGrant().getRankNameComponent()).space()
                         .primary("grant has").space()
                         .primary(event.getExpiredGrant().getRemovedFor().equals("Expired") ? "expired" : "removed")
@@ -55,7 +56,7 @@ public class GrantBridgeListener {
             }
 
             if (!event.getExpiredGrant().getRemovedFor().equals("Expired")) {
-                MessageBuilderDefaults.normal()
+                Core.getInstance().getConfig().getDefaultPallet().toBuilder(false)
                         .tertiary("[Server Monitor]").space()
                         .secondary(event.getExecutorName()).space()
                         .primary("has removed").space()

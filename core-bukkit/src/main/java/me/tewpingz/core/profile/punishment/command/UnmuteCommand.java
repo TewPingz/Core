@@ -9,6 +9,9 @@ import me.tewpingz.core.util.uuid.AsyncUuid;
 import me.tewpingz.message.MessageBuilderDefaults;
 import org.bukkit.command.CommandSender;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 @CommandAlias("unmute")
 @CommandPermission("core.unmute")
 public class UnmuteCommand extends BaseCommand {
@@ -18,19 +21,22 @@ public class UnmuteCommand extends BaseCommand {
     public void onCommand(CommandSender commandSender, AsyncUuid asyncUuid, String reason) {
         asyncUuid.fetchUuid(commandSender, uuid -> {
             Core.getInstance().getProfileManager().updateRealProfile(uuid, profile -> {
-                boolean success = false;
+                Set<Punishment> punishments = profile.getActivePunishments().stream()
+                        .filter(punishment -> punishment.getPunishmentType() == PunishmentType.MUTE)
+                        .collect(Collectors.toSet());;
 
-                for (Punishment punishment : profile.getActivePunishments().stream().filter(punishment -> punishment.getPunishmentType() == PunishmentType.MUTE).toList()) {
-                    profile.removePunishment(punishment, commandSender.getName(), reason);
-                    success = true;
-                }
+                if (!punishments.isEmpty()) {
+                    for (Punishment punishment : punishments) {
+                        profile.removePunishment(punishment, commandSender.getName(), reason);
+                    }
 
-                if (success) {
-                    MessageBuilderDefaults.success().secondary(profile.getLastSeenName()).space()
+                    Core.getInstance().getConfig().getSuccessPallet().toBuilder()
+                            .secondary(profile.getLastSeenName()).space()
                             .primary("has been successfully unmuted").tertiary("!")
                             .build(commandSender::sendMessage);
                 } else {
-                    MessageBuilderDefaults.error().secondary(profile.getLastSeenName()).space()
+                    Core.getInstance().getConfig().getErrorPallet().toBuilder()
+                            .secondary(profile.getLastSeenName()).space()
                             .primary("was not even muted").tertiary("!")
                             .build(commandSender::sendMessage);
                 }

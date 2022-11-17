@@ -129,6 +129,7 @@ public class CorePlugin extends JavaPlugin {
         commandManager.registerCommand(new SyncCommand());
         commandManager.registerCommand(new JoinQueueCommand());
         commandManager.registerCommand(new LeaveQueueCommand());
+        commandManager.registerCommand(new IPBanCommand());
     }
 
     private void registerListeners() {

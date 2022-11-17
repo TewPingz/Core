@@ -32,7 +32,7 @@ public class AsyncUuid {
     }
 
     private void promptPlayerDoesNotExist(CommandSender executor) {
-        MessageBuilderDefaults.error()
+        Core.getInstance().getConfig().getErrorPallet().toBuilder()
                 .secondary(this.name).space()
                 .primary("does not exist as a player")
                 .tertiary("!")

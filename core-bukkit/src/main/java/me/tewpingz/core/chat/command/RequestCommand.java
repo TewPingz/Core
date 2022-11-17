@@ -7,6 +7,7 @@ import me.tewpingz.core.CorePlugin;
 import me.tewpingz.core.chat.PlayerRequestEvent;
 import me.tewpingz.core.util.TimeUtil;
 import me.tewpingz.message.MessageBuilderDefaults;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 @CommandAlias("request")
@@ -18,7 +19,7 @@ public class RequestCommand extends BaseCommand {
     public void onCommand(Player player, String message) {
         Core.getInstance().getProfileManager().updateRealProfileAsync(player.getUniqueId(), profile -> {
             if (!(profile.getRequestCooldown() == -1 || (profile.getRequestCooldown() - System.currentTimeMillis()) < 0)) {
-                MessageBuilderDefaults.error()
+                Core.getInstance().getConfig().getErrorPallet().toBuilder()
                         .primary("You are currently on request cooldown for").space()
                         .secondary(TimeUtil.formatLongIntoDetailedString(profile.getRequestCooldown() - System.currentTimeMillis()))
                         .tertiary(".")
@@ -29,7 +30,7 @@ public class RequestCommand extends BaseCommand {
             profile.setRequestCooldown(System.currentTimeMillis() + 30_000);
             String server = CorePlugin.getInstance().getServerInitializer().getConfig().getServerName();
             Core.getInstance().getBridge().callEvent(new PlayerRequestEvent(player.getName(), server, message));
-            MessageBuilderDefaults.success()
+            Core.getInstance().getConfig().getSuccessPallet().toBuilder()
                     .primary("Your report has been successfully received")
                     .build(player::sendMessage);
         });

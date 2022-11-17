@@ -67,5 +67,12 @@
             <artifactId>adventure-api</artifactId>
             <version>4.11.0</version>
         </dependency>
+
+        <dependency>
+            <groupId>me.tewpingz.message</groupId>
+            <artifactId>MessageBuilder</artifactId>
+            <version>1.0</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 </project>

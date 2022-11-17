@@ -43,7 +43,7 @@ public class PunishmentProcedure {
 
         @Override
         public @NotNull String getPromptText(@NotNull ConversationContext context) {
-            return MessageBuilderDefaults.normal()
+            return Core.getInstance().getConfig().getDefaultPallet().toBuilder()
                     .primary("Please select the duration for this punishment")
                     .tertiary(".")
                     .toString();
@@ -76,7 +76,7 @@ public class PunishmentProcedure {
 
         @Override
         public @NotNull String getPromptText(@NotNull ConversationContext context) {
-            return MessageBuilderDefaults.normal()
+            return Core.getInstance().getConfig().getDefaultPallet().toBuilder()
                     .primary("Please provide a reason for this punishment")
                     .tertiary(".")
                     .toString();

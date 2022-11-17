@@ -1,5 +1,6 @@
 package me.tewpingz.core.server.listener;
 
+import me.tewpingz.core.Core;
 import me.tewpingz.core.CorePlugin;
 import me.tewpingz.core.server.event.ServerOnlineEvent;
 import me.tewpingz.core.server.event.ServerShutdownEvent;
@@ -11,7 +12,7 @@ public class ServerBridgeListener {
 
     public ServerBridgeListener(CorePlugin instance) {
         instance.getCore().getBridge().registerListener(ServerOnlineEvent.class, (charSequence, event) -> {
-            MessageBuilderDefaults.normal()
+            Core.getInstance().getConfig().getDefaultPallet().toBuilder(false)
                     .tertiary("[Server Monitor]").space()
                     .secondary(event.getServer().getDisplayName()).space()
                     .primary("has just gone online").tertiary("!")
@@ -19,7 +20,7 @@ public class ServerBridgeListener {
         });
 
         instance.getCore().getBridge().registerListener(ServerShutdownEvent.class, (charSequence, event) -> {
-            MessageBuilderDefaults.normal()
+            Core.getInstance().getConfig().getDefaultPallet().toBuilder(false)
                     .tertiary("[Server Monitor]").space()
                     .secondary(event.getServer().getDisplayName()).space()
                     .primary("has just gone offline").tertiary("!")
@@ -27,7 +28,7 @@ public class ServerBridgeListener {
         });
 
         instance.getCore().getBridge().registerListener(ServerWhitelistEvent.class, (charSequence, event) -> {
-            MessageBuilderDefaults.normal()
+            Core.getInstance().getConfig().getDefaultPallet().toBuilder(false)
                     .tertiary("[Server Monitor]").space()
                     .secondary(event.getServer().getDisplayName()).space()
                     .primary("has just been").space()
