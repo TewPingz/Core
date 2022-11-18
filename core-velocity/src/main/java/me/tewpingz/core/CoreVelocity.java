@@ -56,6 +56,7 @@ public class CoreVelocity {
     @Subscribe
     public void onProxyShutdown(ProxyShutdownEvent event) {
         this.thread.cancel(false);
+        this.core.shutdown();
     }
 
     @Subscribe
