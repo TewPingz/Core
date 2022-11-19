@@ -16,7 +16,6 @@
     </modules>
 
     <name>Core-Parent</name>
-    <description>A core made for Xenon Network</description>
     <url>https://www.tewpingz.me</url>
 
     <properties>
