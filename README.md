@@ -10,6 +10,7 @@ This core was made at a low price but given rights to release on github.
 * Alts
 * Queue
 * Chat Management
+* Discord Sync
 * ect...
 
 ## Wiki
