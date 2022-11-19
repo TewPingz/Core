@@ -52,7 +52,6 @@ public class Core {
         this.mongoClient = MongoClients.create(mongoConfig.transform());
 
         this.config = CoreServerInfoConfig.getConfig(directory);
-
         this.rediGo = new RediGo(mongoConfig.getDatabase(), this.mongoClient, this.redissonClient, this.gson);
         this.bridge = new Bridge(this);
 

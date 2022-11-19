@@ -17,5 +17,6 @@ public class Main {
         }
 
         new DiscordBot(discordBotConfig);
+        Runtime.getRuntime().addShutdownHook(new Thread(core::shutdown));
     }
 }

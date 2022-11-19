@@ -321,7 +321,7 @@ public class RankCommand extends BaseCommand {
     @CommandCompletion("@ranks")
     public void onInfo(CommandSender sender, Rank.RankSnapshot rankSnapshot) {
         RankManager rankManager = Core.getInstance().getRankManager();
-        rankManager.getRealRank(rankSnapshot.getRankId()).thenAccept(rank -> {
+        rankManager.getRealRankAsync(rankSnapshot.getRankId()).thenAccept(rank -> {
             sender.sendMessage(" ");
 
             Core.getInstance().getConfig().getDefaultPalette().toBuilder()
